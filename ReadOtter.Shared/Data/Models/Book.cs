@@ -1,7 +1,21 @@
-﻿namespace ReadOtter.Shared.Data.Models
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+namespace ReadOtter.Shared.Data.Models
 {
-    internal class Book
+    public class Book
     {
-        //Stuff like the book name and page progress - maybe where the book is stored as well
+        //Information needed to display information about the book without actually parsing the Epub data
+        
+        [Key]
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int CurrentChapter { get; set; }
+
+        public int CurrentChapterPage { get; set; }
+
+        public string FilePath { get; set; }
     }
 }

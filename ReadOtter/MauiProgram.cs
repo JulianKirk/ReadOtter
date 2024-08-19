@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using ReadOtter.Shared.Data;
+using ReadOtter.Shared.Data.Services;
 
 namespace ReadOtter
 {
@@ -15,6 +17,10 @@ namespace ReadOtter
                 });
 
             builder.Services.AddMauiBlazorWebView();
+
+            builder.Services.AddDbContext<ReadOtterLibraryDbContext>();
+            builder.Services.AddScoped<UnitOfWork>();
+            builder.Services.AddScoped<EpubService>();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();
