@@ -16,7 +16,7 @@ namespace ReadOtter.Shared.Data
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "ReadOrderLibrary.db");
+            DbPath = Path.Join(path, "ReadOtterLibrary.db");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

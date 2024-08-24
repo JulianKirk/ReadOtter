@@ -10,7 +10,7 @@ using ReadOtter.Shared.Data;
 namespace ReadOtter.Shared.Migrations
 {
     [DbContext(typeof(ReadOtterLibraryDbContext))]
-    [Migration("20240819140800_InitialCreate")]
+    [Migration("20240824173503_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

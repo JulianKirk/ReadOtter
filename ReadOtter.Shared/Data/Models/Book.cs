@@ -10,7 +10,7 @@ namespace ReadOtter.Shared.Data.Models
         [Key]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public int CurrentChapter { get; set; }
 
