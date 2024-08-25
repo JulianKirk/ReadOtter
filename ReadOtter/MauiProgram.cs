@@ -19,6 +19,7 @@ namespace ReadOtter
             builder.Services.AddMauiBlazorWebView();
 
             builder.Services.AddDbContext<ReadOtterLibraryDbContext>();
+            builder.Services.AddScoped<Seeder>();
             builder.Services.AddScoped<UnitOfWork>();
             builder.Services.AddScoped<EpubService>();
 
@@ -28,9 +29,6 @@ namespace ReadOtter
 #endif
 
             var app = builder.Build();
-
-            Seeder.ClearAllData(app.Services.GetRequiredService<ReadOtterLibraryDbContext>());
-            Seeder.SeedData(app.Services.GetRequiredService<ReadOtterLibraryDbContext>());
 
             return app;
         }

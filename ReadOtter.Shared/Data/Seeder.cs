@@ -10,13 +10,17 @@ namespace ReadOtter.Shared.Data
 {
     public class Seeder
     {
+        ReadOtterLibraryDbContext context;
+
         public Seeder(ReadOtterLibraryDbContext context) 
         {
-            ClearAllData(context);
-            SeedData(context);
+            this.context = context;
+
+            //ClearAllData(context);
+            //SeedData(context);
         }
 
-        public static void SeedData(ReadOtterLibraryDbContext context)
+        public void SeedData()
         {
             context.Books.AddRange(GetBooksToSeed());
 
@@ -25,18 +29,18 @@ namespace ReadOtter.Shared.Data
             context.SaveChanges();
         }
 
-        public static void ClearSeededData(ReadOtterLibraryDbContext context)
+        public void ClearSeededData()
         {
         }
 
-        public static void ClearAllData(ReadOtterLibraryDbContext context)
+        public void ClearAllData()
         {
             context.Books.RemoveRange(context.Books);
 
             context.SaveChanges();
         }
 
-        static List<Book> GetBooksToSeed()
+        List<Book> GetBooksToSeed()
         {
             return new List<Book>
             {

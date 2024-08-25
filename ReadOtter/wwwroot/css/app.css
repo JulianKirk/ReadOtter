@@ -84,3 +84,7 @@ h1:focus {
         padding-left: env(safe-area-inset-left);
     }
 }
+
+.ReadView-Content {
+    padding: 100px;
+}

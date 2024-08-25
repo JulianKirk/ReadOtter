@@ -1,10 +1,4 @@
-﻿using ReadOtter.Shared.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VersOne.Epub;
+﻿using VersOne.Epub;
 using VersOne.Epub.Options;
 
 namespace ReadOtter.Shared.Data.Services
@@ -35,13 +29,29 @@ namespace ReadOtter.Shared.Data.Services
             return EpubReader.ReadBook(book.FilePath, options);
         }
 
-        public EpubLocalTextContentFile GetCurrentChapterContent(int id)
+        public void OffsetBookCurrentChapter(int id, int offset)
         {
-            var epubBook = GetEpubBook(id);
+			var book = _unitOfWork.BookRepository.GetBookById(id);
+            var epubBookRef = GetEpubBookRef(id);
 
-            var book = _unitOfWork.BookRepository.GetBookById(id);
+            //Validation
+            var newChapterNum = book.CurrentChapter + offset;
 
-            return epubBook.Navigation[book.CurrentChapter].HtmlContentFile;
-        }
-    }
+            if (newChapterNum < 0 || newChapterNum >= epubBookRef.GetReadingOrder().Count())
+            {
+                return;
+            }
+
+            book.CurrentChapter += offset;
+		}
+
+		public string GetCurrentChapterTextContent(int id)
+		{
+			var epubBook = GetEpubBookRef(id);
+
+			var book = _unitOfWork.BookRepository.GetBookById(id);
+
+			return epubBook.GetReadingOrder()[book.CurrentChapter].ReadContent();
+		}
+	}
 }

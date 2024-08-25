@@ -1,0 +1,45 @@
+﻿@using ReadOtter.Shared.Data.Models
+@using ReadOtter.Shared.Data.Services
+@using VersOne.Epub
+@inject EpubService EpubService
+
+<div class="ReadView">
+
+	<div class="ReadView-Content">
+		@((MarkupString)content)
+	</div>
+
+	<button class="btn btn-primary" @onclick=@GotoPreviousChapter>Previous Chapter</button>
+	<button class="btn btn-primary" @onclick=@GotoNextChapter>Next Chapter</button>
+</div>
+
+@code {
+	[Parameter]
+	public int BookId { get; set; }
+
+	string content;
+
+
+	protected override void OnInitialized()
+	{
+		UpdateContent();
+	}
+
+	void GotoPreviousChapter()
+	{
+		EpubService.OffsetBookCurrentChapter(BookId, -1);
+		UpdateContent();
+	}
+
+	void GotoNextChapter()
+	{
+		EpubService.OffsetBookCurrentChapter(BookId, 1);
+		UpdateContent();
+	}
+
+	void UpdateContent()
+	{
+		content = EpubService.GetCurrentChapterTextContent(BookId);
+		// StateHasChanged();
+	}
+}
