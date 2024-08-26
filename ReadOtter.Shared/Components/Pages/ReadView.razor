@@ -1,7 +1,7 @@
 ﻿@using ReadOtter.Shared.Data.Models
 @using ReadOtter.Shared.Data.Services
 @using VersOne.Epub
-@inject EpubService EpubService
+@inject EpubContentService EpubContentService
 
 <div class="ReadView">
 
@@ -27,19 +27,19 @@
 
 	void GotoPreviousChapter()
 	{
-		EpubService.OffsetBookCurrentChapter(BookId, -1);
+		EpubContentService.OffsetBookCurrentChapter(BookId, -1);
 		UpdateContent();
 	}
 
 	void GotoNextChapter()
 	{
-		EpubService.OffsetBookCurrentChapter(BookId, 1);
+		EpubContentService.OffsetBookCurrentChapter(BookId, 1);
 		UpdateContent();
 	}
 
 	void UpdateContent()
 	{
-		content = EpubService.GetCurrentChapterTextContent(BookId);
+		content = EpubContentService.GetCurrentChapterTextContent(BookId);
 		// StateHasChanged();
 	}
 }

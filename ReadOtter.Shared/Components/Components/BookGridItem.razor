@@ -1,0 +1,27 @@
+﻿@using ReadOtter.Shared.Data.Models
+@using ReadOtter.Shared.Data.Services
+@using VersOne.Epub
+@inject EpubMetadataService EpubMetadataService
+
+<div class="book-grid-item">
+	<!-- INSERT IMAGE HERE -->
+	<img class="book-cover-image"/>
+
+	<!-- Description -->
+	<p></p>
+
+</div>
+
+@code {
+	[Parameter]
+	public int BookId { get; set; }
+
+	string description;
+
+
+
+	protected override void OnParametersSet()
+	{
+		base.OnParametersSet();
+	}
+}
