@@ -1,27 +1,48 @@
 ﻿@using ReadOtter.Shared.Data.Models
 @using ReadOtter.Shared.Data.Services
-@using VersOne.Epub
+@using VersOne.Epub.Schema;
 @inject EpubMetadataService EpubMetadataService
 
 <div class="book-grid-item">
 	<!-- INSERT IMAGE HERE -->
 	<img class="book-cover-image"/>
 
-	<!-- Description -->
-	<p></p>
+	<h3>Descriptions</h3>
+	<!-- Description(s) -->
+	@foreach (var description in metadata.Descriptions)
+	{
+		<p>@description.Description</p>
+	}
 
+	<h2>Creators</h2>
+	@GetContributorsList()
+
+	<h2>Publishers</h2>
+	@GetPublishersList()
 </div>
 
 @code {
 	[Parameter]
 	public int BookId { get; set; }
-
-	string description;
-
-
+	EpubMetadata metadata;
 
 	protected override void OnParametersSet()
 	{
-		base.OnParametersSet();
+		metadata = EpubMetadataService.GetEpubMetaData(BookId);
+	}
+
+	string GetCreatorsList()
+	{
+		return string.Join(", ", metadata.Creators.Select(c => c.Creator));
+	}
+
+	string GetPublishersList()
+	{
+		return string.Join(", ", metadata.Publishers.Select(p => p.Publisher));
+	}
+
+	string GetContributorsList()
+	{
+		return string.Join(", ", metadata.Contributors.Select(c => c.Contributor));
 	}
 }

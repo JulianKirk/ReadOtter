@@ -1,5 +1,4 @@
 ﻿using ReadOtter.Shared.Data.Models;
-using VersOne.Epub;
 using VersOne.Epub.Schema;
 
 namespace ReadOtter.Shared.Data.Services
