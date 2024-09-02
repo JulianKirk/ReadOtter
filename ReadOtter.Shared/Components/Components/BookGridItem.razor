@@ -7,11 +7,11 @@
 	<!-- INSERT IMAGE HERE -->
 	<img class="book-cover-image"/>
 
-	<h3>Descriptions</h3>
+	<h2>Descriptions</h2>
 	<!-- Description(s) -->
 	@foreach (var description in metadata.Descriptions)
 	{
-		<p>@description.Description</p>
+		<p>@((MarkupString)description.Description)</p>
 	}
 
 	<h2>Creators</h2>
@@ -23,12 +23,13 @@
 
 @code {
 	[Parameter]
-	public int BookId { get; set; }
+	public Book Book { get; set; }
+
 	EpubMetadata metadata;
 
 	protected override void OnParametersSet()
 	{
-		metadata = EpubMetadataService.GetEpubMetaData(BookId);
+		metadata = EpubMetadataService.GetEpubMetaData(Book);
 	}
 
 	string GetCreatorsList()

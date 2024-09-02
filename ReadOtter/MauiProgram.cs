@@ -23,6 +23,7 @@ namespace ReadOtter
             builder.Services.AddScoped<UnitOfWork>();
             builder.Services.AddScoped<EpubContentService>();
 			builder.Services.AddScoped<EpubMetadataService>();
+            builder.Services.AddScoped<BookCommonService>();
 #if DEBUG
 			builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();

@@ -4,15 +4,35 @@
 
 <h1>Seeder</h1>
 
-<button class="btn btn-primary" @onclick="Seeder.SeedData">Seed Data</button>
+<button class="btn btn-primary" @onclick=@SeedData>Seed Data</button>
 
-<button class="btn btn-primary" @onclick="Seeder.ClearSeededData">Clear Seeded Data</button>
+<button class="btn btn-primary" @onclick=@ClearSeededData>Clear Seeded Data</button>
 
-<button class="btn btn-primary" @onclick="Seeder.ClearAllData">Clear All Data</button>
+<button class="btn btn-primary" @onclick=@ClearAllData>Clear All Data</button>
 
 <br />
 
 @foreach(var book in Context.Books)
 {
 	<li>@book.Id: @book.Name</li>
+}
+
+@code {
+	void SeedData() 
+	{ 
+		Seeder.SeedData();
+		StateHasChanged();
+	}
+
+	void ClearSeededData() 
+	{
+		Seeder.ClearSeededData();
+		StateHasChanged();
+	}
+
+	void ClearAllData() 
+	{ 
+		Seeder.ClearAllData();
+		StateHasChanged();
+	}
 }

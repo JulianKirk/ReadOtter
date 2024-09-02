@@ -1,0 +1,21 @@
+﻿@inject BookCommonService BookCommonService
+
+<h2>Catalog</h2>
+
+<div class="BookCatalogView">
+	<div class="BookCatalogView-Grid">
+		@foreach (var book in books)
+		{
+			<BookGridItem Book="@book"></BookGridItem>
+		}
+	</div>
+</div>
+
+@code {
+	List<Book> books = new List<Book>();
+
+	protected override void OnInitialized()
+	{
+		books = BookCommonService.GetAllBooks();
+	}
+}
