@@ -3,15 +3,21 @@
 @using VersOne.Epub.Schema;
 @inject EpubMetadataService EpubMetadataService
 
-<div class="book-grid-item">
+<div class="book-metadata">
 	<!-- INSERT IMAGE HERE -->
-	<img class="book-cover-image" src="@GetCoverImagePath()"/>
+	<img class="book-cover-image" />
 
-	<h2>Author(s)</h2>
-	@GetCreatorsList()
-	<br />
+	<h2>Descriptions</h2>
+	<!-- Description(s) -->
+	@foreach (var description in metadata.Descriptions)
+	{
+		<p>@((MarkupString)description.Description)</p>
+	}
 
-	<h2>Publisher(s)</h2>
+	<h2>Creators</h2>
+	@GetContributorsList()
+
+	<h2>Publishers</h2>
 	@GetPublishersList()
 </div>
 
@@ -36,8 +42,8 @@
 		return string.Join(", ", metadata.Publishers.Select(p => p.Publisher));
 	}
 
-	string GetCoverImagePath()
+	string GetContributorsList()
 	{
-		return EpubMetadataService.GetCoverImage(Book);
+		return string.Join(", ", metadata.Contributors.Select(c => c.Contributor));
 	}
 }
