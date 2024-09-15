@@ -52,7 +52,9 @@ namespace ReadOtter.Shared.Data.Services
 				File.WriteAllBytes(coverPath, imageBytes);
 			}
 
-			return coverPath;
+			var coverBytes = File.ReadAllBytes(coverPath);
+
+			return $"data:image/jpeg;base64,{Convert.ToBase64String(coverBytes)}";
 		}
 	}
 }

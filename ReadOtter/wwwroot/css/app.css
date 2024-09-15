@@ -104,6 +104,11 @@ h1:focus {
     padding: 10px;
 }
 
-.book-grid-item h2{
+.book-grid-item h2 {
     font-size: 20px;
+}
+
+.book-grid-item img {
+    max-height: 90%;
+    max-width: 90%;
 }

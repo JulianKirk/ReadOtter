@@ -2,10 +2,11 @@
 @using ReadOtter.Shared.Data.Services
 @using VersOne.Epub.Schema;
 @inject EpubMetadataService EpubMetadataService
+@inject NavigationManager Navigation
 
-<div class="book-grid-item">
+<div class="book-grid-item" @onclick=@ViewBook>
 	<!-- INSERT IMAGE HERE -->
-	<img class="book-cover-image" src="@GetCoverImagePath()"/>
+	<img src="@GetCoverImageBase64String()"/>
 
 	<h2>Author(s)</h2>
 	@GetCreatorsList()
@@ -36,8 +37,13 @@
 		return string.Join(", ", metadata.Publishers.Select(p => p.Publisher));
 	}
 
-	string GetCoverImagePath()
+	string GetCoverImageBase64String()
 	{
 		return EpubMetadataService.GetCoverImage(Book);
+	}
+
+	void ViewBook()
+	{
+		Navigation.NavigateTo("reader/" + Book.Id);
 	}
 }
