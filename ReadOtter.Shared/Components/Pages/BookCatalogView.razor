@@ -11,11 +11,20 @@
 	</div>
 </div>
 
+<InputFile></InputFile>
+
+<button class="btn btn-primary add-book-button" @onclick =@AddBook></button>
+
 @code {
 	List<Book> books = new List<Book>();
 
 	protected override void OnInitialized()
 	{
 		books = BookCommonService.GetAllBooks();
+	}
+
+	void AddBook()
+	{
+		
 	}
 }
