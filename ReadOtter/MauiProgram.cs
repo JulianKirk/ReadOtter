@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ReadOtter.Shared.Data;
 using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Interopt;
 
 namespace ReadOtter
 {
@@ -20,7 +21,7 @@ namespace ReadOtter
 
             builder.Services.AddDbContext<ReadOtterLibraryDbContext>();
             builder.Services.AddScoped<Seeder>();
-            builder.Services.AddScoped<UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<EpubContentService>();
 			builder.Services.AddScoped<EpubMetadataService>();
             builder.Services.AddScoped<BookCommonService>();
@@ -31,6 +32,8 @@ namespace ReadOtter
 #endif
 
             var app = builder.Build();
+
+            InputInteropt.SetServiceProvider(app.Services);
 
             return app;
         }

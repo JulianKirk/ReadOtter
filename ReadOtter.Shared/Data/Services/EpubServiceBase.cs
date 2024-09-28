@@ -6,7 +6,7 @@ namespace ReadOtter.Shared.Data.Services
 {
     public abstract class EpubServiceBase : ServiceBase
     {
-        public EpubServiceBase(UnitOfWork unitOfWork) :base(unitOfWork) 
+        public EpubServiceBase(IUnitOfWork unitOfWork) :base(unitOfWork) 
         {
         }
 

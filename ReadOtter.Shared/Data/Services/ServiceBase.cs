@@ -8,9 +8,9 @@ namespace ReadOtter.Shared.Data.Services
 {
     public abstract class ServiceBase
     {
-        protected readonly UnitOfWork _unitOfWork;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        protected ServiceBase(UnitOfWork unitOfWork) 
+        protected ServiceBase(IUnitOfWork unitOfWork) 
         { 
             _unitOfWork = unitOfWork; 
         }

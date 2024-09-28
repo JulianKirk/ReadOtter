@@ -5,7 +5,7 @@ namespace ReadOtter.Shared.Data.Services
 {
 	public class EpubMetadataService : EpubServiceBase
 	{
-		public EpubMetadataService(UnitOfWork unitOfWork) : base(unitOfWork)
+		public EpubMetadataService(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
 		}
 

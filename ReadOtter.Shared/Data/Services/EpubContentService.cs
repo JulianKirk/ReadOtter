@@ -2,7 +2,7 @@
 {
 	public class EpubContentService : EpubServiceBase
 	{
-		public EpubContentService(UnitOfWork unitOfWork) : base(unitOfWork)
+		public EpubContentService(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
 		}
 

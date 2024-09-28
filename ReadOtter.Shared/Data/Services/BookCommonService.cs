@@ -4,7 +4,7 @@ namespace ReadOtter.Shared.Data.Services
 {
 	public class BookCommonService : ServiceBase
 	{
-		public BookCommonService(UnitOfWork unitOfWork) : base(unitOfWork)
+		public BookCommonService(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
 		}
 
