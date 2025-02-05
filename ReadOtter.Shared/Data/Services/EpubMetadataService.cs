@@ -3,21 +3,26 @@ using VersOne.Epub.Schema;
 
 namespace ReadOtter.Shared.Data.Services
 {
-	public class EpubMetadataService : EpubServiceBase
+	public class EpubMetadataService : ServiceBase
 	{
-		public EpubMetadataService(IUnitOfWork unitOfWork) : base(unitOfWork)
+		VersOneWrapperService versOneWrapperService;
+
+		public EpubMetadataService(IUnitOfWork unitOfWork, VersOneWrapperService versOneWrapperService) : base(unitOfWork)
 		{
+			this.versOneWrapperService = versOneWrapperService;
 		}
 
 		public EpubMetadata GetEpubMetaData(Book book)
 		{
-			var epubBookRef = GetEpubBookRef(book);
+			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
 			return epubBookRef.Schema.Package.Metadata;
 		}
 
 		public EpubMetadata GetEpubMetaData(int id)
 		{
-			var epubBookRef = GetEpubBookRef(id);
+			var book = _unitOfWork.BookRepository.GetBookById(id);
+			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
+
 			return epubBookRef.Schema.Package.Metadata;
 		}
 
@@ -29,7 +34,7 @@ namespace ReadOtter.Shared.Data.Services
 
 		public string GetCoverImage(Book book)
 		{
-			var epubBookRef = GetEpubBookRef(book);
+			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
 
 			var localAppDataFolder = Environment.SpecialFolder.LocalApplicationData;
 

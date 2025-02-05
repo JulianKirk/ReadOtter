@@ -39,9 +39,9 @@ namespace ReadOtter.Tests.Shared.Data.Services
 			var books = new List<Book>
 			{
 				new Book {Id = 1},
-				new Book {Id = 2},
-				new Book {Id = 3},
-				new Book {Id = 4},
+				new Book {Id = 90},
+				new Book {Id = 32},
+				new Book {Id = 41},
 				new Book {Id = 5}
 			};
 
@@ -52,7 +52,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
 			var bookList = commonService.GetAllBookIds();
 
 			//Assert
-			Assert.That(bookList, Is.EqualTo(new List<int> { 1, 2, 3, 4, 5}));
+			Assert.That(bookList, Is.EqualTo(new List<int> { 1, 90, 32, 41, 5}));
 		}
 
 		IUnitOfWork MockUnitOfWork(List<Book> books)

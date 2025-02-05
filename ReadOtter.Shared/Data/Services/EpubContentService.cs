@@ -1,15 +1,18 @@
 ﻿namespace ReadOtter.Shared.Data.Services
 {
-	public class EpubContentService : EpubServiceBase
+	public class EpubContentService: ServiceBase
 	{
-		public EpubContentService(IUnitOfWork unitOfWork) : base(unitOfWork)
+		VersOneWrapperService versOneWrapperService;
+
+		public EpubContentService(IUnitOfWork unitOfWork, VersOneWrapperService versOneWrapperService) : base(unitOfWork)
 		{
+			this.versOneWrapperService = versOneWrapperService;
 		}
 
 		public void OffsetBookCurrentChapter(int id, int offset)
 		{
 			var book = _unitOfWork.BookRepository.GetBookById(id);
-			var epubBookRef = GetEpubBookRef(book);
+			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
 
 			//Validation
 			var newChapterNum = book.CurrentChapter + offset;
@@ -25,7 +28,7 @@
 		public string GetCurrentChapterTextContent(int id)
 		{
 			var book = _unitOfWork.BookRepository.GetBookById(id);
-			var epubBook = GetEpubBookRef(book);
+			var epubBook = versOneWrapperService.GetEpubBookRef(book);
 
 			return epubBook.GetReadingOrder()[book.CurrentChapter].ReadContent();
 		}
