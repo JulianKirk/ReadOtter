@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ReadOtter.Shared.Data.Repositories
 {
-    public class BookRepository : Repository<Book>
+    public class BookRepository : Repository<Book>, IBookRepository
     {
         public BookRepository(ReadOtterLibraryDbContext context) : base(context)
         {
@@ -15,7 +15,7 @@ namespace ReadOtter.Shared.Data.Repositories
 
         public Book GetBookById(int id)
         {
-            return _context.Books.SingleOrDefault(b => b.Id == id);
+            return GetById(id);
         }
 
         public IEnumerable<Book> GetAllBooks() 

@@ -18,7 +18,7 @@ namespace ReadOtter.Shared.Data
             _context = context;
         }
 
-        public BookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
+        public IBookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
 
         public void Commit()
         {

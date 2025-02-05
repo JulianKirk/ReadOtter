@@ -12,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadOtter.Web.Client", "ReadOtter.Web\ReadOtter.Web.Client\ReadOtter.Web.Client.csproj", "{E6992112-4F64-435C-8E74-6DED2D5BF5F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadOtter.Tests", "ReadOtter.Tests\ReadOtter.Tests.csproj", "{8E97406A-76DF-45C3-8AE9-B1C4D7238FAC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2AC297A4-BD37-4D70-A6DD-077263038F2F} = {2AC297A4-BD37-4D70-A6DD-077263038F2F}
+		{80172F79-6065-4BAE-B1E9-802DE2A8E135} = {80172F79-6065-4BAE-B1E9-802DE2A8E135}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

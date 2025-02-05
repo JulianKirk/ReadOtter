@@ -23,7 +23,7 @@ namespace ReadOtter.Shared.Data.Services
 
 		public string GetCoverImage(int id)
 		{
-			var book = _unitOfWork.BookRepository.GetById(id);
+			var book = _unitOfWork.BookRepository.GetBookById(id);
 			return GetCoverImage(book);
 		}
 

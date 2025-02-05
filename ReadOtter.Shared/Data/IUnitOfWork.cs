@@ -12,6 +12,6 @@ namespace ReadOtter.Shared.Data
         void Commit();
         void Rollback();
 
-        public BookRepository BookRepository { get; }
+        public IBookRepository BookRepository { get; }
     }
 }
