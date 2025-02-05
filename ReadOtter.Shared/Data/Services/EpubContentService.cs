@@ -2,9 +2,9 @@
 {
 	public class EpubContentService: ServiceBase
 	{
-		VersOneWrapperService versOneWrapperService;
+		IVersOneWrapperService versOneWrapperService;
 
-		public EpubContentService(IUnitOfWork unitOfWork, VersOneWrapperService versOneWrapperService) : base(unitOfWork)
+		public EpubContentService(IUnitOfWork unitOfWork, IVersOneWrapperService versOneWrapperService) : base(unitOfWork)
 		{
 			this.versOneWrapperService = versOneWrapperService;
 		}
