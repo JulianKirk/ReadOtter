@@ -12,17 +12,15 @@ namespace ReadOtter.Shared.Data.Services
 			this.versOneWrapperService = versOneWrapperService;
 		}
 
-		public EpubMetadata GetEpubMetaData(Book book)
+        public EpubMetadata GetEpubMetaData(int id)
+        {
+            var book = _unitOfWork.BookRepository.GetBookById(id);
+            return GetEpubMetaData(book);
+        }
+
+        public EpubMetadata GetEpubMetaData(Book book)
 		{
 			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
-			return epubBookRef.Schema.Package.Metadata;
-		}
-
-		public EpubMetadata GetEpubMetaData(int id)
-		{
-			var book = _unitOfWork.BookRepository.GetBookById(id);
-			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
-
 			return epubBookRef.Schema.Package.Metadata;
 		}
 
@@ -53,6 +51,11 @@ namespace ReadOtter.Shared.Data.Services
 			if (!File.Exists(coverPath))
 			{
 				var imageBytes = epubBookRef.ReadCover();
+
+				if (imageBytes is null)
+				{
+
+				}
 
 				File.WriteAllBytes(coverPath, imageBytes);
 			}

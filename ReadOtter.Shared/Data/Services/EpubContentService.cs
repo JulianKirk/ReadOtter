@@ -1,4 +1,6 @@
-﻿namespace ReadOtter.Shared.Data.Services
+﻿using ReadOtter.Shared.Data.Models;
+
+namespace ReadOtter.Shared.Data.Services
 {
 	public class EpubContentService: ServiceBase
 	{
@@ -12,25 +14,32 @@
 		public void OffsetBookCurrentChapter(int id, int offset)
 		{
 			var book = _unitOfWork.BookRepository.GetBookById(id);
-			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
+            OffsetBookCurrentChapter(book, offset);
+        }
 
-			//Validation
-			var newChapterNum = book.CurrentChapter + offset;
+        public void OffsetBookCurrentChapter(Book book, int offset)
+        {
+            var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
+            var newChapterNum = book.CurrentChapter + offset;
 
-			if (newChapterNum < 0 || newChapterNum >= epubBookRef.GetReadingOrder().Count())
-			{
-				return;
-			}
+            if (newChapterNum < 0 || newChapterNum >= epubBookRef.GetReadingOrder().Count())
+            {
+                return;
+            }
 
-			book.CurrentChapter += offset;
-		}
+            book.CurrentChapter = newChapterNum;
+        }
 
-		public string GetCurrentChapterTextContent(int id)
+        public string GetCurrentChapterTextContent(int id)
 		{
 			var book = _unitOfWork.BookRepository.GetBookById(id);
-			var epubBook = versOneWrapperService.GetEpubBookRef(book);
+			return GetCurrentChapterTextContent(book);
+        }
 
-			return epubBook.GetReadingOrder()[book.CurrentChapter].ReadContent();
-		}
-	}
+        public string GetCurrentChapterTextContent(Book book)
+        {
+            var epubBook = versOneWrapperService.GetEpubBookRef(book);
+            return epubBook.GetReadingOrder()[book.CurrentChapter].ReadContent();
+        }
+    }
 }
