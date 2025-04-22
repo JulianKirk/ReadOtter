@@ -18,13 +18,28 @@ class Class10 {
   size()
 }
 class Book{
+    <<model>>
     +Id : int
     +Name : string
     +CurrentChapter : int
     +CurrentChapterPage : int
     +FilePath : string
-    <<NotMapped>> +MetaData : BookMetaData
-    <<NotMapped>> +Content : BookContent
+    &lt&ltNotMapped&gt&gt +MetaData : BookMetaData
+    &lt&ltNotMapped&gt&gt +Content : BookContent
+}
+
+class BookMetaData{
+    +Creators : IEnumerable&ltstring&gt
+    +Publishers : IEnumerable&ltstring&gt
+}
+
+class BookContent{
+    +Chapters : IEnumerable&ltContentChapter&gt
+}
+
+class ContentChapter{
+    +Title: string
+    +Content: string
 }
 
 class BookProvider {
@@ -37,8 +52,9 @@ class BookProvider {
 
 class CachedBookProvider {
     -BookCache: Dictionary&lt;Dictionary<int, Book>&gt;
-    -metaDataCache: Dictionary&lt;Dictionary<int, BookMetaData>&gt;
+    -MetaDataCache: Dictionary&lt;Dictionary<int, BookMetaData>&gt;
     -ContentCache: Dictionary&lt;Dictionary<int, BookContent>&gt;
+    -ChapterCache: Dictionary&lt;Dictionary<int, List<BookChapter>>&gt;
  }
 
 CachedBookProvider ..|> BookProvider
