@@ -1,6 +1,8 @@
 # ReadOtter: A personalized epub file reading software
 
-Backend Architecture:
+## Backend Architecture
+
+## Services
 ```mermaid
 classDiagram
 class Book {
@@ -146,14 +148,72 @@ EpubContentService --> ServiceBase
 EpubMetadataService --> ServiceBase
 InputService --> ServiceBase
 VersOneAdaptorService ..|> IVersOneAdaptorService
-ServiceBase --> IUnitOfWork
 UnitOfWork ..|> IUnitOfWork
-UnitOfWork --> IBookRepository
 BookRepository ..|> IBookRepository
-BookRepository --> Repository~Book~
 Repository~T~ <|-- BookRepository
 IBookRepository --> Book
 Book --> BookMetaData
 Book --> BookContent
 
+```
+
+## Database Access
+```mermaid
+classDiagram
+
+class IUnitOfWork {
+    <<interface>>
+    +void Commit()
+    +void Rollback()
+    +IBookRepository BookRepository
+}
+
+class UnitOfWork {
+    +UnitOfWork(DbContext context)
+    +void Commit()
+    +void Rollback()
+    +IBookRepository BookRepository
+}
+
+class IBookRepository {
+    <<interface>>
+    +Book GetBookById(int id)
+    +IEnumerable~Book~ GetAllBooks()
+    +void RemoveBookById(int id)
+}
+
+class BookRepository {
+    +BookRepository(DbContext context)
+    +Book GetBookById(int id)
+    +IEnumerable~Book~ GetAllBooks()
+    +void RemoveBookById(int id)
+}
+
+class Repository~T~ {
+    <<abstract>>
+    +Repository(DbContext context)
+    +T GetById(int id)
+    +IEnumerable~T~ GetAll()
+    +void Add(T entity)
+    +void Remove(T entity)
+}
+
+class ReadOtterLibraryDbContext {
+    +string DbPath
+    +DbSet~Book~ Books
+    +ReadOtterLibraryDbContext()
+    +void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    +void OnModelCreating(ModelBuilder modelBuilder)
+}
+
+class Seeder {
+    +void Seed(ModelBuilder modelBuilder)
+}
+
+UnitOfWork ..|> IUnitOfWork
+BookRepository ..|> IBookRepository
+Repository~T~ <|-- BookRepository
+IBookRepository --> Book
+Book --> BookMetaData
+Book --> BookContent
 ```
