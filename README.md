@@ -153,3 +153,37 @@ BookRepository ..|> IBookRepository
 Repository~T~ <|-- BookRepository
 IBookRepository --> Book
 ```
+
+### Data
+```mermaid
+classDiagram
+
+class Book {
+    <<model>>
+    +Id : int
+    +Name : string
+    +CurrentChapter : int
+    +CurrentChapterPage : int
+    +FilePath : string
+    ~NotMapped~ +MetaData : BookMetaData
+    ~NotMapped~ +Content : BookContent
+}
+
+class BookMetaData {
+    +Creators : IEnumerable~string~
+    +Publishers : IEnumerable~string~
+}
+
+class BookContent {
+    +Chapters : IEnumerable~ContentChapter~
+}
+
+class ContentChapter {
+    +Title : string
+    +Content : string
+}
+
+Book --> BookMetaData : contains
+Book --> BookContent : contains
+BookContent --> ContentChapter : contains
+```
