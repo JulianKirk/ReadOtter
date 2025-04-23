@@ -2,7 +2,7 @@
 
 ## Backend Architecture
 
-## Services
+### Services
 ```mermaid
 classDiagram
 class Book {
@@ -157,7 +157,7 @@ Book --> BookContent
 
 ```
 
-## Database Access
+### Database Access
 ```mermaid
 classDiagram
 
@@ -208,6 +208,17 @@ class ReadOtterLibraryDbContext {
 
 class Seeder {
     +void Seed(ModelBuilder modelBuilder)
+}
+
+class Book {
+    <<model>>
+    +Id : int
+    +Name : string
+    +CurrentChapter : int
+    +CurrentChapterPage : int
+    +FilePath : string
+    ~NotMapped~ +MetaData : BookMetaData
+    ~NotMapped~ +Content : BookContent
 }
 
 UnitOfWork ..|> IUnitOfWork
