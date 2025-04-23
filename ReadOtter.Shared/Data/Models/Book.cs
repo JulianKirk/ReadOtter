@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ReadOtter.Shared.Data.Models
 {
@@ -17,5 +18,11 @@ namespace ReadOtter.Shared.Data.Models
         public int CurrentChapterPage { get; set; }
 
         public string FilePath { get; set; }
+
+        [NotMapped]
+        public BookMetaData MetaData { get; set; } //LOAD THIS DYNAMICALLY
+
+        [NotMapped]
+        public BookContent Content { get; set; } //LOAD THIS DYNAMICALLY
     }
 }

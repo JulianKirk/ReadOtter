@@ -1,12 +1,15 @@
 ﻿using ReadOtter.Shared.Data.Models;
+using System.Collections.Concurrent;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Data.Services.BlazorConsumed
 {
 	public class EpubContentService: ServiceBase
 	{
-		IVersOneWrapperService versOneWrapperService;
+		private readonly IVersOneAdaptor versOneWrapperService;
 
-		public EpubContentService(IUnitOfWork unitOfWork, IVersOneWrapperService versOneWrapperService) : base(unitOfWork)
+        private readonly ConcurrentDictionary<(int BookId, int ChapterIndex), BookContent> chapterContentCache;
+
+        public EpubContentService(IUnitOfWork unitOfWork, IVersOneAdaptor versOneWrapperService) : base(unitOfWork)
 		{
 			this.versOneWrapperService = versOneWrapperService;
 		}
@@ -19,10 +22,10 @@ namespace ReadOtter.Shared.Data.Services
 
         public void OffsetBookCurrentChapter(Book book, int offset)
         {
-            var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
+            var totalChapterCount = versOneWrapperService.GetTotalChapterCount(book);
             var newChapterNum = book.CurrentChapter + offset;
 
-            if (newChapterNum < 0 || newChapterNum >= epubBookRef.GetReadingOrder().Count())
+            if (newChapterNum < 0 || newChapterNum >= totalChapterCount)
             {
                 return;
             }
@@ -38,8 +41,7 @@ namespace ReadOtter.Shared.Data.Services
 
         public string GetCurrentChapterTextContent(Book book)
         {
-            var epubBook = versOneWrapperService.GetEpubBookRef(book);
-            return epubBook.GetReadingOrder()[book.CurrentChapter].ReadContent();
+            return versOneWrapperService.GetContentForChapter(book, book.CurrentChapter);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ReadOtter.Shared.Data.Services
+﻿namespace ReadOtter.Shared.Data.Services.BlazorConsumed
 {
 	public class InputService
 	{

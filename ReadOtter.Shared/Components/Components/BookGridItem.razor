@@ -1,5 +1,6 @@
 ﻿@using ReadOtter.Shared.Data.Models
 @using ReadOtter.Shared.Data.Services
+@using ReadOtter.Shared.Data.Services.BlazorConsumed
 @using VersOne.Epub.Schema;
 @inject EpubMetadataService EpubMetadataService
 @inject NavigationManager Navigation
@@ -24,7 +25,7 @@
 
 	protected override void OnParametersSet()
 	{
-		metadata = EpubMetadataService.GetEpubMetaData(Book);
+		metadata = EpubMetadataService.GetMetaData(Book);
 	}
 
 	string GetCreatorsList()

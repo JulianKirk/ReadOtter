@@ -41,7 +41,7 @@ namespace ReadOtter.Tests.Common
             mockUnitOfWork.Setup(u => u.BookRepository).Returns(mockBookRepository.Object);
         }
 
-        public static Mock<IVersOneWrapperService> MockVersOneWrapperService()
+        public static Mock<IVersOneAdaptor> MockVersOneWrapperService()
         {
             //This isn't useful most functionality that needs these tests need fields under Vers One data types
             throw new NotImplementedException();

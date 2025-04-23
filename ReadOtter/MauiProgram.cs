@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ReadOtter.Shared.Data;
 using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Data.Services.BlazorConsumed;
 using ReadOtter.Shared.Interopt;
 
 namespace ReadOtter
@@ -23,7 +24,9 @@ namespace ReadOtter
             builder.Services.AddScoped<Seeder>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            builder.Services.AddScoped<IVersOneWrapperService, VersOneWrapperService>();
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            builder.Services.AddScoped<IVersOneAdaptor, VersOneAdaptor>();
             builder.Services.AddScoped<EpubContentService>();
 			builder.Services.AddScoped<EpubMetadataService>();
 

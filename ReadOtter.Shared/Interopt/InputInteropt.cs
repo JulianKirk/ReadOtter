@@ -1,5 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Data.Services.BlazorConsumed;
 
 namespace ReadOtter.Shared.Interopt
 {

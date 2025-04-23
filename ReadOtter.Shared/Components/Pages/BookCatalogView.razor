@@ -1,4 +1,5 @@
-﻿@inject BookCommonService BookCommonService
+﻿@using ReadOtter.Shared.Data.Services.BlazorConsumed
+@inject BookCommonService BookCommonService
 
 <h2>Catalog</h2>
 
@@ -16,7 +17,7 @@
 <button class="btn btn-primary add-book-button" @onclick =@AddBook></button>
 
 @code {
-	List<Book> books = new List<Book>();
+	IEnumerable<Book> books = new List<Book>();
 
 	protected override void OnInitialized()
 	{

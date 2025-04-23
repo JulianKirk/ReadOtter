@@ -1,30 +1,30 @@
 ﻿using ReadOtter.Shared.Data.Models;
 using VersOne.Epub.Schema;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Data.Services.BlazorConsumed
 {
 	public class EpubMetadataService : ServiceBase
 	{
-		IVersOneWrapperService versOneWrapperService;
+		private readonly IVersOneAdaptor versOneWrapperService;
 
-		public EpubMetadataService(IUnitOfWork unitOfWork, IVersOneWrapperService versOneWrapperService) : base(unitOfWork)
+		public EpubMetadataService(IUnitOfWork unitOfWork, IVersOneAdaptor versOneWrapperService) : base(unitOfWork)
 		{
 			this.versOneWrapperService = versOneWrapperService;
 		}
 
-        public EpubMetadata GetEpubMetaData(int id)
+        public BookMetaData GetMetaData(int id)
         {
             var book = _unitOfWork.BookRepository.GetBookById(id);
-            return GetEpubMetaData(book);
+            return GetMetaData(book);
         }
 
-        public EpubMetadata GetEpubMetaData(Book book)
+        public BookMetaData GetMetaData(Book book)
 		{
 			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
-			return epubBookRef.Schema.Package.Metadata;
+			return epubBookRef.Schema.Package.Metadata
 		}
 
-		public string GetCoverImage(int id)
+        public string GetCoverImage(int id)
 		{
 			var book = _unitOfWork.BookRepository.GetBookById(id);
 			return GetCoverImage(book);
