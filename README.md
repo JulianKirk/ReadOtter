@@ -107,37 +107,34 @@ class UnitOfWork {
 
 class IBookRepository {
     <<interface>>
-    +Book GetBookById(int id)
-    +IEnumerable~Book~ GetAllBooks()
-    +void RemoveBookById(int id)
+    +GetBookById(int id) Book 
+    +GetAllBooks() IEnumerable~Book~ 
+    +RemoveBookById(int id) void 
 }
 
 class BookRepository {
-    +BookRepository(DbContext context)
-    +Book GetBookById(int id)
-    +IEnumerable~Book~ GetAllBooks()
-    +void RemoveBookById(int id)
+    +BookRepository(DbContext context) BookRepository
 }
 
 class Repository~T~ {
     <<abstract>>
-    +Repository(DbContext context)
-    +T GetById(int id)
-    +IEnumerable~T~ GetAll()
-    +void Add(T entity)
-    +void Remove(T entity)
+    +Repository(DbContext context) Repository~T~
+    +GetById(int id) T
+    +GetAll() IEnumerable~T~
+    +Add(T entity) void
+    +Remove(T entity) void
 }
 
 class ReadOtterLibraryDbContext {
-    +string DbPath
-    +DbSet~Book~ Books
-    +ReadOtterLibraryDbContext()
-    +void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    +void OnModelCreating(ModelBuilder modelBuilder)
+    +DbPath string
+    +Books : DbSet~Book~
+    +ReadOtterLibraryDbContext() ReadOtterLibraryDbContext
+    +OnConfiguring(DbContextOptionsBuilder optionsBuilder) void
+    +OnModelCreating(ModelBuilder modelBuilder) void
 }
 
 class Seeder {
-    +void Seed(ModelBuilder modelBuilder)
+    +Seed(ModelBuilder modelBuilder) void 
 }
 
 class Book {
