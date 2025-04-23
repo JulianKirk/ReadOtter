@@ -214,6 +214,4 @@ UnitOfWork ..|> IUnitOfWork
 BookRepository ..|> IBookRepository
 Repository~T~ <|-- BookRepository
 IBookRepository --> Book
-Book --> BookMetaData
-Book --> BookContent
 ```
