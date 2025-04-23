@@ -68,9 +68,26 @@ class VersOneAdaptor {
     +GetTotalChapterCount(book: Book)  int
 }
 
+class IUnitOfWork {
+    <<interface>>
+    +Commit() void 
+    +Rollback() void 
+    +BookRepository IBookRepository 
+}
+
+class UnitOfWork {
+    +UnitOfWork(DbContext context) UnitOfWork
+}
+
+VersOneAdaptor ..|> IVersOneAdaptor
 CachedBookProvider ..|> IBookProvider
 DirectBookProvider ..|> IBookProvider
-VersOneAdaptor ..|> IVersOneAdaptor
+UnitOfWork ..|> IUnitOfWork
+CachedBookProvider --> IUnitOfWork : uses
+DirectBookProvider --> IUnitOfWork : uses
+BookCommonService --> CachedBookProvider : uses
+EpubContentService --> IVersOneAdaptor : uses
+EpubMetadataService --> IVersOneAdaptor : uses
 ```
 
 ### Database Access
@@ -79,16 +96,13 @@ classDiagram
 
 class IUnitOfWork {
     <<interface>>
-    +void Commit()
-    +void Rollback()
-    +IBookRepository BookRepository
+    +Commit() void 
+    +Rollback() void 
+    +BookRepository IBookRepository 
 }
 
 class UnitOfWork {
-    +UnitOfWork(DbContext context)
-    +void Commit()
-    +void Rollback()
-    +IBookRepository BookRepository
+    +UnitOfWork(DbContext context) UnitOfWork
 }
 
 class IBookRepository {
