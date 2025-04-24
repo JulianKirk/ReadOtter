@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReadOtter.Shared.Data;
 
@@ -10,9 +11,11 @@ using ReadOtter.Shared.Data;
 namespace ReadOtter.Shared.Migrations
 {
     [DbContext(typeof(ReadOtterLibraryDbContext))]
-    partial class ReadOtterLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250424171143_Changed book name to title")]
+    partial class Changedbooknametotitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
