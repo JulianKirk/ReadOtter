@@ -1,6 +1,4 @@
-﻿@using ReadOtter.Shared.Data.Services.BlazorConsumed
-@using VersOne.Epub
-ed.Data.Services.BlazorConsumed
+﻿@using ReadOtter.Shared.Data.Services
 @using VersOne.Epub
 @inject EpubContentService EpubContentService
 @inject InputService InputService
@@ -17,9 +15,9 @@ ed.Data.Services.BlazorConsumed
 
 @code {
 	[Parameter]
-	public int BookId { get; set; }
+	public Guid BookId { get; set; }
 
-	string content;
+	string content = string.Empty;
 
 	protected override void OnInitialized()
 	{

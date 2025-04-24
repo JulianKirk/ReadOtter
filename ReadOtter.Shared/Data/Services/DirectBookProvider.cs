@@ -9,19 +9,42 @@ namespace ReadOtter.Shared.Data.Services
 {
     public class DirectBookProvider : IBookProvider
     {
-        public Book GetFullBook(int id)
+        public IEnumerable<Book> GetAllBooks()
         {
             throw new NotImplementedException();
         }
-        public BookMetaData GetMetadata(int id)
+
+        public ContentChapter GetChapter(Guid id, string chapterName)
         {
             throw new NotImplementedException();
         }
-        public BookContent GetContent(int id)
+
+        public ContentChapter GetChapter(Guid id, int chapterIndex)
         {
             throw new NotImplementedException();
         }
-        public ContentChapter GetChapter(int id, string chapterName)
+
+        public int GetChapterCount(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BookContent GetContent(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Book GetEmptyOrIncompleteBook(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Book GetFullBook(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BookMetaData GetMetadata(Guid id)
         {
             throw new NotImplementedException();
         }

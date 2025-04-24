@@ -20,7 +20,7 @@ namespace ReadOtter.Shared.Data.Repositories
             get { return _context as ReadOtterLibraryDbContext; }
         }
 
-		protected TEntity GetById(int id)
+        protected TEntity? GetById(Guid id)
         {
             return _context.Set<TEntity>().Find(id);
         }

@@ -1,47 +1,47 @@
 ﻿using ReadOtter.Shared.Data.Models;
 using System.Collections.Concurrent;
 
-namespace ReadOtter.Shared.Data.Services.BlazorConsumed
+namespace ReadOtter.Shared.Data.Services
 {
-	public class EpubContentService: ServiceBase
+	public class EpubContentService
 	{
-		private readonly IVersOneAdaptor versOneWrapperService;
+		private readonly IBookProvider bookProvider;
 
-        private readonly ConcurrentDictionary<(int BookId, int ChapterIndex), BookContent> chapterContentCache;
-
-        public EpubContentService(IUnitOfWork unitOfWork, IVersOneAdaptor versOneWrapperService) : base(unitOfWork)
+        public EpubContentService(IBookProvider bookProvider)
 		{
-			this.versOneWrapperService = versOneWrapperService;
-		}
-
-		public void OffsetBookCurrentChapter(int id, int offset)
-		{
-			var book = _unitOfWork.BookRepository.GetBookById(id);
-            OffsetBookCurrentChapter(book, offset);
+			this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
         }
 
-        public void OffsetBookCurrentChapter(Book book, int offset)
+		public bool OffsetBookCurrentChapter(Guid id, int offset)
+		{
+			var book = bookProvider.GetEmptyOrIncompleteBook(id);
+            return OffsetBookCurrentChapter(book, offset);
+        }
+
+        public bool OffsetBookCurrentChapter(Book book, int offset)
         {
-            var totalChapterCount = versOneWrapperService.GetTotalChapterCount(book);
+            var totalChapterCount = bookProvider.GetChapterCount(book.Id);
             var newChapterNum = book.CurrentChapter + offset;
 
             if (newChapterNum < 0 || newChapterNum >= totalChapterCount)
             {
-                return;
+                return false;
             }
 
             book.CurrentChapter = newChapterNum;
+
+            return true;
         }
 
-        public string GetCurrentChapterTextContent(int id)
+        public string GetCurrentChapterTextContent(Guid id)
 		{
-			var book = _unitOfWork.BookRepository.GetBookById(id);
-			return GetCurrentChapterTextContent(book);
+            var book = bookProvider.GetEmptyOrIncompleteBook(id);
+            return GetCurrentChapterTextContent(book);
         }
 
         public string GetCurrentChapterTextContent(Book book)
         {
-            return versOneWrapperService.GetContentForChapter(book, book.CurrentChapter);
+            return bookProvider.GetChapter(book.Id, book.CurrentChapter).Content;
         }
     }
 }

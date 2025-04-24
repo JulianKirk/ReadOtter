@@ -17,15 +17,15 @@ namespace ReadOtter.Shared.Data.Models
 
             if (title == null && index == null)
             {
-                throw new ArgumentException("Either title or index must be provided.");
+                throw new ArgumentException($"Either {nameof(title)} or {nameof(index)} must be provided.");
             }
         }
 
-        public string? Key { get; set; } //As defined in the EPUB manifest
+        public string? Key { get; } //As defined in the EPUB manifest
 
-        public string? Title { get; set; }
+        public string? Title { get; }
 
-        public int? Index { get; set; }
+        public int? Index { get; }
 
         public string Content { get; set; }
     }

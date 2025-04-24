@@ -1,6 +1,5 @@
 ﻿@using ReadOtter.Shared.Data.Models
 @using ReadOtter.Shared.Data.Services
-@using ReadOtter.Shared.Data.Services.BlazorConsumed
 @using VersOne.Epub.Schema;
 @inject EpubMetadataService EpubMetadataService
 
@@ -10,9 +9,9 @@
 
 	<h2>Descriptions</h2>
 	<!-- Description(s) -->
-	@foreach (var description in metadata.Descriptions)
+	@foreach (var description in metadata.Descriptions ?? [])
 	{
-		<p>@((MarkupString)description.Description)</p>
+		<p>@((MarkupString)description)</p>
 	}
 
 	<h2>Creators</h2>
@@ -24,9 +23,9 @@
 
 @code {
 	[Parameter]
-	public Book Book { get; set; }
+	public required Book Book { get; set; }
 
-	EpubMetadata metadata;
+	BookMetaData metadata = new();
 
 	protected override void OnParametersSet()
 	{
@@ -35,16 +34,16 @@
 
 	string GetCreatorsList()
 	{
-		return string.Join(", ", metadata.Creators.Select(c => c.Creator));
+		return string.Join(", ", metadata.Creators ?? []);
 	}
 
 	string GetPublishersList()
 	{
-		return string.Join(", ", metadata.Publishers.Select(p => p.Publisher));
+		return string.Join(", ", metadata.Publishers ?? []);
 	}
 
 	string GetContributorsList()
 	{
-		return string.Join(", ", metadata.Contributors.Select(c => c.Contributor));
+		return string.Join(", ", metadata.Contributors ?? []);
 	}
 }

@@ -1,9 +1,4 @@
 ﻿using ReadOtter.Shared.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReadOtter.Shared.Data.Services
 {
@@ -12,10 +7,10 @@ namespace ReadOtter.Shared.Data.Services
         readonly IUnitOfWork unitOfWork;
         readonly IVersOneAdaptor versOneAdaptor;
 
-        readonly Dictionary<int, Book> bookCache = new();
-        readonly Dictionary<int, BookMetaData> metaDataCache = new();
-        readonly Dictionary<int, BookContent> contentCache = new();
-        readonly Dictionary<int, List<ContentChapter>> chapterCache = new();
+        Dictionary<Guid, Book> bookCache = new();
+        readonly Dictionary<Guid, BookMetaData> metaDataCache = new();
+        readonly Dictionary<Guid, BookContent> contentCache = new();
+        readonly Dictionary<Guid, List<ContentChapter>> chapterCache = new();
 
         public CachedBookProvider(IUnitOfWork unitOfWork, IVersOneAdaptor versOneAdaptor)
         {
@@ -23,7 +18,16 @@ namespace ReadOtter.Shared.Data.Services
             this.versOneAdaptor = versOneAdaptor ?? throw new ArgumentNullException(nameof(versOneAdaptor));
         }
 
-        public Book GetEmptyOrIncompleteBook(int id)
+        public IEnumerable<Book> GetAllBooks()
+        {
+            var books = unitOfWork.BookRepository.GetAllBooks();
+
+            bookCache = books.ToDictionary(b => b.Id, b => b);
+
+            return books;
+        }
+
+        public Book GetEmptyOrIncompleteBook(Guid id)
         {
             if (bookCache.TryGetValue(id, out var book))
             {
@@ -36,7 +40,7 @@ namespace ReadOtter.Shared.Data.Services
             return book;
         }
 
-        public Book GetFullBook(int id)
+        public Book GetFullBook(Guid id)
         {
             if (bookCache.TryGetValue(id, out var book))
             {
@@ -54,7 +58,7 @@ namespace ReadOtter.Shared.Data.Services
             return book;
         }
 
-        public BookMetaData GetMetadata(int id)
+        public BookMetaData GetMetadata(Guid id)
         {
             if (metaDataCache.TryGetValue(id, out var metaData))
             {
@@ -63,25 +67,69 @@ namespace ReadOtter.Shared.Data.Services
 
             var book = GetEmptyOrIncompleteBook(id);
 
-            var epubRef = versOneAdaptor.GetEpubBookRef(book);
+            return versOneAdaptor.GetMetaData(book);
         }
 
-        public BookContent GetContent(int id)
+        public BookContent GetContent(Guid id)
         {
             if (contentCache.TryGetValue(id, out var content))
-                return content;
-        }
-
-        public ContentChapter GetChapter(int id, string chapterName)
-        {
-            if (chapterCache.TryGetValue(id, out var chapters))
             {
-                var chapter = chapters.Find(c => c.Title.Equals(chapterName, StringComparison.OrdinalIgnoreCase));
-                if (chapter != null)
-                    return chapter;
+                return content;
             }
 
-            return null;
+            var book = GetEmptyOrIncompleteBook(id);
+
+            return versOneAdaptor.GetContent(book);
+        }
+
+        public ContentChapter GetChapter(Guid id, string chapterTitle)
+        {
+            var chapterExists = chapterCache.TryGetValue(id, out var chapters);
+
+            if (chapters == null)
+            {
+                chapters = new List<ContentChapter>();
+                chapterCache.Add(id, chapters);
+            }
+
+            var chapter = chapters.FirstOrDefault(c => c.Title != null && c.Title.Equals(chapterTitle, StringComparison.OrdinalIgnoreCase));
+
+            if (chapter == null)
+            {
+                var book = GetEmptyOrIncompleteBook(id);
+                chapter = versOneAdaptor.GetChapterContent(book, chapterTitle);
+                chapters.Add(chapter);
+            }
+
+            return chapter;
+        }
+
+        public ContentChapter GetChapter(Guid id, int chapterIndex)
+        {
+            var chapterExists = chapterCache.TryGetValue(id, out var chapters);
+
+            if (chapters == null)
+            {
+                chapters = new List<ContentChapter>();
+                chapterCache.Add(id, chapters);
+            }
+
+            var chapter = chapters.FirstOrDefault(c => c.Index == chapterIndex);
+
+            if (chapter == null)
+            {
+                var book = GetEmptyOrIncompleteBook(id);
+                chapter = versOneAdaptor.GetChapterContent(book, chapterIndex);
+                chapters.Add(chapter);
+            }
+
+            return chapter;
+        }
+
+        public int GetChapterCount(Guid id)
+        {
+            var book = GetEmptyOrIncompleteBook(id);
+            return versOneAdaptor.GetTotalChapterCount(book);
         }
     }
 }

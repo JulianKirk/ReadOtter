@@ -8,8 +8,12 @@ namespace ReadOtter.Shared.Data.Models
 {
     public class BookMetaData
     {
-        IEnumerable<string> Creators { get; set; }
+        public IEnumerable<string>? Descriptions { get; set; }
 
-        IEnumerable<string> Publishers { get; set; }
+        public IEnumerable<string>? Creators { get; set; }
+
+        public IEnumerable<string>? Publishers { get; set; }
+
+        public IEnumerable<string>? Contributors { get; set; }
     }
 }

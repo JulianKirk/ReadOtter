@@ -2,6 +2,11 @@
 {
     public class BookContent
     {
-        public IEnumerable<ContentChapter> Chapters;
+        public BookContent(IEnumerable<ContentChapter> chapters)
+        {
+            Chapters = chapters ?? throw new ArgumentNullException(nameof(chapters));
+        }
+
+        public IEnumerable<ContentChapter> Chapters { get; }
     }
 }

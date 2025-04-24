@@ -10,6 +10,7 @@ namespace ReadOtter.Tests.Common
     public class MockHelper
     {
         //NOTE TO SELF - for the future can add more parameters to this other than books
+        //I think this should be kept here for the sake of possible future removal features and integration tests - even though it is not immediately useful
         public static Mock<IUnitOfWork> MockUnitOfWork(List<Book>? books = null)
         {
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -26,14 +27,14 @@ namespace ReadOtter.Tests.Common
         {
             var mockBookRepository = new Mock<IBookRepository>();
             mockBookRepository.Setup(r => r.GetAllBooks()).Returns(books);
-            mockBookRepository.Setup(r => r.RemoveBookById(It.IsAny<int>()))
-                .Callback<int>(id =>
+            mockBookRepository.Setup(r => r.RemoveBookById(It.IsAny<Guid>()))
+                .Callback<Guid>(id =>
                 {
-                    var bookToRemove = books.FirstOrDefault(b => b.Id == id);
+                    var bookToRemove = books.First(b => b.Id == id);
                     books.Remove(bookToRemove);
                 });
-            mockBookRepository.Setup(r => r.GetBookById(It.IsAny<int>()))
-                .Returns<int>(id =>
+            mockBookRepository.Setup(r => r.GetBookById(It.IsAny<Guid>()))
+                .Returns<Guid>(id =>
                 {
                     return books.FirstOrDefault(b => b.Id == id);
                 });

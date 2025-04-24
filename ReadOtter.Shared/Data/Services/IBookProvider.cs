@@ -1,22 +1,23 @@
 ﻿using ReadOtter.Shared.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReadOtter.Shared.Data.Services
 {
     public interface IBookProvider
     {
-        public Book GetEmptyOrIncompleteBook(int id);
+        public IEnumerable<Book> GetAllBooks();
 
-        public Book GetFullBook(int id);
+        public Book GetEmptyOrIncompleteBook(Guid id);
 
-        public BookMetaData GetMetadata(int id);
+        public Book GetFullBook(Guid id);
 
-        public BookContent GetContent(int id);
+        public BookMetaData GetMetadata(Guid id);
 
-        public ContentChapter GetChapter(int id, string chapterName);
+        public BookContent GetContent(Guid id);
+
+        public ContentChapter GetChapter(Guid id, string chapterName);
+
+        public ContentChapter GetChapter(Guid id, int chapterIndex);
+
+        public int GetChapterCount(Guid id);
     }
 }

@@ -64,7 +64,7 @@ namespace ReadOtter.Shared.Data.Services
                chapters.Add(new ContentChapter(chapter.Content, key: chapter.Key, index: chapterIndex));
             }
 
-            return new BookContent { Chapters = chap };
+            return new BookContent(chapters);
         }
 
         public int GetTotalChapterCount(Book book)

@@ -42,8 +42,8 @@ namespace ReadOtter.Shared.Data
         {
             return new List<Book>
             {
-                new Book { Name = "ORV", CurrentChapter  = 1, CurrentChapterPage = 1, FilePath = @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\ORV.epub" },
-                new Book { Name = "Red Rising", CurrentChapter = 1, CurrentChapterPage = 1, FilePath = @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\RedRising.epub" }
+                new Book { Title = "ORV", CurrentChapter  = 1, CurrentChapterPage = 1, FilePath = @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\ORV.epub" },
+                new Book { Title = "Red Rising", CurrentChapter = 1, CurrentChapterPage = 1, FilePath = @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\RedRising.epub" }
 			};
         }
     }

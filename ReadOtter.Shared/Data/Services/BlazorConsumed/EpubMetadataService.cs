@@ -1,68 +1,68 @@
 ﻿using ReadOtter.Shared.Data.Models;
 using VersOne.Epub.Schema;
 
-namespace ReadOtter.Shared.Data.Services.BlazorConsumed
+namespace ReadOtter.Shared.Data.Services
 {
-	public class EpubMetadataService : ServiceBase
+	public class EpubMetadataService
 	{
-		private readonly IVersOneAdaptor versOneWrapperService;
+        private readonly IBookProvider bookProvider;
 
-		public EpubMetadataService(IUnitOfWork unitOfWork, IVersOneAdaptor versOneWrapperService) : base(unitOfWork)
+		public EpubMetadataService(IBookProvider bookProvider)
 		{
-			this.versOneWrapperService = versOneWrapperService;
+            this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
 		}
 
-        public BookMetaData GetMetaData(int id)
+        public BookMetaData GetMetaData(Guid id)
         {
-            var book = _unitOfWork.BookRepository.GetBookById(id);
-            return GetMetaData(book);
+            return bookProvider.GetMetadata(id);
         }
 
         public BookMetaData GetMetaData(Book book)
 		{
-			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
-			return epubBookRef.Schema.Package.Metadata
-		}
+			return bookProvider.GetMetadata(book.Id);
+        }
 
-        public string GetCoverImage(int id)
+        public string GetCoverImage(Guid id)
 		{
-			var book = _unitOfWork.BookRepository.GetBookById(id);
+			var book = bookProvider.GetEmptyOrIncompleteBook(id);
 			return GetCoverImage(book);
 		}
 
 		public string GetCoverImage(Book book)
 		{
-			var epubBookRef = versOneWrapperService.GetEpubBookRef(book);
+			//var book = bookProvider.GetEmptyOrIncompleteBook(book.Id);
 
-			var localAppDataFolder = Environment.SpecialFolder.LocalApplicationData;
+			//var localAppDataFolder = Environment.SpecialFolder.LocalApplicationData;
 
-			var bookDirectoryPath = Environment.GetFolderPath(localAppDataFolder) + @$"\Books\Metadata\{epubBookRef.Title}";
-			var fileName = "cover.jpg";
+			//var bookDirectoryPath = Environment.GetFolderPath(localAppDataFolder) + @$"\Books\Metadata\{book}";
+			//var fileName = "cover.jpg";
 
-			var coverPath = Path.Combine(bookDirectoryPath, fileName);
+			//var coverPath = Path.Combine(bookDirectoryPath, fileName);
 
-			//Create the directory if it does not exist
-			if (!Directory.Exists(bookDirectoryPath))
-			{
-				Directory.CreateDirectory(bookDirectoryPath);
-			}
+			////Create the directory if it does not exist
+			//if (!Directory.Exists(bookDirectoryPath))
+			//{
+			//	Directory.CreateDirectory(bookDirectoryPath);
+			//}
 
-			//Create the file if it does not exist
-			if (!File.Exists(coverPath))
-			{
-				var imageBytes = epubBookRef.ReadCover();
+			////Create the file if it does not exist
+			//if (!File.Exists(coverPath))
+			//{
+			//	var imageBytes = epubBookRef.ReadCover();
 
-				if (imageBytes is null)
-				{
+			//	if (imageBytes is null)
+			//	{
 
-				}
+			//	}
 
-				File.WriteAllBytes(coverPath, imageBytes);
-			}
+			//	File.WriteAllBytes(coverPath, imageBytes);
+			//}
 
-			var coverBytes = File.ReadAllBytes(coverPath);
+			//var coverBytes = File.ReadAllBytes(coverPath);
 
-			return $"data:image/jpeg;base64,{Convert.ToBase64String(coverBytes)}";
+			//return $"data:image/jpeg;base64,{Convert.ToBase64String(coverBytes)}";
+
+			throw new NotImplementedException();
 		}
 	}
 }

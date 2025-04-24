@@ -13,7 +13,7 @@ namespace ReadOtter.Shared.Data.Repositories
         {
         }
 
-        public Book GetBookById(int id)
+        public Book? GetBookById(Guid id)
         {
             return GetById(id);
         }
@@ -23,7 +23,7 @@ namespace ReadOtter.Shared.Data.Repositories
             return _context.Books;
         }
 
-        public void RemoveBookById(int id)
+        public void RemoveBookById(Guid id)
         {
             var book = GetBookById(id);
 

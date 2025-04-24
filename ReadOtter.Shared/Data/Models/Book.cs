@@ -9,20 +9,20 @@ namespace ReadOtter.Shared.Data.Models
         //Information needed to display information about the book without actually parsing the Epub data
         
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public string? Name { get; set; }
+        public required string Title { get; set; } //If this is not present then maybe put a message discussing how the epub format provdiided is not accurate
 
-        public int CurrentChapter { get; set; }
+        public int CurrentChapter { get; set; } = 0;
 
-        public int CurrentChapterPage { get; set; }
+        public int CurrentChapterPage { get; set; } = 0; //Unsure yet how exactly this will work out
 
-        public string FilePath { get; set; }
-
-        [NotMapped]
-        public BookMetaData MetaData { get; set; } //LOAD THIS DYNAMICALLY
+        public required string FilePath { get; set; }
 
         [NotMapped]
-        public BookContent Content { get; set; } //LOAD THIS DYNAMICALLY
+        public BookMetaData? MetaData { get; set; } //LOAD THIS DYNAMICALLY
+
+        [NotMapped]
+        public BookContent? Content { get; set; } //LOAD THIS DYNAMICALLY
     }
 }

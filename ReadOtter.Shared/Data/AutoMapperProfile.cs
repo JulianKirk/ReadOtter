@@ -8,7 +8,7 @@ namespace ReadOtter.Shared.Data
     {
         public AutoMapperProfile()
         {
-             CreateMap<EpubMetadata, BookMetaData>();
+            CreateMap<EpubMetadata, BookMetaData>();
             CreateMap<EpubLocalTextContentFile, ContentChapter>()
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
                 .ForMember(dest => dest.Title, opt => opt.Ignore())

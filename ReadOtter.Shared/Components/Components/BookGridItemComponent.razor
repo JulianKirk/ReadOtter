@@ -1,7 +1,5 @@
 ﻿@using ReadOtter.Shared.Data.Models
 @using ReadOtter.Shared.Data.Services
-@using ReadOtter.Shared.Data.Services.BlazorConsumed
-@using VersOne.Epub.Schema;
 @inject EpubMetadataService EpubMetadataService
 @inject NavigationManager Navigation
 
@@ -19,9 +17,9 @@
 
 @code {
 	[Parameter]
-	public Book Book { get; set; }
+	public required Book Book { get; set; }
 
-	EpubMetadata metadata;
+	BookMetaData metadata = new();
 
 	protected override void OnParametersSet()
 	{
@@ -30,12 +28,12 @@
 
 	string GetCreatorsList()
 	{
-		return string.Join(", ", metadata.Creators.Select(c => c.Creator));
+		return string.Join(", ", metadata.Creators ?? []);
 	}
 
 	string GetPublishersList()
 	{
-		return string.Join(", ", metadata.Publishers.Select(p => p.Publisher));
+		return string.Join(", ", metadata.Publishers ?? []);
 	}
 
 	string GetCoverImageBase64String()

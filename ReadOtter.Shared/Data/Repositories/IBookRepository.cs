@@ -10,10 +10,10 @@ namespace ReadOtter.Shared.Data.Repositories
 {
 	public interface IBookRepository
 	{
-		Book GetBookById(int id);
+		Book? GetBookById(Guid id);
 
 		IEnumerable<Book> GetAllBooks();
 
-		void RemoveBookById(int id);
+		void RemoveBookById(Guid id);
 	}
 }

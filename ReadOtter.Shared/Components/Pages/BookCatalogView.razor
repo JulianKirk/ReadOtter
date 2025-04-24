@@ -1,5 +1,5 @@
-﻿@using ReadOtter.Shared.Data.Services.BlazorConsumed
-@inject BookCommonService BookCommonService
+﻿@using ReadOtter.Shared.Data.Services
+@inject BookCollectionService BookCommonService
 
 <h2>Catalog</h2>
 
@@ -7,7 +7,7 @@
 	<div class="BookCatalogView-Grid">
 		@foreach (var book in books)
 		{
-			<BookGridItem Book="@book"></BookGridItem>
+			<BookGridItemComponent Book="@book"></BookGridItemComponent>
 		}
 	</div>
 </div>

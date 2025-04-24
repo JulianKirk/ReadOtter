@@ -7,12 +7,14 @@ namespace ReadOtter.Shared.Data.Services
 {
     public interface IVersOneAdaptor
     {
-        EpubBook GetEpubBook(Book book, EpubReaderOptions? readerOptions = null);
+        public BookMetaData GetMetaData(Book book);
 
-        EpubBookRef GetEpubBookRef(Book book, EpubReaderOptions? readerOptions = null);
+        public ContentChapter GetChapterContent(Book book, string title);
 
-        string GetContentForChapter(Book book, int chapterIndex);
+        public ContentChapter GetChapterContent(Book book, int index);
 
-        int GetTotalChapterCount(Book book);
+        public BookContent GetContent(Book book);
+
+        public int GetTotalChapterCount(Book book);
     }
 }

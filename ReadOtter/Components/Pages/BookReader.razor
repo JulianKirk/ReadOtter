@@ -1,18 +1,18 @@
 ﻿@page "/reader/{BookId}"
 
-<ReadView BookId=@GetBookIdInt()></ReadView>
+<ReadView BookId=@GetBookId()></ReadView>
 
 @code {
 	[Parameter]
-	public string? BookId { get; set; }
+	public required string BookId { get; set; }
 
 	protected override void OnParametersSet()
 	{
 		StateHasChanged();
 	}
 
-	int GetBookIdInt()
+	Guid GetBookId()
 	{
-		return int.Parse(BookId);
+		return Guid.Parse(BookId);
 	}
 }
