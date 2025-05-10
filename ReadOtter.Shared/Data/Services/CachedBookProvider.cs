@@ -131,5 +131,18 @@ namespace ReadOtter.Shared.Data.Services
             var book = GetEmptyOrIncompleteBook(id);
             return versOneAdaptor.GetTotalChapterCount(book);
         }
+
+        public string GetCoverImage(Guid id)
+        {
+            var book = GetEmptyOrIncompleteBook(id);
+            var coverImageBytes = versOneAdaptor.GetCoverImage(book);
+
+            if (coverImageBytes != null)
+            {
+                return $"data:image/jpeg;base64,{Convert.ToBase64String(coverImageBytes)}";
+            }
+
+            return string.Empty;
+        }
     }
 }

@@ -34,6 +34,11 @@ namespace ReadOtter.Shared.Data.Services
             throw new NotImplementedException();
         }
 
+        public string GetCoverImage(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Book GetEmptyOrIncompleteBook(Guid id)
         {
             throw new NotImplementedException();

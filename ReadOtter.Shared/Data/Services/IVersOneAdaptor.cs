@@ -16,5 +16,7 @@ namespace ReadOtter.Shared.Data.Services
         public BookContent GetContent(Book book);
 
         public int GetTotalChapterCount(Book book);
+
+        public byte[]? GetCoverImage(Book book);
     }
 }

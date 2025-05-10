@@ -72,5 +72,10 @@ namespace ReadOtter.Shared.Data.Services
 			var epubBook = GetEpubBookRef(book);
             return epubBook.GetReadingOrder().Count;
         }
+
+        public byte[]? GetCoverImage(Book book)
+        {
+            return GetEpubBookRef(book).ReadCover();
+        }
     }
 }

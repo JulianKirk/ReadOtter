@@ -19,5 +19,7 @@ namespace ReadOtter.Shared.Data.Services
         public ContentChapter GetChapter(Guid id, int chapterIndex);
 
         public int GetChapterCount(Guid id);
+
+        public string GetCoverImage(Guid id);
     }
 }
