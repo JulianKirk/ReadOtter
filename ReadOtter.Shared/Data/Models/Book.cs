@@ -11,7 +11,7 @@ namespace ReadOtter.Shared.Data.Models
         [Key]
         public Guid Id { get; set; }
 
-        public required string Title { get; set; } //If this is not present then maybe put a message discussing how the epub format provdiided is not accurate
+        public required string Title { get; set; } //If this is not present then maybe put a message discussing how the epub format provided is not accurate
 
         public int CurrentChapter { get; set; } = 0;
 
