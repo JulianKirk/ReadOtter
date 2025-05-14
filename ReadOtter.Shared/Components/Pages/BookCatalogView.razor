@@ -1,0 +1,31 @@
+﻿@using ReadOtter.Shared.Data.Services
+@inject BookCollectionService BookCommonService
+
+<div class="BookCatalogView">
+	<h2>Catalog</h2>
+
+	<div class="BookCatalogView-Grid">
+		@foreach (var book in books)
+		{
+			<BookGridItemComponent Book="@book"></BookGridItemComponent>
+		}
+	</div>
+
+	<InputFile></InputFile>
+
+	<button class="btn btn-primary add-book-button" @onclick=@AddBook></button>
+</div>
+
+@code {
+	IEnumerable<Book> books = new List<Book>();
+
+	protected override void OnInitialized()
+	{
+		books = BookCommonService.GetAllBooks();
+	}
+
+	void AddBook()
+	{
+		
+	}
+}

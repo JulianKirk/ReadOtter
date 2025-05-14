@@ -88,3 +88,30 @@ h1:focus {
 .ReadView-Content {
     padding: 100px;
 }
+
+.BookCatalogView-Grid
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+/*    grid-template-rows: repeat(3, 250px);*/
+    grid-auto-columns: 250px;
+    grid-auto-rows: 250px;
+    grid-auto-flow: row dense;
+    gap: 50px;
+}
+
+.book-grid-item {
+    overflow-y: auto;
+    background-color: lightseagreen;
+    font-size: 12px;
+    padding: 10px;
+}
+
+.book-grid-item h2 {
+    font-size: 20px;
+}
+
+.book-grid-item img {
+    max-height: 90%;
+    max-width: 90%;
+}

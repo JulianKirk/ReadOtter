@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ReadOtter.Shared.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ReadOtter.Shared.Data.Models;
 
 namespace ReadOtter.Shared.Data
 {
@@ -12,7 +6,7 @@ namespace ReadOtter.Shared.Data
     {
         ReadOtterLibraryDbContext context;
 
-        public Seeder(ReadOtterLibraryDbContext context) 
+        public Seeder(ReadOtterLibraryDbContext context)
         {
             this.context = context;
 
@@ -24,14 +18,10 @@ namespace ReadOtter.Shared.Data
         {
             context.Books.AddRange(GetBooksToSeed());
 
-            context.Books.Add(new Book { FilePath = "whatever", Name = "na,e" });
-
             context.SaveChanges();
         }
 
-        public void ClearSeededData()
-        {
-        }
+        public void ClearSeededData() { }
 
         public void ClearAllData()
         {
@@ -44,7 +34,22 @@ namespace ReadOtter.Shared.Data
         {
             return new List<Book>
             {
-                new Book { Name = "ORV", CurrentChapter  = 1, CurrentChapterPage = 1, FilePath = @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\ORV.epub"}
+                new Book
+                {
+                    Title = "ORV",
+                    CurrentChapter = 1,
+                    CurrentChapterPage = 1,
+                    FilePath =
+                        @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\ORV.epub",
+                },
+                new Book
+                {
+                    Title = "Red Rising",
+                    CurrentChapter = 1,
+                    CurrentChapterPage = 1,
+                    FilePath =
+                        @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\RedRising.epub",
+                },
             };
         }
     }

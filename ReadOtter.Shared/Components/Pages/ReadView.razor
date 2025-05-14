@@ -1,7 +1,7 @@
-﻿@using ReadOtter.Shared.Data.Models
-@using ReadOtter.Shared.Data.Services
+﻿@using ReadOtter.Shared.Data.Services
 @using VersOne.Epub
 @inject EpubContentService EpubContentService
+@inject InputService InputService
 
 <div class="ReadView">
 
@@ -15,14 +15,29 @@
 
 @code {
 	[Parameter]
-	public int BookId { get; set; }
+	public Guid BookId { get; set; }
 
-	string content;
-
+	string content = string.Empty;
 
 	protected override void OnInitialized()
 	{
 		UpdateContent();
+
+		InputService.OnKeyDown += HandleKeyDown;
+	}
+
+	
+	void HandleKeyDown(string key)
+	{
+		if (key == "ArrowRight")
+		{
+			GotoNextChapter();
+		}
+
+		if (key == "ArrowLeft")
+		{
+			GotoPreviousChapter();
+		}
 	}
 
 	void GotoPreviousChapter()
@@ -40,6 +55,6 @@
 	void UpdateContent()
 	{
 		content = EpubContentService.GetCurrentChapterTextContent(BookId);
-		// StateHasChanged();
+		StateHasChanged();
 	}
 }

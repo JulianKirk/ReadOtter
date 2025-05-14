@@ -1,0 +1,47 @@
+﻿@using ReadOtter.Shared.Data.Models
+@using ReadOtter.Shared.Data.Services
+@inject EpubMetadataService EpubMetadataService
+@inject NavigationManager Navigation
+
+<div class="book-grid-item" @onclick=@ViewBook>
+	<img src="@GetCoverImageBase64String()"/>
+
+	<h2>Author(s)</h2>
+	@GetCreatorsList()
+	<br />
+
+	<h2>Publisher(s)</h2>
+	@GetPublishersList()
+</div>
+
+@code {
+	[Parameter]
+	public required Book Book { get; set; }
+
+	BookMetaData metadata = new();
+
+	protected override void OnParametersSet()
+	{
+		metadata = EpubMetadataService.GetMetaData(Book);
+	}
+
+	string GetCreatorsList()
+	{
+		return string.Join(", ", metadata.Creators ?? []);
+	}
+
+	string GetPublishersList()
+	{
+		return string.Join(", ", metadata.Publishers ?? []);
+	}
+
+	string GetCoverImageBase64String()
+	{
+		return EpubMetadataService.GetCoverImage(Book);
+	}
+
+	void ViewBook()
+	{
+		Navigation.NavigateTo("reader/" + Book.Id);
+	}
+}

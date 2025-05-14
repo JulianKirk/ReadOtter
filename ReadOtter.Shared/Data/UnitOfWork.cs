@@ -1,9 +1,4 @@
 ﻿using ReadOtter.Shared.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReadOtter.Shared.Data
 {
@@ -18,7 +13,7 @@ namespace ReadOtter.Shared.Data
             _context = context;
         }
 
-        public BookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
+        public IBookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
 
         public void Commit()
         {
