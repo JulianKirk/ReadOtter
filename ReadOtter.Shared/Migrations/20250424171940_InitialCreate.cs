@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -19,19 +18,19 @@ namespace ReadOtter.Shared.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     CurrentChapter = table.Column<int>(type: "INTEGER", nullable: false),
                     CurrentChapterPage = table.Column<int>(type: "INTEGER", nullable: false),
-                    FilePath = table.Column<string>(type: "TEXT", nullable: false)
+                    FilePath = table.Column<string>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Books");
+            migrationBuilder.DropTable(name: "Books");
         }
     }
 }
