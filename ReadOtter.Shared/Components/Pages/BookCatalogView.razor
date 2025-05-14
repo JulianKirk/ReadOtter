@@ -5,9 +5,9 @@
 	<h2>Catalog</h2>
 
 	<div class="BookCatalogView-Grid">
-		@foreach (var book in books)
+		@foreach (var bookId in bookIds)
 		{
-			<BookGridItemComponent Book="@book"></BookGridItemComponent>
+			<BookGridItemComponent BookId="@bookId"></BookGridItemComponent>
 		}
 	</div>
 
@@ -17,11 +17,11 @@
 </div>
 
 @code {
-	IEnumerable<Book> books = new List<Book>();
+	IEnumerable<Guid> bookIds = new List<Guid>();
 
 	protected override void OnInitialized()
 	{
-		books = BookCommonService.GetAllBooks();
+		bookIds = BookCommonService.GetAllBookIds();
 	}
 
 	void AddBook()
