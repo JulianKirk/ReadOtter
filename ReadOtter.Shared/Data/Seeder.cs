@@ -9,9 +9,6 @@ namespace ReadOtter.Shared.Data
         public Seeder(ReadOtterLibraryDbContext context)
         {
             this.context = context;
-
-            //ClearAllData(context);
-            //SeedData(context);
         }
 
         public void SeedData()

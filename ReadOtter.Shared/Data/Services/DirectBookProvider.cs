@@ -2,6 +2,7 @@
 
 namespace ReadOtter.Shared.Data.Services
 {
+    //Implement this after the registry is added
     public class DirectBookProvider : IBookProvider
     {
         public IEnumerable<Book> GetAllBooks()
