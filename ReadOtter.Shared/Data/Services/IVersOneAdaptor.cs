@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using ReadOtter.Shared.Data.Models;
-using VersOne.Epub;
-using VersOne.Epub.Options;
+﻿using ReadOtter.Shared.Data.Models;
 
 namespace ReadOtter.Shared.Data.Services
 {

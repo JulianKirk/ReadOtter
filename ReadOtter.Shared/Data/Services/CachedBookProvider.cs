@@ -15,7 +15,8 @@ namespace ReadOtter.Shared.Data.Services
         public CachedBookProvider(IUnitOfWork unitOfWork, IVersOneAdaptor versOneAdaptor)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            this.versOneAdaptor = versOneAdaptor ?? throw new ArgumentNullException(nameof(versOneAdaptor));
+            this.versOneAdaptor =
+                versOneAdaptor ?? throw new ArgumentNullException(nameof(versOneAdaptor));
         }
 
         public IEnumerable<Book> GetAllBooks()
@@ -34,7 +35,10 @@ namespace ReadOtter.Shared.Data.Services
                 return book;
             }
 
-            book = unitOfWork.BookRepository.GetBookById(id) ?? throw new InvalidOperationException($"Book with ID {id} not found."); ;
+            book =
+                unitOfWork.BookRepository.GetBookById(id)
+                ?? throw new InvalidOperationException($"Book with ID {id} not found.");
+            ;
             bookCache.Add(id, book);
 
             return book;
@@ -92,7 +96,9 @@ namespace ReadOtter.Shared.Data.Services
                 chapterCache.Add(id, chapters);
             }
 
-            var chapter = chapters.FirstOrDefault(c => c.Title != null && c.Title.Equals(chapterTitle, StringComparison.OrdinalIgnoreCase));
+            var chapter = chapters.FirstOrDefault(c =>
+                c.Title != null && c.Title.Equals(chapterTitle, StringComparison.OrdinalIgnoreCase)
+            );
 
             if (chapter == null)
             {

@@ -2,23 +2,24 @@
 
 namespace ReadOtter.Shared.Data.Services
 {
-	public class BookCollectionService
-	{
+    public class BookCollectionService
+    {
         private readonly IBookProvider bookProvider;
 
         public BookCollectionService(IBookProvider bookProvider)
-		{
-            this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
+        {
+            this.bookProvider =
+                bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
         }
 
-		public IEnumerable<Book> GetAllBooks()
-		{
-			return bookProvider.GetAllBooks();
-		}
+        public IEnumerable<Book> GetAllBooks()
+        {
+            return bookProvider.GetAllBooks();
+        }
 
-		public IEnumerable<Guid> GetAllBookIds()
-		{
-			return GetAllBooks().Select(b => b.Id);
-		}
-	}
+        public IEnumerable<Guid> GetAllBookIds()
+        {
+            return GetAllBooks().Select(b => b.Id);
+        }
+    }
 }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ReadOtter.Shared.Data.Models
+﻿namespace ReadOtter.Shared.Data.Models
 {
     public class ContentChapter
     {
-        public ContentChapter(string content, string? title = null, int? index = null, string? key = null)
+        public ContentChapter(
+            string content,
+            string? title = null,
+            int? index = null,
+            string? key = null
+        )
         {
             Title = title;
             Content = content;
@@ -17,7 +16,9 @@ namespace ReadOtter.Shared.Data.Models
 
             if (title == null && index == null)
             {
-                throw new ArgumentException($"Either {nameof(title)} or {nameof(index)} must be provided.");
+                throw new ArgumentException(
+                    $"Either {nameof(title)} or {nameof(index)} must be provided."
+                );
             }
         }
 

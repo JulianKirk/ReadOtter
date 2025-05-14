@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ReadOtter.Shared.Data.Models
 {
     public class Book
     {
-        //Information needed to display information about the book without actually parsing the Epub data
-        
         [Key]
         public Guid Id { get; set; }
 
@@ -15,14 +13,14 @@ namespace ReadOtter.Shared.Data.Models
 
         public int CurrentChapter { get; set; } = 0;
 
-        public int CurrentChapterPage { get; set; } = 0; //Unsure yet how exactly this will work out
+        public int CurrentChapterPage { get; set; } = 0; //Not yet used
 
         public required string FilePath { get; set; }
 
         [NotMapped]
-        public BookMetaData? MetaData { get; set; } //LOAD THIS DYNAMICALLY
+        public BookMetaData? MetaData { get; set; }
 
         [NotMapped]
-        public BookContent? Content { get; set; } //LOAD THIS DYNAMICALLY
+        public BookContent? Content { get; set; }
     }
 }

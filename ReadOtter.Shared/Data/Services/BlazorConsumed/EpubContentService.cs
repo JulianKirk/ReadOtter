@@ -1,20 +1,20 @@
 ﻿using ReadOtter.Shared.Data.Models;
-using System.Collections.Concurrent;
 
 namespace ReadOtter.Shared.Data.Services
 {
-	public class EpubContentService
-	{
-		private readonly IBookProvider bookProvider;
+    public class EpubContentService
+    {
+        private readonly IBookProvider bookProvider;
 
         public EpubContentService(IBookProvider bookProvider)
-		{
-			this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
+        {
+            this.bookProvider =
+                bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
         }
 
-		public bool OffsetBookCurrentChapter(Guid id, int offset)
-		{
-			var book = bookProvider.GetEmptyOrIncompleteBook(id);
+        public bool OffsetBookCurrentChapter(Guid id, int offset)
+        {
+            var book = bookProvider.GetEmptyOrIncompleteBook(id);
             return OffsetBookCurrentChapter(book, offset);
         }
 
@@ -34,7 +34,7 @@ namespace ReadOtter.Shared.Data.Services
         }
 
         public string GetCurrentChapterTextContent(Guid id)
-		{
+        {
             var book = bookProvider.GetEmptyOrIncompleteBook(id);
             return GetCurrentChapterTextContent(book);
         }

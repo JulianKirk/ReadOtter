@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ReadOtter.Shared.Data.Repositories
+﻿namespace ReadOtter.Shared.Data.Repositories
 {
-    public abstract class Repository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity>
+        where TEntity : class
     {
         protected readonly ReadOtterLibraryDbContext _context;
 
@@ -25,22 +20,22 @@ namespace ReadOtter.Shared.Data.Repositories
             return _context.Set<TEntity>().Find(id);
         }
 
-		protected IEnumerable<TEntity> GetAll()
+        protected IEnumerable<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();
         }
 
-		protected void Add(TEntity entity)
+        protected void Add(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);
         }
 
-		protected void Remove(TEntity entity)
+        protected void Remove(TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
         }
 
-		protected void Update(TEntity entity)
+        protected void Update(TEntity entity)
         {
             _context.Set<TEntity>().Update(entity);
         }

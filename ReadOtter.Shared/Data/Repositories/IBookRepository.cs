@@ -1,19 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ReadOtter.Shared.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ReadOtter.Shared.Data.Models;
 
 namespace ReadOtter.Shared.Data.Repositories
 {
-	public interface IBookRepository
-	{
-		Book? GetBookById(Guid id);
+    public interface IBookRepository
+    {
+        Book? GetBookById(Guid id);
 
-		IEnumerable<Book> GetAllBooks();
+        IEnumerable<Book> GetAllBooks();
 
-		void RemoveBookById(Guid id);
-	}
+        void RemoveBookById(Guid id);
+    }
 }
