@@ -41,7 +41,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void GetMetaData_WithId_ShouldCallProviderWithCorrectId()
+        public void GetMetaData_ShouldCallProviderWithCorrectId()
         {
             // Act
             var result = metadataService.GetMetaData(testBookId);
@@ -52,18 +52,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void GetMetaData_WithBook_ShouldCallProviderWithBookId()
-        {
-            // Act
-            var result = metadataService.GetMetaData(testBook);
-
-            // Assert
-            mockBookProvider.Verify(p => p.GetMetadata(testBookId), Times.Once);
-            Assert.That(result, Is.EqualTo(testMetadata));
-        }
-
-        [Test]
-        public void GetCoverImage_WithId_ShouldCallProvidersCorrectly()
+        public void GetCoverImage_ShouldCallProvidersCorrectly()
         {
             // Act
             var result = metadataService.GetCoverImage(testBookId);
@@ -75,20 +64,9 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void GetCoverImage_WithBook_ShouldCallProviderWithBookId()
+        public void Constructor_WhenNullBookProvider_ThrowsArgumentNullException()
         {
-            // Act
-            var result = metadataService.GetCoverImage(testBook);
-
-            // Assert
-            mockBookProvider.Verify(p => p.GetCoverImage(testBookId), Times.Once);
-            Assert.That(result, Is.EqualTo(testCoverImage));
-        }
-
-        [Test]
-        public void Constructor_NullBookProvider_ThrowsArgumentNullException()
-        {
-            // Act & Assert
+            // Act, Assert
             var ex = Assert.Throws<ArgumentNullException>(() => new EpubMetadataService(null));
             Assert.That(ex.ParamName, Is.EqualTo("bookProvider"));
         }

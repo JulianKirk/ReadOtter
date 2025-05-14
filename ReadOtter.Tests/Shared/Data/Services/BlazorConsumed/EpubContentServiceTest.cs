@@ -7,7 +7,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
     public class EpubContentServiceTest
     {
         [Test]
-        public void TestOffsetBookCurrentChapter_ValidOffset_UpdatesChapter()
+        public void OffsetBookCurrentChapter_ValidOffset_UpdatesChapter()
         {
             // Arrange
             var bookId = Guid.NewGuid();
@@ -33,7 +33,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void TestOffsetBookCurrentChapter_BelowLowerBound_ReturnsFalseAndDoesNotUpdateCurrentChapter()
+        public void OffsetBookCurrentChapter_BelowLowerBound_ReturnsFalseAndDoesNotUpdateCurrentChapter()
         {
             // Arrange
             var bookId = Guid.NewGuid();
@@ -59,7 +59,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void TestOffsetBookCurrentChapter_AboveUpperBound_ReturnsFalseAndDoesNotUpdateCurrentChapter()
+        public void OffsetBookCurrentChapter_AboveUpperBound_ReturnsFalseAndDoesNotUpdateCurrentChapter()
         {
             // Arrange
             var bookId = Guid.NewGuid();
@@ -85,7 +85,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void TestGetCurrentChapterTextContent_ReturnsChapterContent()
+        public void GetCurrentChapterTextContent_ReturnsChapterContent()
         {
             // Arrange
             var bookId = Guid.NewGuid();
@@ -108,6 +108,14 @@ namespace ReadOtter.Tests.Shared.Data.Services
 
             // Assert
             Assert.That(content, Is.EqualTo("Chapter Content"));
+        }
+
+        [Test]
+        public void Constructor_WhenNullBookProvider_ThrowsArgumentNullException()
+        {
+            // Act, Assert
+            var ex = Assert.Throws<ArgumentNullException>(() => new EpubContentService(null));
+            Assert.That(ex.ParamName, Is.EqualTo("bookProvider"));
         }
     }
 }

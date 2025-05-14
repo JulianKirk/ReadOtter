@@ -4,11 +4,9 @@
 @inject EpubMetadataService EpubMetadataService
 
 <div class="book-metadata">
-	<!-- INSERT IMAGE HERE -->
 	<img class="book-cover-image" />
 
 	<h2>Descriptions</h2>
-	<!-- Description(s) -->
 	@foreach (var description in metadata.Descriptions ?? [])
 	{
 		<p>@((MarkupString)description)</p>
@@ -24,13 +22,13 @@
 @code { 
 	//This does not currently display - do so in the near future
 	[Parameter]
-	public required Book Book { get; set; }
+	public required Guid BookId { get; set; }
 
 	BookMetaData metadata = new();
 
 	protected override void OnParametersSet()
 	{
-		metadata = EpubMetadataService.GetMetaData(Book);
+		metadata = EpubMetadataService.GetMetaData(BookId);
 	}
 
 	string GetCreatorsList()

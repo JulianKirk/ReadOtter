@@ -17,7 +17,7 @@ namespace ReadOtter.Shared.Data.Services
             return bookProvider.GetMetadata(id);
         }
 
-        public BookMetaData GetMetaData(Book book)
+        BookMetaData GetMetaData(Book book)
         {
             return bookProvider.GetMetadata(book.Id);
         }
@@ -28,7 +28,7 @@ namespace ReadOtter.Shared.Data.Services
             return GetCoverImage(book);
         }
 
-        public string GetCoverImage(Book book)
+        string GetCoverImage(Book book)
         {
             return bookProvider.GetCoverImage(book.Id);
         }

@@ -7,7 +7,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
     public class BookCollectionServiceTest
     {
         [Test]
-        public void TestGetAllBooks()
+        public void GetAllBooks_ReturnsAllBooks()
         {
             //Arrange
             var books = Enumerable
@@ -33,7 +33,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void TestGetAllBookIds()
+        public void GetAllBookIds_ReturnsAllBookIds()
         {
             //Arrange
             var bookIds = Enumerable.Range(1, 5).Select(i => Guid.NewGuid()).ToList();
@@ -55,6 +55,14 @@ namespace ReadOtter.Tests.Shared.Data.Services
 
             //Assert
             Assert.That(bookList, Is.EqualTo(bookIds));
+        }
+
+        [Test]
+        public void Constructor_WhenNullBookProvider_ThrowsArgumentNullException()
+        {
+            // Act, Assert
+            var ex = Assert.Throws<ArgumentNullException>(() => new EpubContentService(null));
+            Assert.That(ex.ParamName, Is.EqualTo("bookProvider"));
         }
     }
 }
