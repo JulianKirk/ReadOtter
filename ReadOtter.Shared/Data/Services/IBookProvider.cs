@@ -6,20 +6,20 @@ namespace ReadOtter.Shared.Data.Services
     {
         public IEnumerable<Book> GetAllBooks();
 
-        public Book GetEmptyOrIncompleteBook(Guid id);
+        public Book GetEmptyOrIncompleteBook(Guid bookId);
 
-        public Book GetFullBook(Guid id);
+        public Book GetFullBook(Guid bookId);
 
-        public BookMetaData GetMetadata(Guid id);
+        public BookMetaData GetMetadata(Guid bookId);
 
-        public BookContent GetContent(Guid id);
+        public BookContent GetContent(Guid bookId);
 
-        public ContentChapter GetChapter(Guid id, string chapterName);
+        public ContentChapter GetChapter(Guid bookId, string chapterName);
 
-        public ContentChapter GetChapter(Guid id, int chapterIndex);
+        public ContentChapter GetChapter(Guid bookId, int chapterIndex);
 
-        public int GetChapterCount(Guid id);
+        public int GetChapterCount(Guid bookId);
 
-        public string GetCoverImage(Guid id);
+        public string GetCoverImage(Guid bookId);
     }
 }
