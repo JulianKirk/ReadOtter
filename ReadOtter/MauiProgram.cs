@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
-using ReadOtter.Shared.Data;
 using ReadOtter.Shared.Data.Services;
 using ReadOtter.Shared.Interopt;
+using ReadOtter.Shared.Src.Data.Database;
+using ReadOtter.Shared.Src.Data.Epub;
+using ReadOtter.Shared.Src.Services;
 
 namespace ReadOtter
 {
@@ -20,7 +22,7 @@ namespace ReadOtter
             builder.Services.AddMauiBlazorWebView();
 
             builder.Services.AddDbContext<ReadOtterLibraryDbContext>();
-            builder.Services.AddScoped<Seeder>();
+            builder.Services.AddScoped<SeederService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -29,13 +31,13 @@ namespace ReadOtter
             builder.Services.AddScoped<IBookProvider, CachedBookProvider>();
 
             builder.Services.AddScoped<EpubContentService>();
-			builder.Services.AddScoped<EpubMetadataService>();
+            builder.Services.AddScoped<EpubMetadataService>();
             builder.Services.AddScoped<BookCollectionService>();
 
             builder.Services.AddScoped<InputService>();
 #if DEBUG
-			builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddDebug();
 #endif
 
             var app = builder.Build();

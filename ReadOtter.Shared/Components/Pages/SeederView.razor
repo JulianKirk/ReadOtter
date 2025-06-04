@@ -1,5 +1,7 @@
-﻿@using ReadOtter.Shared.Data
-@inject Seeder Seeder
+﻿@using ReadOtter.Shared.Src.Data.Database
+@using ReadOtter.Shared.Src.Data
+@using ReadOtter.Shared.Src.Services
+@inject SeederService SeederService
 @inject ReadOtterLibraryDbContext Context
 
 <h1>Seeder</h1>
@@ -20,19 +22,19 @@
 @code {
 	void SeedData() 
 	{ 
-		Seeder.SeedData();
+		SeederService.SeedData();
 		StateHasChanged();
 	}
 
 	void ClearSeededData() 
 	{
-		Seeder.ClearSeededData();
+		SeederService.ClearSeededData();
 		StateHasChanged();
 	}
 
 	void ClearAllData() 
 	{ 
-		Seeder.ClearAllData();
+		SeederService.ClearAllData();
 		StateHasChanged();
 	}
 }

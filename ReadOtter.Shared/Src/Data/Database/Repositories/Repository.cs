@@ -1,4 +1,4 @@
-﻿namespace ReadOtter.Shared.Data.Repositories
+﻿namespace ReadOtter.Shared.Src.Data.Database.Repositories
 {
     public abstract class Repository<TEntity>
         where TEntity : class
@@ -7,7 +7,7 @@
 
         public Repository(ReadOtterLibraryDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         protected ReadOtterLibraryDbContext DbContext

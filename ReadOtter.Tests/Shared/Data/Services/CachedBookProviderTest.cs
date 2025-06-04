@@ -1,8 +1,9 @@
 ﻿using Moq;
-using ReadOtter.Shared.Data;
-using ReadOtter.Shared.Data.Models;
-using ReadOtter.Shared.Data.Repositories;
 using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Src.Data.Database;
+using ReadOtter.Shared.Src.Data.Database.Repositories;
+using ReadOtter.Shared.Src.Data.Epub;
+using ReadOtter.Shared.Src.Data.Models;
 
 namespace ReadOtter.Tests.Shared.Data.Services
 {
@@ -114,7 +115,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         {
             // Arrange
             var nonExistentId = Guid.NewGuid();
-            _mockBookRepository.Setup(repo => repo.GetBookById(nonExistentId)).Returns((Book)null);
+            _mockBookRepository.Setup(repo => repo.GetBookById(nonExistentId)).Returns((Book?)null);
 
             // Act & Assert
             Assert.That(
@@ -389,7 +390,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
             _mockBookRepository.Setup(repo => repo.GetBookById(testBook.Id)).Returns(testBook);
             _mockVersOneAdaptor
                 .Setup(adaptor => adaptor.GetCoverImage(It.IsAny<Book>()))
-                .Returns((byte[])null);
+                .Returns((byte[]?)null);
 
             // Act
             var result = testCachedBookProvider.GetCoverImage(testBook.Id);

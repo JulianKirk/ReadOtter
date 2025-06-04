@@ -1,8 +1,8 @@
 ﻿using Moq;
-using ReadOtter.Shared.Data;
-using ReadOtter.Shared.Data.Models;
-using ReadOtter.Shared.Data.Repositories;
-using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Src.Data.Database;
+using ReadOtter.Shared.Src.Data.Database.Repositories;
+using ReadOtter.Shared.Src.Data.Epub;
+using ReadOtter.Shared.Src.Data.Models;
 
 namespace ReadOtter.Tests.Common
 {

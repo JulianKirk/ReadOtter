@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ReadOtter.Shared.Data.Models;
+using ReadOtter.Shared.Src.Data.Models;
 using VersOne.Epub;
 using VersOne.Epub.Options;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Src.Data.Epub
 {
     public class VersOneAdaptor : IVersOneAdaptor
     {

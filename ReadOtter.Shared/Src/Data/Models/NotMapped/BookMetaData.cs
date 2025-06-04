@@ -1,4 +1,4 @@
-﻿namespace ReadOtter.Shared.Data.Models
+﻿namespace ReadOtter.Shared.Src.Data.Models
 {
     public class BookMetaData
     {

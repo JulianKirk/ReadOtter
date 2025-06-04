@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ReadOtter.Shared.Data.Models
+namespace ReadOtter.Shared.Src.Data.Models
 {
     public class Book
     {

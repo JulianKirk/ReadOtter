@@ -1,6 +1,6 @@
-﻿using ReadOtter.Shared.Data.Repositories;
+﻿using ReadOtter.Shared.Src.Data.Database.Repositories;
 
-namespace ReadOtter.Shared.Data
+namespace ReadOtter.Shared.Src.Data.Database
 {
     public class UnitOfWork : IUnitOfWork
     {
