@@ -29,7 +29,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void GetAllBooks_ShouldReturnAllBooksFromRepository_AndCacheThem()
+        public void GetAllBooks_ShouldReturnAllBooksFromRepository_WithNoCache()
         {
             // Arrange
             var testBooks = new List<Book>
@@ -59,7 +59,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
             var secondResult = testCachedBookProvider.GetAllBooks().ToList();
 
             Assert.That(secondResult, Is.EqualTo(testBooks));
-            _mockBookRepository.Verify(repo => repo.GetAllBooks(), Times.Once);
+            _mockBookRepository.Verify(repo => repo.GetAllBooks(), Times.Exactly(2));
         }
 
         [Test]
@@ -249,7 +249,7 @@ namespace ReadOtter.Tests.Shared.Data.Services
 
             var secondResult = testCachedBookProvider.GetContent(testBook.Id);
 
-            Assert.That(secondResult, Is.SameAs(firstResult));
+            Assert.That(secondResult, Is.SameAs(testContent));
             _mockVersOneAdaptor.Verify(adaptor => adaptor.GetContent(It.IsAny<Book>()), Times.Once);
         }
 

@@ -70,8 +70,11 @@ namespace ReadOtter.Shared.Data.Services
             }
 
             var book = GetEmptyOrIncompleteBook(bookId);
+            metaData = versOneAdaptor.GetMetaData(book);
 
-            return versOneAdaptor.GetMetaData(book);
+            metaDataCache.Add(bookId, metaData);
+
+            return metaData;
         }
 
         public BookContent GetContent(Guid bookId)
@@ -82,8 +85,11 @@ namespace ReadOtter.Shared.Data.Services
             }
 
             var book = GetEmptyOrIncompleteBook(bookId);
+            content = versOneAdaptor.GetContent(book);
 
-            return versOneAdaptor.GetContent(book);
+            contentCache.Add(book.Id, content);
+
+            return content;
         }
 
         public ContentChapter GetChapter(Guid bookId, string chapterTitle)
