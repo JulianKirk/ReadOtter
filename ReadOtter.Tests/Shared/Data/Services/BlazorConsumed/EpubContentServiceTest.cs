@@ -1,6 +1,7 @@
 ﻿using Moq;
-using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Models;
+using ReadOtter.Shared.Src.Services;
 
 namespace ReadOtter.Tests.Shared.Data.Services
 {

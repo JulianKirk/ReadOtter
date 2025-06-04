@@ -1,8 +1,7 @@
 ﻿using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Src.Data
 {
-    //Implement this after the registry is added
     public class DirectBookProvider : IBookProvider
     {
         public IEnumerable<Book> GetAllBooks()

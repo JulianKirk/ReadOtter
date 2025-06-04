@@ -2,7 +2,7 @@
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Src.Data
 {
     public class CachedBookProvider : IBookProvider
     {

@@ -1,5 +1,5 @@
 ﻿using Moq;
-using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Database.Repositories;
 using ReadOtter.Shared.Src.Data.Epub;
@@ -26,6 +26,22 @@ namespace ReadOtter.Tests.Shared.Data.Services
             testCachedBookProvider = new CachedBookProvider(
                 _mockUnitOfWork.Object,
                 _mockVersOneAdaptor.Object
+            );
+        }
+
+        [Test]
+        public void NullUnitOfWork_ShouldThrowArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new CachedBookProvider(null!, _mockVersOneAdaptor.Object)
+            );
+        }
+
+        [Test]
+        public void NullVersOneAdaptor_ShouldThrowArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                new CachedBookProvider(null!, _mockVersOneAdaptor.Object)
             );
         }
 

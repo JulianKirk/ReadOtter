@@ -1,6 +1,7 @@
-﻿using ReadOtter.Shared.Src.Data.Models;
+﻿using ReadOtter.Shared.Src.Data;
+using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Src.Services
 {
     public class BookCollectionService
     {

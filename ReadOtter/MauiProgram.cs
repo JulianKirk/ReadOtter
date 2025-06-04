@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using ReadOtter.Shared.Data.Services;
 using ReadOtter.Shared.Interopt;
+using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Services;
