@@ -1,6 +1,4 @@
-﻿@using ReadOtter.Shared.Data.Models
-@using ReadOtter.Shared.Data.Services
-@inject EpubMetadataService EpubMetadataService
+﻿@inject EpubMetadataService EpubMetadataService
 @inject NavigationManager Navigation
 
 <div class="book-grid-item" @onclick=@ViewBook>
@@ -16,13 +14,13 @@
 
 @code {
 	[Parameter]
-	public required Book Book { get; set; }
+	public required Guid BookId { get; set; }
 
 	BookMetaData metadata = new();
 
 	protected override void OnParametersSet()
 	{
-		metadata = EpubMetadataService.GetMetaData(Book);
+		metadata = EpubMetadataService.GetMetaData(BookId);
 	}
 
 	string GetCreatorsList()
@@ -37,11 +35,11 @@
 
 	string GetCoverImageBase64String()
 	{
-		return EpubMetadataService.GetCoverImage(Book);
+		return EpubMetadataService.GetCoverImage(BookId);
 	}
 
 	void ViewBook()
 	{
-		Navigation.NavigateTo("reader/" + Book.Id);
+		Navigation.NavigateTo("reader/" + BookId);
 	}
 }

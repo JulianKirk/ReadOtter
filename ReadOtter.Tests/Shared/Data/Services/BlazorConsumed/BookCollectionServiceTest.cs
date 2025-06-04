@@ -1,18 +1,24 @@
 ﻿using Moq;
-using ReadOtter.Shared.Data.Models;
-using ReadOtter.Shared.Data.Services;
-using ReadOtter.Tests.Common;
+using ReadOtter.Shared.Src.Data;
+using ReadOtter.Shared.Src.Data.Models;
+using ReadOtter.Shared.Src.Services;
 
 namespace ReadOtter.Tests.Shared.Data.Services
 {
     public class BookCollectionServiceTest
     {
         [Test]
-        public void TestGetAllBooks()
+        public void GetAllBooks_ReturnsAllBooks()
         {
             //Arrange
-            var books = Enumerable.Range(1, 5)
-                .Select(i => new Book { Id = Guid.NewGuid(), Title = $"Book {i}", FilePath = $"Filepath {i}" })
+            var books = Enumerable
+                .Range(1, 5)
+                .Select(i => new Book
+                {
+                    Id = Guid.NewGuid(),
+                    Title = $"Book {i}",
+                    FilePath = $"Filepath {i}",
+                })
                 .ToList();
 
             var mockBookProvider = new Mock<IBookProvider>();
@@ -28,14 +34,17 @@ namespace ReadOtter.Tests.Shared.Data.Services
         }
 
         [Test]
-        public void TestGetAllBookIds()
+        public void GetAllBookIds_ReturnsAllBookIds()
         {
             //Arrange
-            var bookIds = Enumerable.Range(1, 5)
-                .Select(i => Guid.NewGuid())
-                .ToList();
+            var bookIds = Enumerable.Range(1, 5).Select(i => Guid.NewGuid()).ToList();
 
-            var books = bookIds.Select(id => new Book { Id = id, Title = $"Book {id}", FilePath = $"Filepath {id}" });
+            var books = bookIds.Select(id => new Book
+            {
+                Id = id,
+                Title = $"Book {id}",
+                FilePath = $"Filepath {id}",
+            });
 
             var mockBookProvider = new Mock<IBookProvider>();
             mockBookProvider.Setup(b => b.GetAllBooks()).Returns(books);
@@ -47,6 +56,14 @@ namespace ReadOtter.Tests.Shared.Data.Services
 
             //Assert
             Assert.That(bookList, Is.EqualTo(bookIds));
+        }
+
+        [Test]
+        public void Constructor_WhenNullBookProvider_ThrowsArgumentNullException()
+        {
+            // Act, Assert
+            var ex = Assert.Throws<ArgumentNullException>(() => new EpubContentService(null));
+            Assert.That(ex.ParamName, Is.EqualTo("bookProvider"));
         }
     }
 }

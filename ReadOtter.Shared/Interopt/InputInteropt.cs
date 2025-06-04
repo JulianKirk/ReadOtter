@@ -1,5 +1,5 @@
 ﻿using Microsoft.JSInterop;
-using ReadOtter.Shared.Data.Services;
+using ReadOtter.Shared.Src.Services;
 
 namespace ReadOtter.Shared.Interopt
 {

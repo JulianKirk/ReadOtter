@@ -1,4 +1,4 @@
-﻿namespace ReadOtter.Shared.Data.Services
+﻿namespace ReadOtter.Shared.Src.Services
 {
     public class InputService
     {

@@ -1,6 +1,6 @@
-﻿using ReadOtter.Shared.Data.Models;
+﻿using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Data.Services
+namespace ReadOtter.Shared.Src.Data.Epub
 {
     public interface IVersOneAdaptor
     {

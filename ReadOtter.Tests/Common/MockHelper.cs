@@ -1,9 +1,8 @@
 ﻿using Moq;
-using ReadOtter.Shared.Data;
-using ReadOtter.Shared.Data.Models;
-using ReadOtter.Shared.Data.Repositories;
-using ReadOtter.Shared.Data.Services;
-using VersOne.Epub;
+using ReadOtter.Shared.Src.Data.Database;
+using ReadOtter.Shared.Src.Data.Database.Repositories;
+using ReadOtter.Shared.Src.Data.Epub;
+using ReadOtter.Shared.Src.Data.Models;
 
 namespace ReadOtter.Tests.Common
 {
@@ -27,13 +26,15 @@ namespace ReadOtter.Tests.Common
         {
             var mockBookRepository = new Mock<IBookRepository>();
             mockBookRepository.Setup(r => r.GetAllBooks()).Returns(books);
-            mockBookRepository.Setup(r => r.RemoveBookById(It.IsAny<Guid>()))
+            mockBookRepository
+                .Setup(r => r.RemoveBookById(It.IsAny<Guid>()))
                 .Callback<Guid>(id =>
                 {
                     var bookToRemove = books.First(b => b.Id == id);
                     books.Remove(bookToRemove);
                 });
-            mockBookRepository.Setup(r => r.GetBookById(It.IsAny<Guid>()))
+            mockBookRepository
+                .Setup(r => r.GetBookById(It.IsAny<Guid>()))
                 .Returns<Guid>(id =>
                 {
                     return books.FirstOrDefault(b => b.Id == id);

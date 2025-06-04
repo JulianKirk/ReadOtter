@@ -1,8 +1,8 @@
-﻿using ReadOtter.Shared.Data.Models;
+﻿using ReadOtter.Shared.Src.Data.Models;
 using VersOne.Epub;
 using VersOne.Epub.Schema;
 
-namespace ReadOtter.Shared.Data
+namespace ReadOtter.Shared.Src.Data.Epub
 {
     public class AutoMapperProfile : AutoMapper.Profile
     {

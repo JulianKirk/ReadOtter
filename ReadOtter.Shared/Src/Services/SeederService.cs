@@ -1,17 +1,15 @@
-﻿using ReadOtter.Shared.Data.Models;
+﻿using ReadOtter.Shared.Src.Data.Database;
+using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Data
+namespace ReadOtter.Shared.Src.Services
 {
-    public class Seeder
+    public class SeederService
     {
         ReadOtterLibraryDbContext context;
 
-        public Seeder(ReadOtterLibraryDbContext context)
+        public SeederService(ReadOtterLibraryDbContext context)
         {
             this.context = context;
-
-            //ClearAllData(context);
-            //SeedData(context);
         }
 
         public void SeedData()

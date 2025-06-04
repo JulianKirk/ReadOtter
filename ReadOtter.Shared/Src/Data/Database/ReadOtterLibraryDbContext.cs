@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReadOtter.Shared.Data.Models;
+using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Data
+namespace ReadOtter.Shared.Src.Data.Database
 {
     public class ReadOtterLibraryDbContext : DbContext
     {
