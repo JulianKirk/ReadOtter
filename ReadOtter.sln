@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadOtter", "ReadOtter\Read
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadOtter.Shared", "ReadOtter.Shared\ReadOtter.Shared.csproj", "{2AC297A4-BD37-4D70-A6DD-077263038F2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadOtter.Web", "ReadOtter.Web\ReadOtter.Web\ReadOtter.Web.csproj", "{A2983989-9945-48CC-81C1-3736A8E256AF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadOtter.Web.Client", "ReadOtter.Web\ReadOtter.Web.Client\ReadOtter.Web.Client.csproj", "{E6992112-4F64-435C-8E74-6DED2D5BF5F5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadOtter.Tests", "ReadOtter.Tests\ReadOtter.Tests.csproj", "{8E97406A-76DF-45C3-8AE9-B1C4D7238FAC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2AC297A4-BD37-4D70-A6DD-077263038F2F} = {2AC297A4-BD37-4D70-A6DD-077263038F2F}
@@ -38,14 +34,6 @@ Global
 		{2AC297A4-BD37-4D70-A6DD-077263038F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AC297A4-BD37-4D70-A6DD-077263038F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AC297A4-BD37-4D70-A6DD-077263038F2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A2983989-9945-48CC-81C1-3736A8E256AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2983989-9945-48CC-81C1-3736A8E256AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2983989-9945-48CC-81C1-3736A8E256AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2983989-9945-48CC-81C1-3736A8E256AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6992112-4F64-435C-8E74-6DED2D5BF5F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6992112-4F64-435C-8E74-6DED2D5BF5F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6992112-4F64-435C-8E74-6DED2D5BF5F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6992112-4F64-435C-8E74-6DED2D5BF5F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E97406A-76DF-45C3-8AE9-B1C4D7238FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E97406A-76DF-45C3-8AE9-B1C4D7238FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E97406A-76DF-45C3-8AE9-B1C4D7238FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
