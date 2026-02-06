@@ -10,8 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +18,24 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build ReadOtter.Shared --no-restore
+        dotnet-version: 9.0.x
+    - name: Build Shared
+      run: dotnet build ReadOtter.Shared/ReadOtter.Shared.csproj
+    - name: Build Web
+      run: dotnet build ReadOtter.Web/ReadOtter.Web/ReadOtter.Web.csproj
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ReadOtter.Tests/ReadOtter.Tests.csproj --verbosity normal
+
+  build-maui:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Install MAUI workload
+      run: dotnet workload install maui
+    - name: Build MAUI
+      run: dotnet build ReadOtter/ReadOtter.csproj -f net9.0-windows10.0.19041.0
