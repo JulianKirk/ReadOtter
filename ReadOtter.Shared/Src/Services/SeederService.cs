@@ -28,6 +28,19 @@ namespace ReadOtter.Shared.Src.Services
             context.SaveChanges();
         }
 
+        static string GetTestFilePath(string fileName)
+        {
+            // TestFiles are copied to the output directory via CopyToOutputDirectory in the csproj.
+            var candidate = Path.Combine(AppContext.BaseDirectory, "TestFiles", fileName);
+            if (File.Exists(candidate))
+                return candidate;
+
+            throw new FileNotFoundException(
+                $"Could not locate test file '{fileName}' at '{candidate}'. "
+                    + "Ensure the TestFiles are set to CopyToOutputDirectory in ReadOtter.Shared.csproj."
+            );
+        }
+
         List<Book> GetBooksToSeed()
         {
             return new List<Book>
@@ -37,16 +50,14 @@ namespace ReadOtter.Shared.Src.Services
                     Title = "ORV",
                     CurrentChapter = 1,
                     CurrentChapterPage = 1,
-                    FilePath =
-                        @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\ORV.epub",
+                    FilePath = GetTestFilePath("ORV.epub"),
                 },
                 new Book
                 {
                     Title = "Red Rising",
                     CurrentChapter = 1,
                     CurrentChapterPage = 1,
-                    FilePath =
-                        @"C:\Users\proga\source\repos\ReadOtter\ReadOtter.Shared\TestFiles\RedRising.epub",
+                    FilePath = GetTestFilePath("RedRising.epub"),
                 },
             };
         }

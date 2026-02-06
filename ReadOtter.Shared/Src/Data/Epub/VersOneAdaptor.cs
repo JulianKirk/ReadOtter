@@ -16,8 +16,18 @@ namespace ReadOtter.Shared.Src.Data.Epub
             this.mapper = mapper;
         }
 
+        static void ValidateFileExists(Book book)
+        {
+            if (!File.Exists(book.FilePath))
+                throw new FileNotFoundException(
+                    $"EPUB file not found at '{book.FilePath}' for book '{book.Title}' (Id: {book.Id}).",
+                    book.FilePath
+                );
+        }
+
         EpubBookRef GetEpubBookRef(Book book, EpubReaderOptions? readerOptions = null)
         {
+            ValidateFileExists(book);
             var options = readerOptions ?? defaultReaderOptions;
 
             return EpubReader.OpenBook(book.FilePath, options);
@@ -25,6 +35,7 @@ namespace ReadOtter.Shared.Src.Data.Epub
 
         EpubBook GetEpubBook(Book book, EpubReaderOptions? readerOptions = null)
         {
+            ValidateFileExists(book);
             var options = readerOptions ?? defaultReaderOptions;
 
             return EpubReader.ReadBook(book.FilePath, options);
