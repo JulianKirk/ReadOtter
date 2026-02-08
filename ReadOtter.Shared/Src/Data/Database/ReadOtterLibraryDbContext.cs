@@ -5,19 +5,8 @@ namespace ReadOtter.Shared.Src.Data.Database
 {
     public class ReadOtterLibraryDbContext : DbContext
     {
-        string DbPath { get; set; }
-
-        public ReadOtterLibraryDbContext()
-        {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "ReadOtterLibrary.db");
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite($"Data Source={DbPath}");
-        }
+        public ReadOtterLibraryDbContext(DbContextOptions<ReadOtterLibraryDbContext> options)
+            : base(options) { }
 
         public virtual DbSet<Book> Books { get; set; }
     }
