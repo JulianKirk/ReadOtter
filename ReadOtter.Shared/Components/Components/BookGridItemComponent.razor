@@ -2,14 +2,23 @@
 @inject NavigationManager Navigation
 
 <div class="book-grid-item" @onclick=@ViewBook>
-	<img src="@GetCoverImageBase64String()"/>
+	@if (loadError)
+	{
+		<div class="book-grid-item-error">
+			<p>Unable to load book data</p>
+		</div>
+	}
+	else
+	{
+		<img src="@GetCoverImageBase64String()"/>
 
-	<h2>Author(s)</h2>
-	@GetCreatorsList()
-	<br />
+		<h2>Author(s)</h2>
+		@GetCreatorsList()
+		<br />
 
-	<h2>Publisher(s)</h2>
-	@GetPublishersList()
+		<h2>Publisher(s)</h2>
+		@GetPublishersList()
+	}
 </div>
 
 @code {
@@ -17,10 +26,21 @@
 	public required Guid BookId { get; set; }
 
 	BookMetaData metadata = new();
+	string coverImage = string.Empty;
+	bool loadError;
 
 	protected override void OnParametersSet()
 	{
-		metadata = EpubMetadataService.GetMetaData(BookId);
+		try
+		{
+			metadata = EpubMetadataService.GetMetaData(BookId);
+			coverImage = EpubMetadataService.GetCoverImage(BookId);
+			loadError = false;
+		}
+		catch (Exception)
+		{
+			loadError = true;
+		}
 	}
 
 	string GetCreatorsList()
@@ -35,7 +55,7 @@
 
 	string GetCoverImageBase64String()
 	{
-		return EpubMetadataService.GetCoverImage(BookId);
+		return coverImage;
 	}
 
 	void ViewBook()

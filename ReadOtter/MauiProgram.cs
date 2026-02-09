@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ReadOtter.Shared.Interopt;
 using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
@@ -21,7 +22,10 @@ namespace ReadOtter
 
             builder.Services.AddMauiBlazorWebView();
 
-            builder.Services.AddDbContext<ReadOtterLibraryDbContext>();
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "ReadOtterLibrary.db");
+            builder.Services.AddDbContext<ReadOtterLibraryDbContext>(options =>
+                options.UseSqlite($"Data Source={dbPath}")
+            );
             builder.Services.AddScoped<SeederService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -41,6 +45,22 @@ namespace ReadOtter
 #endif
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ReadOtterLibraryDbContext>();
+                db.Database.Migrate();
+
+                var hasStaleBooks = db
+                    .Books.AsEnumerable()
+                    .Any(b => b.FilePath != null && !File.Exists(b.FilePath));
+                if (!db.Books.Any() || hasStaleBooks)
+                {
+                    var seeder = scope.ServiceProvider.GetRequiredService<SeederService>();
+                    seeder.ClearAllData();
+                    seeder.SeedData();
+                }
+            }
 
             InputInteropt.SetServiceProvider(app.Services);
 
