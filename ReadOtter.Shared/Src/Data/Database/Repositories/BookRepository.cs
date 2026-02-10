@@ -26,5 +26,10 @@ namespace ReadOtter.Shared.Src.Data.Database.Repositories
                 Remove(book);
             }
         }
+
+        public void AddBook(Book book)
+        {
+            Add(book);
+        }
     }
 }

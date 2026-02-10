@@ -9,5 +9,7 @@ namespace ReadOtter.Shared.Src.Data.Database.Repositories
         IEnumerable<Book> GetAllBooks();
 
         void RemoveBookById(Guid id);
+
+        void AddBook(Book book);
     }
 }

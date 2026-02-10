@@ -22,5 +22,10 @@ namespace ReadOtter.Shared.Src.Services
         {
             return GetAllBooks().Select(b => b.Id);
         }
+
+        public Book AddBook(byte[] epubData, string fileName)
+        {
+            return bookProvider.AddBook(epubData, fileName);
+        }
     }
 }

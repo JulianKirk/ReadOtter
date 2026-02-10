@@ -1,4 +1,5 @@
-﻿@inject BookCollectionService BookCollectionService
+﻿@using Microsoft.AspNetCore.Components.Forms
+@inject BookCollectionService BookCollectionService
 @inject IJSRuntime JS
 
 <div class="BookCatalogView">
@@ -14,27 +15,25 @@
 	</div>
 
 	<button class="btn btn-primary add-book-button" @onclick="OpenFilePicker"></button>
-	<input type="file" style="display:none" @ref="addBookFileInput" OnChange="OnFileSelected" accept=".epub"/>
+	<InputFile @ref="addBookFileInput" style="display:none" OnChange="OnFileSelected" accept=".epub"/>
 </div>
 
 @code {
 	IEnumerable<Guid> bookIds = new List<Guid>();
 
-	ElementReference? addBookFileInput;
+	InputFile? addBookFileInput;
 
 	protected override void OnInitialized()
 	{
 		bookIds = BookCollectionService.GetAllBookIds();
 	}
 
-	void AddBook()
-	{
-		// Implementation for adding a book can be placed here if needed
-	}
-
 	async Task OpenFilePicker()
 	{
-		await JS.InvokeVoidAsync("clickElement", addBookFileInput);
+		if (addBookFileInput?.Element is not null)
+		{
+			await JS.InvokeVoidAsync("clickElement", addBookFileInput.Element);
+		}
 	}
 
 	async Task OnFileSelected(InputFileChangeEventArgs e)
@@ -43,9 +42,13 @@
 		if (file is not null)
 		{
 			var buffer = new byte[file.Size];
-			using var stream = file.OpenReadStream();
+			using var stream = file.OpenReadStream(maxAllowedSize: 100 * 1024 * 1024);
 			await stream.ReadAsync(buffer, 0, (int)file.Size);
-			// Handle the buffer (e.g., upload or process the file)
+
+			BookCollectionService.AddBook(buffer, file.Name);
+
+			bookIds = BookCollectionService.GetAllBookIds();
+			StateHasChanged();
 		}
 	}
 }
