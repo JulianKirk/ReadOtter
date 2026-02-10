@@ -97,5 +97,17 @@ namespace ReadOtter.Shared.Src.Data.Epub
         {
             return GetEpubBookRef(book).ReadCover();
         }
+
+        public string GetTitle(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException(
+                    $"EPUB file not found at '{filePath}'.",
+                    filePath
+                );
+
+            using var epubBookRef = EpubReader.OpenBook(filePath);
+            return epubBookRef.Title;
+        }
     }
 }

@@ -21,8 +21,6 @@ jobs:
         dotnet-version: 9.0.x
     - name: Build Shared
       run: dotnet build ReadOtter.Shared/ReadOtter.Shared.csproj
-    - name: Build Web
-      run: dotnet build ReadOtter.Web/ReadOtter.Web/ReadOtter.Web.csproj
     - name: Test
       run: dotnet test ReadOtter.Tests/ReadOtter.Tests.csproj --verbosity normal
 

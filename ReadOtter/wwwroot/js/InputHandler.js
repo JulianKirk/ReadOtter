@@ -18,3 +18,7 @@
         this._dotNetRef = null;
     }
 };
+
+window.clickElement = (element) => {
+    element.click();
+};

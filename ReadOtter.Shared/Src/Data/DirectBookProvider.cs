@@ -4,6 +4,11 @@ namespace ReadOtter.Shared.Src.Data
 {
     public class DirectBookProvider : IBookProvider
     {
+        public Book AddBook(byte[] epubData, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Book> GetAllBooks()
         {
             throw new NotImplementedException();

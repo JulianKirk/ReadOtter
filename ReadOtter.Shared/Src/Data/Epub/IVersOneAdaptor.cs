@@ -15,5 +15,7 @@ namespace ReadOtter.Shared.Src.Data.Epub
         public int GetTotalChapterCount(Book book);
 
         public byte[]? GetCoverImage(Book book);
+
+        public string GetTitle(string filePath);
     }
 }

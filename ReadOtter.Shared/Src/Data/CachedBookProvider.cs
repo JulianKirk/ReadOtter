@@ -158,5 +158,46 @@ namespace ReadOtter.Shared.Src.Data
 
             return string.Empty;
         }
+
+        public Book AddBook(byte[] epubData, string fileName)
+        {
+            var booksDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "ReadOtter",
+                "Books"
+            );
+
+            Directory.CreateDirectory(booksDir);
+
+            var filePath = Path.Combine(booksDir, fileName);
+
+            // Avoid overwriting existing files
+            if (File.Exists(filePath))
+            {
+                var name = Path.GetFileNameWithoutExtension(fileName);
+                var ext = Path.GetExtension(fileName);
+                filePath = Path.Combine(booksDir, $"{name}_{Guid.NewGuid():N}{ext}");
+            }
+
+            File.WriteAllBytes(filePath, epubData);
+
+            var title = versOneAdaptor.GetTitle(filePath);
+
+            var book = new Book
+            {
+                Id = Guid.NewGuid(),
+                Title = title,
+                FilePath = filePath,
+                CurrentChapter = 0,
+                CurrentChapterPage = 0,
+            };
+
+            unitOfWork.BookRepository.AddBook(book);
+            unitOfWork.Commit();
+
+            bookCache[book.Id] = book;
+
+            return book;
+        }
     }
 }

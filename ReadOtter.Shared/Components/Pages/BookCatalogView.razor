@@ -1,7 +1,10 @@
-﻿@inject BookCollectionService BookCommonService
+﻿@inject BookCollectionService BookCollectionService
+@inject IJSRuntime JS
 
 <div class="BookCatalogView">
-	<h2>Catalog</h2>
+	<div class="BookCatalogView-Topbar">
+		<h3>Catalog</h3>
+	</div>
 
 	<div class="BookCatalogView-Grid">
 		@foreach (var bookId in bookIds)
@@ -10,21 +13,41 @@
 		}
 	</div>
 
-	<InputFile></InputFile>
-
-	<button class="btn btn-primary add-book-button" @onclick=@AddBook></button>
+	<button class="btn btn-primary add-book-button" @onclick="OpenFilePicker">Add Book</button>
+	<InputFile @ref="addBookFileInput" style="display:none" OnChange="OnFileSelected" accept=".epub"/>
 </div>
 
 @code {
 	IEnumerable<Guid> bookIds = new List<Guid>();
 
+	InputFile? addBookFileInput;
+
 	protected override void OnInitialized()
 	{
-		bookIds = BookCommonService.GetAllBookIds();
+		bookIds = BookCollectionService.GetAllBookIds();
 	}
 
-	void AddBook()
+	async Task OpenFilePicker()
 	{
-		
+		if (addBookFileInput?.Element is not null)
+		{
+			await JS.InvokeVoidAsync("clickElement", addBookFileInput.Element);
+		}
+	}
+
+	async Task OnFileSelected(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+		if (file is not null)
+		{
+			var buffer = new byte[file.Size];
+			using var stream = file.OpenReadStream(maxAllowedSize: 100 * 1024 * 1024);
+			await stream.ReadAsync(buffer, 0, (int)file.Size);
+
+			BookCollectionService.AddBook(buffer, file.Name);
+
+			bookIds = BookCollectionService.GetAllBookIds();
+			StateHasChanged();
+		}
 	}
 }
