@@ -1,7 +1,20 @@
-﻿window.addEventListener('keydown', (event) => {
-    DotNet.invokeMethodAsync('ReadOtter.Shared', 'OnKeyDown', event.key);
-});
+﻿window.InputHandler = {
+    _dotNetRef: null,
+    _listener: null,
 
-window.addEventListener('keydown', (event) => {
-    DotNet.invokeMethodAsync('ReadOtter', 'OnKeyDown', event.key);
-});
+    register: function (dotNetRef) {
+        this._dotNetRef = dotNetRef;
+        this._listener = (event) => {
+            dotNetRef.invokeMethodAsync('HandleKeyDown', event.key);
+        };
+        window.addEventListener('keydown', this._listener);
+    },
+
+    unregister: function () {
+        if (this._listener) {
+            window.removeEventListener('keydown', this._listener);
+            this._listener = null;
+        }
+        this._dotNetRef = null;
+    }
+};

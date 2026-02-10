@@ -1,5 +1,6 @@
 ﻿@inject EpubContentService EpubContentService
 @inject InputService InputService
+@implements IDisposable
 
 <div class="ReadView">
 
@@ -17,14 +18,14 @@
 
 	string content = string.Empty;
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		UpdateContent();
 
 		InputService.OnKeyDown += HandleKeyDown;
+		await InputService.Initialize();
 	}
 
-	
 	void HandleKeyDown(string key)
 	{
 		if (key == "ArrowRight")
@@ -53,6 +54,11 @@
 	void UpdateContent()
 	{
 		content = EpubContentService.GetCurrentChapterTextContent(BookId);
-		StateHasChanged();
+		InvokeAsync(StateHasChanged);
+	}
+
+	public void Dispose()
+	{
+		InputService.OnKeyDown -= HandleKeyDown;
 	}
 }
