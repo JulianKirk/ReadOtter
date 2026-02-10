@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ReadOtter.Shared.Interopt;
 using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Epub;
@@ -61,8 +60,6 @@ namespace ReadOtter
                     seeder.SeedData();
                 }
             }
-
-            InputInteropt.SetServiceProvider(app.Services);
 
             return app;
         }
