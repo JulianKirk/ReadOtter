@@ -1,28 +1,27 @@
 ﻿using ReadOtter.Shared.Src.Data.Database.Repositories;
 
-namespace ReadOtter.Shared.Src.Data.Database
+namespace ReadOtter.Shared.Src.Data.Database;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly ReadOtterLibraryDbContext context;
+
+    private BookRepository? bookRepository;
+
+    public UnitOfWork(ReadOtterLibraryDbContext context)
     {
-        private readonly ReadOtterLibraryDbContext _context;
+        this.context = context;
+    }
 
-        private BookRepository? _bookRepository;
+    public IBookRepository BookRepository => bookRepository ??= new BookRepository(context);
 
-        public UnitOfWork(ReadOtterLibraryDbContext context)
-        {
-            _context = context;
-        }
+    public void Commit()
+    {
+        context.SaveChanges();
+    }
 
-        public IBookRepository BookRepository => _bookRepository ??= new BookRepository(_context);
-
-        public void Commit()
-        {
-            _context.SaveChanges();
-        }
-
-        public void Rollback()
-        {
-            //Insert rollback logic
-        }
+    public void Rollback()
+    {
+        //Insert rollback logic
     }
 }

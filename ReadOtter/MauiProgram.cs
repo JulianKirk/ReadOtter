@@ -23,8 +23,8 @@ namespace ReadOtter
 
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "ReadOtterLibrary.db");
             builder.Services.AddDbContext<ReadOtterLibraryDbContext>(options =>
-                options.UseSqlite($"Data Source={dbPath}")
-            );
+                options.UseSqlite($"Data Source={dbPath}"));
+
             builder.Services.AddScoped<SeederService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

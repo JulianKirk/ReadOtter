@@ -1,4 +1,5 @@
-﻿namespace ReadOtter.Tests.Shared.Data.Services
+﻿namespace ReadOtter.Tests.Shared.Data.Services;
+
+public class DirectBookProviderTest
 {
-    public class DirectBookProviderTest { } //For when this is added
-}
+} //For when this is added

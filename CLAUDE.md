@@ -86,6 +86,39 @@ Desktop pages in `ReadOtter/Components/Pages/` delegate to these shared componen
 
 SQLite database stored at `%LOCALAPPDATA%/ReadOtterLibrary.db`. Managed via EF Core with migrations.
 
+## Code Style
+
+### Member Ordering (enforced by StyleCop SA1201-SA1214)
+
+Within each class/struct, members must be ordered by **kind**, then by **access**, then **instance before static**:
+
+1. **By kind:** Fields → Constructors → Finalizers → Delegates → Events → Enums → Interfaces → Properties → Indexers → Methods → Structs → Classes
+2. **By access (within each kind):** public → internal → protected internal → protected → private
+3. **Instance before static** (within each access level)
+4. **Constants before fields**, **readonly before non-readonly**
+
+Example layout:
+```csharp
+public class Foo
+{
+    // 1. Fields (instance before static, public before private)
+    private readonly IService service;
+    private int count;
+    private static readonly string Tag = "foo";
+
+    // 2. Constructors
+    public Foo(IService service) { ... }
+
+    // 3. Properties
+    public int Count => count;
+
+    // 4. Methods (public before private, instance before static)
+    public void DoWork() { ... }
+    private void Reset() { ... }
+    private static string Format(int n) { ... }
+}
+```
+
 ## Preferences
 
 - Do NOT run tests unless explicitly asked to by the user. They prefer running tests manually to save tokens.

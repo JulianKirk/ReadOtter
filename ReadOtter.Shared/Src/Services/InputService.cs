@@ -1,39 +1,38 @@
 ﻿using Microsoft.JSInterop;
 
-namespace ReadOtter.Shared.Src.Services
+namespace ReadOtter.Shared.Src.Services;
+
+public class InputService : IAsyncDisposable
 {
-    public class InputService : IAsyncDisposable
+    private readonly IJSRuntime jsRuntime;
+    private DotNetObjectReference<InputService>? dotNetRef;
+
+    public InputService(IJSRuntime jsRuntime)
     {
-        private readonly IJSRuntime jsRuntime;
-        private DotNetObjectReference<InputService>? dotNetRef;
+        this.jsRuntime = jsRuntime;
+    }
 
-        public event Action<string>? OnKeyDown;
+    public event Action<string>? OnKeyDown;
 
-        public InputService(IJSRuntime jsRuntime)
+    public async Task Initialize()
+    {
+        dotNetRef = DotNetObjectReference.Create(this);
+        await jsRuntime.InvokeVoidAsync("InputHandler.register", dotNetRef);
+    }
+
+    [JSInvokable]
+    public void HandleKeyDown(string key)
+    {
+        OnKeyDown?.Invoke(key);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (dotNetRef != null)
         {
-            this.jsRuntime = jsRuntime;
-        }
-
-        public async Task Initialize()
-        {
-            dotNetRef = DotNetObjectReference.Create(this);
-            await jsRuntime.InvokeVoidAsync("InputHandler.register", dotNetRef);
-        }
-
-        [JSInvokable]
-        public void HandleKeyDown(string key)
-        {
-            OnKeyDown?.Invoke(key);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            if (dotNetRef != null)
-            {
-                await jsRuntime.InvokeVoidAsync("InputHandler.unregister");
-                dotNetRef.Dispose();
-                dotNetRef = null;
-            }
+            await jsRuntime.InvokeVoidAsync("InputHandler.unregister");
+            dotNetRef.Dispose();
+            dotNetRef = null;
         }
     }
 }
