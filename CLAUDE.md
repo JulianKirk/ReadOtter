@@ -119,6 +119,13 @@ public class Foo
 }
 ```
 
+### Logging Convention
+
+- Use `ILogger<T>` from `Microsoft.Extensions.Logging` in all services (not Serilog types directly).
+- Log unexpected but non-fatal behaviour at **Warning** level (e.g. an image path that can't be resolved).
+- Log significant errors at **Error** level (e.g. a file that should exist but doesn't, a failed external call).
+- Serilog sinks are configured in `ReadOtter/MauiProgram.cs`; shared code should only depend on `Microsoft.Extensions.Logging`.
+
 ## Preferences
 
 - Do NOT run tests unless explicitly asked to by the user. They prefer running tests manually to save tokens.
