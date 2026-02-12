@@ -1,5 +1,7 @@
 # ReadOtter: A personalized epub file reading software
 
+NOTE: ALL OF THE BELOW IS OUTDATED
+
 ## Backend Architecture
 
 ### Services / Dependency Injection
