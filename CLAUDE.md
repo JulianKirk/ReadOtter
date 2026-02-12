@@ -129,3 +129,4 @@ public class Foo
 ## Preferences
 
 - Do NOT run tests unless explicitly asked to by the user. They prefer running tests manually to save tokens.
+- Do NOT add code comments unless the code is exceptionally confusing or the comment is clearly essential.

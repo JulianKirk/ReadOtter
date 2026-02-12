@@ -169,7 +169,6 @@ public class CachedBookProvider : IBookProvider
 
         var filePath = Path.Combine(booksDir, fileName);
 
-        // Avoid overwriting existing files
         if (File.Exists(filePath))
         {
             var name = Path.GetFileNameWithoutExtension(fileName);
