@@ -1,12 +1,12 @@
 ﻿using ReadOtter.Shared.Src.Data.Database.Repositories;
 
-namespace ReadOtter.Shared.Src.Data.Database
-{
-    public interface IUnitOfWork
-    {
-        void Commit();
-        void Rollback();
+namespace ReadOtter.Shared.Src.Data.Database;
 
-        public IBookRepository BookRepository { get; }
-    }
+public interface IUnitOfWork
+{
+    public IBookRepository BookRepository { get; }
+
+    void Commit();
+
+    void Rollback();
 }

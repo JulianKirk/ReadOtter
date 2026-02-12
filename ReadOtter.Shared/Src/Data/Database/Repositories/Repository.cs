@@ -1,48 +1,47 @@
-﻿namespace ReadOtter.Shared.Src.Data.Database.Repositories
+﻿namespace ReadOtter.Shared.Src.Data.Database.Repositories;
+
+public abstract class Repository<TEntity>
+    where TEntity : class
 {
-    public abstract class Repository<TEntity>
-        where TEntity : class
+    readonly ReadOtterLibraryDbContext context;
+
+    public Repository(ReadOtterLibraryDbContext context)
     {
-        protected readonly ReadOtterLibraryDbContext _context;
+        this.context = context;
+    }
 
-        public Repository(ReadOtterLibraryDbContext context)
-        {
-            _context = context;
-        }
+    protected ReadOtterLibraryDbContext DbContext
+    {
+        get { return context as ReadOtterLibraryDbContext; }
+    }
 
-        protected ReadOtterLibraryDbContext DbContext
-        {
-            get { return _context as ReadOtterLibraryDbContext; }
-        }
+    protected TEntity? GetById(Guid id)
+    {
+        return context.Set<TEntity>().Find(id);
+    }
 
-        protected TEntity? GetById(Guid id)
-        {
-            return _context.Set<TEntity>().Find(id);
-        }
+    protected IEnumerable<TEntity> GetAll()
+    {
+        return context.Set<TEntity>().ToList();
+    }
 
-        protected IEnumerable<TEntity> GetAll()
-        {
-            return _context.Set<TEntity>().ToList();
-        }
+    protected void Add(TEntity entity)
+    {
+        context.Set<TEntity>().Add(entity);
+    }
 
-        protected void Add(TEntity entity)
-        {
-            _context.Set<TEntity>().Add(entity);
-        }
+    protected void Remove(TEntity entity)
+    {
+        context.Set<TEntity>().Remove(entity);
+    }
 
-        protected void Remove(TEntity entity)
-        {
-            _context.Set<TEntity>().Remove(entity);
-        }
+    protected void Update(TEntity entity)
+    {
+        context.Set<TEntity>().Update(entity);
+    }
 
-        protected void Update(TEntity entity)
-        {
-            _context.Set<TEntity>().Update(entity);
-        }
-
-        protected void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
+    protected void SaveChanges()
+    {
+        context.SaveChanges();
     }
 }
