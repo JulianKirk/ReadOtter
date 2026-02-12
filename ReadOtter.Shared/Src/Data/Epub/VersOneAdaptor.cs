@@ -61,7 +61,7 @@ public partial class VersOneAdaptor : IVersOneAdaptor
         var imageLookup = BuildImageLookup(epubBook, book.FilePath);
         var chapters = new List<ContentChapter>();
 
-        int chapterIndex = 0;
+        var chapterIndex = 0;
         foreach (var chapter in epubBook.Content.Html.Local)
         {
             var html = ResolveImagesInHtml(chapter.Content, chapter.FilePath, imageLookup);
