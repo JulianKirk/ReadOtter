@@ -370,3 +370,6 @@ build_output.txt
 
 # Windows null device artifact
 nul
+
+# Build output logs
+build_output.txt

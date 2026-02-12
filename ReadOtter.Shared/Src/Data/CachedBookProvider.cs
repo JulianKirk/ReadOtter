@@ -196,4 +196,9 @@ public class CachedBookProvider : IBookProvider
 
         return book;
     }
+
+    public void SaveBookProgress(Guid bookId)
+    {
+        unitOfWork.Commit();
+    }
 }

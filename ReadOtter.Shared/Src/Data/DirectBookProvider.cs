@@ -53,4 +53,9 @@ public class DirectBookProvider : IBookProvider
     {
         throw new NotImplementedException();
     }
+
+    public void SaveBookProgress(Guid bookId)
+    {
+        throw new NotImplementedException();
+    }
 }

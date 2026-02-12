@@ -23,4 +23,6 @@ public interface IBookProvider
     public string GetCoverImage(Guid bookId);
 
     public Book AddBook(byte[] epubData, string fileName);
+
+    public void SaveBookProgress(Guid bookId);
 }
