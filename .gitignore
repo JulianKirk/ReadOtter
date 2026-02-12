@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 # Windows null device artifact
 nul
+
+# Build output logs
+build_output.txt

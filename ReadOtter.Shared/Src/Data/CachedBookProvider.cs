@@ -199,5 +199,10 @@ namespace ReadOtter.Shared.Src.Data
 
             return book;
         }
+
+        public void SaveBookProgress(Guid bookId)
+        {
+            unitOfWork.Commit();
+        }
     }
 }

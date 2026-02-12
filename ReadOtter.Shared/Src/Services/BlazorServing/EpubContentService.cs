@@ -30,6 +30,7 @@ namespace ReadOtter.Shared.Src.Services
             }
 
             book.CurrentChapter = newChapterNum;
+            bookProvider.SaveBookProgress(book.Id);
 
             return true;
         }
