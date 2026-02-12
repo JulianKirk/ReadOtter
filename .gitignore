@@ -362,6 +362,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# Build output logs
+build_output.txt
+
 # Claude Code
 .claude/
 

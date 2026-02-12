@@ -4,49 +4,48 @@ using ReadOtter.Shared.Src.Data.Database.Repositories;
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Tests.Common
+namespace ReadOtter.Tests.Common;
+
+public class MockHelper
 {
-    public class MockHelper
+    //NOTE TO SELF - for the future can add more parameters to this other than books
+    //I think this should be kept here for the sake of possible future removal features and integration tests - even though it is not immediately useful
+    public static Mock<IUnitOfWork> MockUnitOfWork(List<Book>? books = null)
     {
-        //NOTE TO SELF - for the future can add more parameters to this other than books
-        //I think this should be kept here for the sake of possible future removal features and integration tests - even though it is not immediately useful
-        public static Mock<IUnitOfWork> MockUnitOfWork(List<Book>? books = null)
-        {
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
+        var mockUnitOfWork = new Mock<IUnitOfWork>();
 
-            if (books != null)
+        if (books != null)
+        {
+            MockBookRepository(mockUnitOfWork, books);
+        }
+
+        return mockUnitOfWork;
+    }
+
+    static void MockBookRepository(Mock<IUnitOfWork> mockUnitOfWork, List<Book> books)
+    {
+        var mockBookRepository = new Mock<IBookRepository>();
+        mockBookRepository.Setup(r => r.GetAllBooks()).Returns(books);
+        mockBookRepository
+            .Setup(r => r.RemoveBookById(It.IsAny<Guid>()))
+            .Callback<Guid>(id =>
             {
-                MockBookRepository(mockUnitOfWork, books);
-            }
+                var bookToRemove = books.First(b => b.Id == id);
+                books.Remove(bookToRemove);
+            });
+        mockBookRepository
+            .Setup(r => r.GetBookById(It.IsAny<Guid>()))
+            .Returns<Guid>(id =>
+            {
+                return books.FirstOrDefault(b => b.Id == id);
+            });
 
-            return mockUnitOfWork;
-        }
+        mockUnitOfWork.Setup(u => u.BookRepository).Returns(mockBookRepository.Object);
+    }
 
-        static void MockBookRepository(Mock<IUnitOfWork> mockUnitOfWork, List<Book> books)
-        {
-            var mockBookRepository = new Mock<IBookRepository>();
-            mockBookRepository.Setup(r => r.GetAllBooks()).Returns(books);
-            mockBookRepository
-                .Setup(r => r.RemoveBookById(It.IsAny<Guid>()))
-                .Callback<Guid>(id =>
-                {
-                    var bookToRemove = books.First(b => b.Id == id);
-                    books.Remove(bookToRemove);
-                });
-            mockBookRepository
-                .Setup(r => r.GetBookById(It.IsAny<Guid>()))
-                .Returns<Guid>(id =>
-                {
-                    return books.FirstOrDefault(b => b.Id == id);
-                });
-
-            mockUnitOfWork.Setup(u => u.BookRepository).Returns(mockBookRepository.Object);
-        }
-
-        public static Mock<IVersOneAdaptor> MockVersOneWrapperService()
-        {
-            //This isn't useful most functionality that needs these tests need fields under Vers One data types
-            throw new NotImplementedException();
-        }
+    static Mock<IVersOneAdaptor> MockVersOneWrapperService()
+    {
+        //This isn't useful most functionality that needs these tests need fields under Vers One data types
+        throw new NotImplementedException();
     }
 }

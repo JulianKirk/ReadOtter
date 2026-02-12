@@ -4,6 +4,7 @@ using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Services;
+using Serilog;
 
 namespace ReadOtter
 {
@@ -23,8 +24,8 @@ namespace ReadOtter
 
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "ReadOtterLibrary.db");
             builder.Services.AddDbContext<ReadOtterLibraryDbContext>(options =>
-                options.UseSqlite($"Data Source={dbPath}")
-            );
+                options.UseSqlite($"Data Source={dbPath}"));
+
             builder.Services.AddScoped<SeederService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -38,9 +39,20 @@ namespace ReadOtter
             builder.Services.AddScoped<BookCollectionService>();
 
             builder.Services.AddScoped<InputService>();
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(
+                    Path.Combine(FileSystem.AppDataDirectory, "Logs", "readotter-.log"),
+                    rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
+                .WriteTo.Debug()
+                .CreateLogger();
+
+            builder.Logging.AddSerilog(Log.Logger);
+
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
-            builder.Logging.AddDebug();
 #endif
 
             var app = builder.Build();
