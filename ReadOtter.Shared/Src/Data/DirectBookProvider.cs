@@ -49,14 +49,13 @@ public class DirectBookProvider : IBookProvider
         throw new NotImplementedException();
     }
 
-        public BookMetaData GetMetadata(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+    public BookMetaData GetMetadata(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
-        public void SaveBookProgress(Guid bookId)
-        {
-            throw new NotImplementedException();
-        }
+    public void SaveBookProgress(Guid bookId)
+    {
+        throw new NotImplementedException();
     }
 }
