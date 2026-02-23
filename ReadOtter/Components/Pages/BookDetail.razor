@@ -1,0 +1,8 @@
+@page "/book/{BookId}"
+
+<BookMetadataView BookId="@(Guid.Parse(BookId))"></BookMetadataView>
+
+@code {
+	[Parameter]
+	public required string BookId { get; set; }
+}

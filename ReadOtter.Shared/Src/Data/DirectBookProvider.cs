@@ -9,6 +9,11 @@ public class DirectBookProvider : IBookProvider
         throw new NotImplementedException();
     }
 
+    public void RemoveBook(Guid bookId)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Book> GetAllBooks()
     {
         throw new NotImplementedException();

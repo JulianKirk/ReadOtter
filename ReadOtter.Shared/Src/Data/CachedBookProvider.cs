@@ -197,6 +197,17 @@ public class CachedBookProvider : IBookProvider
         return book;
     }
 
+    public void RemoveBook(Guid bookId)
+    {
+        unitOfWork.BookRepository.RemoveBookById(bookId);
+        unitOfWork.Commit();
+
+        bookCache.Remove(bookId);
+        metaDataCache.Remove(bookId);
+        contentCache.Remove(bookId);
+        chapterCache.Remove(bookId);
+    }
+
     public void SaveBookProgress(Guid bookId)
     {
         unitOfWork.Commit();

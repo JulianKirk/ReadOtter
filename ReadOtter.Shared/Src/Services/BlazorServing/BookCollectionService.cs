@@ -27,5 +27,10 @@ namespace ReadOtter.Shared.Src.Services
         {
             return bookProvider.AddBook(epubData, fileName);
         }
+
+        public void RemoveBook(Guid bookId)
+        {
+            bookProvider.RemoveBook(bookId);
+        }
     }
 }

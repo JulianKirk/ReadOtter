@@ -376,6 +376,73 @@ public class CachedBookProviderTest
     }
 
     [Test]
+    public void RemoveBook_ShouldCallRepositoryRemoveAndCommit()
+    {
+        // Arrange
+        var bookId = Guid.NewGuid();
+
+        // Act
+        testCachedBookProvider.RemoveBook(bookId);
+
+        // Assert
+        mockBookRepository.Verify(repo => repo.RemoveBookById(bookId), Times.Once);
+        mockUnitOfWork.Verify(uow => uow.Commit(), Times.Once);
+    }
+
+    [Test]
+    public void RemoveBook_ShouldEvictAllCaches()
+    {
+        // Arrange
+        var testBook = new Book
+        {
+            Id = Guid.NewGuid(),
+            Title = "Test Book",
+            FilePath = "/path/to/book.epub",
+        };
+        var testMetaData = new BookMetaData
+        {
+            Descriptions = new List<string>() { "desc" },
+            Creators = new List<string>() { "creator" },
+        };
+        var testContent = new BookContent(
+            new List<ContentChapter>() { new ContentChapter("content", title: "title") });
+        var testChapter = new ContentChapter("chapter content", "Chapter 1", 0);
+
+        mockBookRepository.Setup(repo => repo.GetBookById(testBook.Id)).Returns(testBook);
+        mockVersOneAdaptor
+            .Setup(adaptor => adaptor.GetMetaData(It.IsAny<Book>()))
+            .Returns(testMetaData);
+        mockVersOneAdaptor
+            .Setup(adaptor => adaptor.GetContent(It.IsAny<Book>()))
+            .Returns(testContent);
+        mockVersOneAdaptor
+            .Setup(adaptor => adaptor.GetChapterContent(It.IsAny<Book>(), 0))
+            .Returns(testChapter);
+
+        testCachedBookProvider.GetMetadata(testBook.Id);
+        testCachedBookProvider.GetContent(testBook.Id);
+        testCachedBookProvider.GetChapter(testBook.Id, 0);
+
+        // Act
+        testCachedBookProvider.RemoveBook(testBook.Id);
+
+        // Assert -- subsequent calls should hit the repository again
+        testCachedBookProvider.GetMetadata(testBook.Id);
+        testCachedBookProvider.GetContent(testBook.Id);
+        testCachedBookProvider.GetChapter(testBook.Id, 0);
+
+        mockVersOneAdaptor.Verify(
+            adaptor => adaptor.GetMetaData(It.IsAny<Book>()),
+            Times.Exactly(2));
+        mockVersOneAdaptor.Verify(
+            adaptor => adaptor.GetContent(It.IsAny<Book>()),
+            Times.Exactly(2));
+        mockVersOneAdaptor.Verify(
+            adaptor => adaptor.GetChapterContent(It.IsAny<Book>(), 0),
+            Times.Exactly(2));
+    }
+
+    [Test]
     public void GetCoverImage_ShouldReturnEmptyString_WhenImageDoesNotExist()
     {
         // Arrange

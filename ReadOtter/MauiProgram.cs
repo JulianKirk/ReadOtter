@@ -6,75 +6,72 @@ using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Services;
 using Serilog;
 
-namespace ReadOtter
+namespace ReadOtter;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
-            builder.Services.AddMauiBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
 
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "ReadOtterLibrary.db");
-            builder.Services.AddDbContext<ReadOtterLibraryDbContext>(options =>
-                options.UseSqlite($"Data Source={dbPath}"));
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "ReadOtterLibrary.db");
+        builder.Services.AddDbContext<ReadOtterLibraryDbContext>(options =>
+            options.UseSqlite($"Data Source={dbPath}"));
 
-            builder.Services.AddScoped<SeederService>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<SeederService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+        builder.Services.AddScoped<IVersOneAdaptor, VersOneAdaptor>();
+        builder.Services.AddScoped<IBookProvider, CachedBookProvider>();
 
-            builder.Services.AddScoped<IVersOneAdaptor, VersOneAdaptor>();
-            builder.Services.AddScoped<IBookProvider, CachedBookProvider>();
+        builder.Services.AddScoped<EpubContentService>();
+        builder.Services.AddScoped<EpubMetadataService>();
+        builder.Services.AddScoped<BookCollectionService>();
 
-            builder.Services.AddScoped<EpubContentService>();
-            builder.Services.AddScoped<EpubMetadataService>();
-            builder.Services.AddScoped<BookCollectionService>();
+        builder.Services.AddScoped<InputService>();
+        builder.Services.AddScoped<LinkService>();
 
-            builder.Services.AddScoped<InputService>();
-            builder.Services.AddScoped<LinkService>();
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File(
+                Path.Combine(FileSystem.AppDataDirectory, "Logs", "readotter-.log"),
+                rollingInterval: RollingInterval.Day)
+            .WriteTo.Console()
+            .WriteTo.Debug()
+            .CreateLogger();
 
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File(
-                    Path.Combine(FileSystem.AppDataDirectory, "Logs", "readotter-.log"),
-                    rollingInterval: RollingInterval.Day)
-                .WriteTo.Console()
-                .WriteTo.Debug()
-                .CreateLogger();
-
-            builder.Logging.AddSerilog(Log.Logger);
+        builder.Logging.AddSerilog(Log.Logger);
 
 #if DEBUG
-            builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
-            var app = builder.Build();
+        var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ReadOtterLibraryDbContext>();
+            db.Database.Migrate();
+
+            var hasStaleBooks = db
+                .Books.AsEnumerable()
+                .Any(b => b.FilePath != null && !File.Exists(b.FilePath));
+            if (!db.Books.Any() || hasStaleBooks)
             {
-                var db = scope.ServiceProvider.GetRequiredService<ReadOtterLibraryDbContext>();
-                db.Database.Migrate();
-
-                var hasStaleBooks = db
-                    .Books.AsEnumerable()
-                    .Any(b => b.FilePath != null && !File.Exists(b.FilePath));
-                if (!db.Books.Any() || hasStaleBooks)
-                {
-                    var seeder = scope.ServiceProvider.GetRequiredService<SeederService>();
-                    seeder.ClearAllData();
-                    seeder.SeedData();
-                }
+                var seeder = scope.ServiceProvider.GetRequiredService<SeederService>();
+                seeder.ClearAllData();
+                seeder.SeedData();
             }
-
-            return app;
         }
+
+        return app;
     }
 }
