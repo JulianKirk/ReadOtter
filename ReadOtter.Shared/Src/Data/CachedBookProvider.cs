@@ -201,4 +201,10 @@ public class CachedBookProvider : IBookProvider
     {
         unitOfWork.Commit();
     }
+
+    public int? ResolveChapterIndex(Guid bookId, string href)
+    {
+        var book = GetEmptyOrIncompleteBook(bookId);
+        return versOneAdaptor.ResolveChapterIndex(book, href);
+    }
 }

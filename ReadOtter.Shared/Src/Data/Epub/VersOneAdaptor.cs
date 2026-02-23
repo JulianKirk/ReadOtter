@@ -82,6 +82,34 @@ public partial class VersOneAdaptor : IVersOneAdaptor
         return GetEpubBookRef(book).ReadCover();
     }
 
+    public int? ResolveChapterIndex(Book book, string href)
+    {
+        var fragmentIndex = href.IndexOf('#');
+        var filePart = fragmentIndex >= 0 ? href[..fragmentIndex] : href;
+
+        if (string.IsNullOrEmpty(filePart))
+        {
+            logger.LogWarning("File part of href is empty.");
+
+            return null;
+        }
+
+        var normalized = NormalizePath(filePart);
+        var readingOrder = GetEpubBookRef(book).GetReadingOrder();
+
+        for (int i = 0; i < readingOrder.Count; i++)
+        {
+            var chapterPath = NormalizePath(readingOrder[i].FilePath);
+            if (chapterPath.Equals(normalized, StringComparison.OrdinalIgnoreCase)
+                || chapterPath.EndsWith(normalized, StringComparison.OrdinalIgnoreCase))
+            {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
     public string GetTitle(string filePath)
     {
         if (!File.Exists(filePath))

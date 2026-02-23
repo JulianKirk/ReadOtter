@@ -1,5 +1,6 @@
 ﻿@inject EpubContentService EpubContentService
 @inject InputService InputService
+@inject LinkService LinkService
 @implements IDisposable
 
 <div class="ReadView">
@@ -24,6 +25,17 @@
 
 		InputService.OnKeyDown += HandleKeyDown;
 		await InputService.Initialize();
+
+		LinkService.OnLinkClick += HandleLinkClick;
+		await LinkService.Initialize(".ReadView-Content");
+	}
+
+	void HandleLinkClick(string href)
+	{
+		if (EpubContentService.NavigateToHref(BookId, href))
+		{
+			UpdateContent();
+		}
 	}
 
 	void HandleKeyDown(string key)
@@ -60,5 +72,6 @@
 	public void Dispose()
 	{
 		InputService.OnKeyDown -= HandleKeyDown;
+		LinkService.OnLinkClick -= HandleLinkClick;
 	}
 }
