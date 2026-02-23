@@ -39,6 +39,7 @@ namespace ReadOtter
             builder.Services.AddScoped<BookCollectionService>();
 
             builder.Services.AddScoped<InputService>();
+            builder.Services.AddScoped<LinkService>();
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

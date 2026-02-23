@@ -9,8 +9,7 @@ public class EpubContentService
 
     public EpubContentService(IBookProvider bookProvider)
     {
-        this.bookProvider =
-            bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
+        this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
     }
 
     public bool OffsetBookCurrentChapter(Guid id, int offset)
@@ -44,5 +43,20 @@ public class EpubContentService
     public string GetCurrentChapterTextContent(Book book)
     {
         return bookProvider.GetChapter(book.Id, book.CurrentChapter).Content;
+    }
+
+    public bool NavigateToHref(Guid bookId, string href)
+    {
+        var chapterIndex = bookProvider.ResolveChapterIndex(bookId, href);
+        if (chapterIndex == null)
+        {
+            return false;
+        }
+
+        var book = bookProvider.GetEmptyOrIncompleteBook(bookId);
+        book.CurrentChapter = chapterIndex.Value;
+        bookProvider.SaveBookProgress(bookId);
+
+        return true;
     }
 }

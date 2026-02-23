@@ -17,4 +17,6 @@ public interface IVersOneAdaptor
     public byte[]? GetCoverImage(Book book);
 
     public string GetTitle(string filePath);
+
+    public int? ResolveChapterIndex(Book book, string href);
 }
