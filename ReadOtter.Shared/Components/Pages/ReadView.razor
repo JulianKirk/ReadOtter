@@ -15,7 +15,7 @@
 <!-- Reader toolbar -->
 <div class="sticky top-0 bg-surface-card border-b border-border px-4 py-3 flex items-center justify-between z-40">
     <button class="text-text-secondary hover:text-text-primary transition-colors" @onclick="GoBack">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <Icon Name="IconName.Back" />
     </button>
     <span class="text-sm text-text-secondary truncate mx-4">@bookTitle</span>
     <span class="text-xs text-text-tertiary whitespace-nowrap">Ch @(currentChapter + 1) / @totalChapters</span>
@@ -50,7 +50,7 @@
         UpdateContent();
 
         InputService.OnKeyDown += HandleKeyDown;
-        await InputService.Initialize();
+        await InputService.Initialize(["ArrowRight", "ArrowLeft"]);
 
         LinkService.OnLinkClick += HandleLinkClick;
         await LinkService.Initialize(".ReadView-Content");
@@ -68,6 +68,7 @@
     {
         if (key == "ArrowRight") GotoNextChapter();
         if (key == "ArrowLeft") GotoPreviousChapter();
+        if (key == "Escape") GoBack();
     }
 
     void GotoPreviousChapter()

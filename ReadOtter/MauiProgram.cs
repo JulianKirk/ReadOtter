@@ -60,22 +60,6 @@ public static class MauiProgram
 
         var app = builder.Build();
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<ReadOtterLibraryDbContext>();
-            db.Database.Migrate();
-
-            var hasStaleBooks = db
-                .Books.AsEnumerable()
-                .Any(b => b.FilePath != null && !File.Exists(b.FilePath));
-            if (!db.Books.Any() || hasStaleBooks)
-            {
-                var seeder = scope.ServiceProvider.GetRequiredService<SeederService>();
-                seeder.ClearAllData();
-                seeder.SeedData();
-            }
-        }
-
         return app;
     }
 }

@@ -1,0 +1,20 @@
+@page "/controls"
+@using Microsoft.Extensions.Options
+@using ReadOtter.Shared.Src.Settings
+@inject IOptions<DevSettings> DevSettings
+@inject NavigationManager Navigation
+
+@if (DevSettings.Value.IsDevMode)
+{
+    <ControlsReferenceView />
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!DevSettings.Value.IsDevMode)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+}

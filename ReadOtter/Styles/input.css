@@ -5,12 +5,25 @@
 @layer base {
     body {
         @apply bg-surface-base text-text-primary font-sans;
+        scrollbar-width: none;
+    }
+
+    body::-webkit-scrollbar {
+        display: none;
+    }
+
+    *:focus {
+        outline: none;
+    }
+
+    *:focus-visible {
+        @apply outline-2 outline-accent outline-offset-2;
     }
 }
 
 @layer components {
     .btn-primary {
-        @apply px-4 py-2 bg-accent text-surface-base font-semibold rounded-md hover:bg-accent-hover transition-colors;
+        @apply px-4 py-2 bg-accent text-white font-semibold rounded-md hover:bg-accent-hover transition-colors;
     }
 
     .btn-secondary {
@@ -23,5 +36,16 @@
 
     .btn-danger-ghost {
         @apply px-4 py-2 text-danger hover:text-danger-hover transition-colors font-semibold;
+    }
+
+    .ReadView-Content a[href] {
+        color: #2563EB;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.15s;
+    }
+
+    .ReadView-Content a[href]:hover {
+        color: #1D4ED8;
     }
 }

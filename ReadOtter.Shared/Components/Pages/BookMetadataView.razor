@@ -1,10 +1,12 @@
 @inject EpubMetadataService EpubMetadataService
 @inject BookCollectionService BookCollectionService
 @inject NavigationManager Navigation
+@inject InputService InputService
+@implements IDisposable
 
 <div class="py-8 space-y-6">
 
-    <a href="library-catalog" class="text-text-secondary hover:text-text-primary transition-colors text-sm">&larr; Back to Library</a>
+    <a href="" class="text-text-secondary hover:text-text-primary transition-colors text-sm">&larr; Back to Home</a>
 
     <div class="md:flex gap-8">
         <div class="w-48 flex-shrink-0 mb-6 md:mb-0">
@@ -77,11 +79,22 @@
     string bookTitle = string.Empty;
     bool showConfirmation;
 
+    protected override async Task OnInitializedAsync()
+    {
+        InputService.OnKeyDown += HandleKeyDown;
+        await InputService.Initialize();
+    }
+
     protected override void OnParametersSet()
     {
         metadata = EpubMetadataService.GetMetaData(BookId);
         coverImage = EpubMetadataService.GetCoverImage(BookId);
         bookTitle = EpubMetadataService.GetBookTitle(BookId);
+    }
+
+    void HandleKeyDown(string key)
+    {
+        if (key == "Escape") Navigation.NavigateTo("");
     }
 
     void ReadBook()
@@ -108,4 +121,9 @@
     string GetCreatorsList() => string.Join(", ", metadata.Creators ?? []);
     string GetPublishersList() => string.Join(", ", metadata.Publishers ?? []);
     string GetContributorsList() => string.Join(", ", metadata.Contributors ?? []);
+
+    public void Dispose()
+    {
+        InputService.OnKeyDown -= HandleKeyDown;
+    }
 }
