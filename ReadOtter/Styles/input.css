@@ -35,10 +35,13 @@
 @layer base {
     body {
         @apply bg-surface-base text-text-primary font-sans;
+    }
+
+    * {
         scrollbar-width: none;
     }
 
-    body::-webkit-scrollbar {
+    *::-webkit-scrollbar {
         display: none;
     }
 
