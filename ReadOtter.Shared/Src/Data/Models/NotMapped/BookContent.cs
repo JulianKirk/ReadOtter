@@ -1,12 +1,11 @@
-﻿namespace ReadOtter.Shared.Src.Data.Models
-{
-    public class BookContent
-    {
-        public BookContent(IEnumerable<ContentChapter> chapters)
-        {
-            Chapters = chapters ?? throw new ArgumentNullException(nameof(chapters));
-        }
+﻿namespace ReadOtter.Shared.Src.Data.Models;
 
-        public IEnumerable<ContentChapter> Chapters { get; }
+public class BookContent
+{
+    public BookContent(IEnumerable<ContentChapter> chapters)
+    {
+        Chapters = chapters ?? throw new ArgumentNullException(nameof(chapters));
     }
+
+    public IEnumerable<ContentChapter> Chapters { get; }
 }

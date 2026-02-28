@@ -1,15 +1,14 @@
 ﻿using ReadOtter.Shared.Src.Data.Models;
 
-namespace ReadOtter.Shared.Src.Data.Database.Repositories
+namespace ReadOtter.Shared.Src.Data.Database.Repositories;
+
+public interface IBookRepository
 {
-    public interface IBookRepository
-    {
-        Book? GetBookById(Guid id);
+    Book? GetBookById(Guid id);
 
-        IEnumerable<Book> GetAllBooks();
+    IEnumerable<Book> GetAllBooks();
 
-        void RemoveBookById(Guid id);
+    void RemoveBookById(Guid id);
 
-        void AddBook(Book book);
-    }
+    void AddBook(Book book);
 }
