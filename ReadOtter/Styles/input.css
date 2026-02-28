@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-surface-base text-text-primary font-sans;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply px-4 py-2 bg-accent text-surface-base font-semibold rounded-md hover:bg-accent-hover transition-colors;
+    }
+
+    .btn-secondary {
+        @apply px-4 py-2 border border-border text-text-primary rounded-md hover:border-accent hover:text-accent transition-colors;
+    }
+
+    .btn-ghost {
+        @apply px-4 py-2 text-text-secondary hover:text-text-primary transition-colors;
+    }
+
+    .btn-danger-ghost {
+        @apply px-4 py-2 text-danger hover:text-danger-hover transition-colors font-semibold;
+    }
+}

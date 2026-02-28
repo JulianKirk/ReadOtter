@@ -1,65 +1,58 @@
-﻿@inject EpubMetadataService EpubMetadataService
+@inject EpubMetadataService EpubMetadataService
 @inject NavigationManager Navigation
 
-<div class="book-grid-item" @onclick=@ViewBook>
-	@if (loadError)
-	{
-		<div class="book-grid-item-error">
-			<p>Unable to load book data</p>
-		</div>
-	}
-	else
-	{
-		<img src="@GetCoverImageBase64String()"/>
+<div class="bg-surface-card rounded-lg border border-border overflow-hidden hover:border-accent transition-colors cursor-pointer" @onclick="ViewBook">
+    @if (loadError)
+    {
+        <div class="aspect-[2/3] w-full bg-surface-raised flex items-center justify-center">
+            <p class="text-text-tertiary text-xs">Unable to load</p>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(coverImage))
+    {
+        <img src="@coverImage" class="aspect-[2/3] w-full object-cover bg-surface-raised" />
+    }
+    else
+    {
+        <div class="aspect-[2/3] w-full bg-surface-raised flex items-center justify-center">
+            <p class="text-text-tertiary text-xs">No Cover</p>
+        </div>
+    }
 
-		<h2>Author(s)</h2>
-		@GetCreatorsList()
-		<br />
-
-		<h2>Publisher(s)</h2>
-		@GetPublishersList()
-	}
+    <div class="p-3">
+        <p class="text-sm font-medium text-text-primary truncate">@bookTitle</p>
+        <p class="text-xs text-text-secondary truncate">@GetCreatorsList()</p>
+    </div>
 </div>
 
 @code {
-	[Parameter]
-	public required Guid BookId { get; set; }
+    [Parameter]
+    public required Guid BookId { get; set; }
 
-	BookMetaData metadata = new();
-	string coverImage = string.Empty;
-	bool loadError;
+    BookMetaData metadata = new();
+    string coverImage = string.Empty;
+    string bookTitle = string.Empty;
+    bool loadError;
 
-	protected override void OnParametersSet()
-	{
-		try
-		{
-			metadata = EpubMetadataService.GetMetaData(BookId);
-			coverImage = EpubMetadataService.GetCoverImage(BookId);
-			loadError = false;
-		}
-		catch (Exception)
-		{
-			loadError = true;
-		}
-	}
+    protected override void OnParametersSet()
+    {
+        try
+        {
+            metadata = EpubMetadataService.GetMetaData(BookId);
+            coverImage = EpubMetadataService.GetCoverImage(BookId);
+            bookTitle = EpubMetadataService.GetBookTitle(BookId);
+            loadError = false;
+        }
+        catch (Exception)
+        {
+            loadError = true;
+        }
+    }
 
-	string GetCreatorsList()
-	{
-		return string.Join(", ", metadata.Creators ?? []);
-	}
+    string GetCreatorsList() => string.Join(", ", metadata.Creators ?? []);
 
-	string GetPublishersList()
-	{
-		return string.Join(", ", metadata.Publishers ?? []);
-	}
-
-	string GetCoverImageBase64String()
-	{
-		return coverImage;
-	}
-
-	void ViewBook()
-	{
-		Navigation.NavigateTo("book/" + BookId);
-	}
+    void ViewBook()
+    {
+        Navigation.NavigateTo("book/" + BookId);
+    }
 }

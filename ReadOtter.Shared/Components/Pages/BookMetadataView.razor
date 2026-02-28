@@ -2,91 +2,110 @@
 @inject BookCollectionService BookCollectionService
 @inject NavigationManager Navigation
 
-<div class="book-metadata">
-	@if (!string.IsNullOrEmpty(coverImage))
-	{
-		<img class="book-cover-image" src="@coverImage" />
-	}
+<div class="py-8 space-y-6">
 
-	<h1>@bookTitle</h1>
+    <a href="library-catalog" class="text-text-secondary hover:text-text-primary transition-colors text-sm">&larr; Back to Library</a>
 
-	<div class="book-metadata-actions">
-		<button class="btn btn-primary" @onclick="ReadBook">Read</button>
-		<button class="btn btn-danger" @onclick="ShowRemoveConfirmation">Remove from Library</button>
-	</div>
+    <div class="md:flex gap-8">
+        <div class="w-48 flex-shrink-0 mb-6 md:mb-0">
+            @if (!string.IsNullOrEmpty(coverImage))
+            {
+                <img src="@coverImage" class="aspect-[2/3] w-full object-cover rounded-lg bg-surface-raised" />
+            }
+            else
+            {
+                <div class="aspect-[2/3] w-full bg-surface-raised rounded-lg flex items-center justify-center">
+                    <span class="text-text-tertiary text-sm">No Cover</span>
+                </div>
+            }
+        </div>
 
-	<h2>Descriptions</h2>
-	@foreach (var description in metadata.Descriptions ?? [])
-	{
-		<p>@((MarkupString)description)</p>
-	}
+        <div class="flex-1 space-y-4">
+            <h1 class="text-2xl font-semibold">@bookTitle</h1>
 
-	<h2>Creators</h2>
-	@GetCreatorsList()
+            @if (metadata.Creators?.Any() == true)
+            {
+                <p class="text-text-secondary">by @GetCreatorsList()</p>
+            }
 
-	<h2>Publishers</h2>
-	@GetPublishersList()
+            @if (metadata.Publishers?.Any() == true)
+            {
+                <p class="text-sm text-text-tertiary">Publisher: @GetPublishersList()</p>
+            }
 
-	<h2>Contributors</h2>
-	@GetContributorsList()
+            <div class="flex gap-3 pt-2">
+                <button class="btn-primary" @onclick="ReadBook">Read</button>
+                <button class="btn-danger-ghost" @onclick="ShowRemoveConfirmation">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    @if (metadata.Descriptions?.Any() == true)
+    {
+        <section class="space-y-3 pt-4 border-t border-border">
+            <h2 class="text-lg font-semibold">Description</h2>
+            @foreach (var description in metadata.Descriptions)
+            {
+                <div class="text-text-secondary leading-relaxed">@((MarkupString)description)</div>
+            }
+        </section>
+    }
+
+    @if (metadata.Contributors?.Any() == true)
+    {
+        <section class="pt-4 border-t border-border">
+            <h2 class="text-lg font-semibold mb-2">Contributors</h2>
+            <p class="text-text-secondary">@GetContributorsList()</p>
+        </section>
+    }
+
 </div>
 
 <ConfirmationDialog
-	IsVisible="@showConfirmation"
-	Message="Are you sure you want to remove this book from your library?"
-	ConfirmText="Remove"
-	OnConfirm="RemoveBook"
-	OnCancel="HideRemoveConfirmation" />
+    IsVisible="@showConfirmation"
+    Message="Are you sure you want to remove this book from your library?"
+    ConfirmText="Remove"
+    OnConfirm="RemoveBook"
+    OnCancel="HideRemoveConfirmation" />
 
 @code {
-	[Parameter]
-	public required Guid BookId { get; set; }
+    [Parameter]
+    public required Guid BookId { get; set; }
 
-	BookMetaData metadata = new();
-	string coverImage = string.Empty;
-	string bookTitle = string.Empty;
-	bool showConfirmation;
+    BookMetaData metadata = new();
+    string coverImage = string.Empty;
+    string bookTitle = string.Empty;
+    bool showConfirmation;
 
-	protected override void OnParametersSet()
-	{
-		metadata = EpubMetadataService.GetMetaData(BookId);
-		coverImage = EpubMetadataService.GetCoverImage(BookId);
-		bookTitle = EpubMetadataService.GetBookTitle(BookId);
-	}
+    protected override void OnParametersSet()
+    {
+        metadata = EpubMetadataService.GetMetaData(BookId);
+        coverImage = EpubMetadataService.GetCoverImage(BookId);
+        bookTitle = EpubMetadataService.GetBookTitle(BookId);
+    }
 
-	void ReadBook()
-	{
-		Navigation.NavigateTo($"reader/{BookId}");
-	}
+    void ReadBook()
+    {
+        Navigation.NavigateTo($"reader/{BookId}");
+    }
 
-	void ShowRemoveConfirmation()
-	{
-		showConfirmation = true;
-	}
+    void ShowRemoveConfirmation()
+    {
+        showConfirmation = true;
+    }
 
-	void HideRemoveConfirmation()
-	{
-		showConfirmation = false;
-	}
+    void HideRemoveConfirmation()
+    {
+        showConfirmation = false;
+    }
 
-	void RemoveBook()
-	{
-		BookCollectionService.RemoveBook(BookId);
-		Navigation.NavigateTo("library-catalog");
-	}
+    void RemoveBook()
+    {
+        BookCollectionService.RemoveBook(BookId);
+        Navigation.NavigateTo("library-catalog");
+    }
 
-	string GetCreatorsList()
-	{
-		return string.Join(", ", metadata.Creators ?? []);
-	}
-
-	string GetPublishersList()
-	{
-		return string.Join(", ", metadata.Publishers ?? []);
-	}
-
-	string GetContributorsList()
-	{
-		return string.Join(", ", metadata.Contributors ?? []);
-	}
+    string GetCreatorsList() => string.Join(", ", metadata.Creators ?? []);
+    string GetPublishersList() => string.Join(", ", metadata.Publishers ?? []);
+    string GetContributorsList() => string.Join(", ", metadata.Contributors ?? []);
 }

@@ -4,6 +4,7 @@ using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Services;
+using ReadOtter.Shared.Src.Settings;
 using Serilog;
 
 namespace ReadOtter;
@@ -52,6 +53,9 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.Configure<DevSettings>(o => o.IsDevMode = true);
+#else
+        builder.Services.Configure<DevSettings>(_ => { });
 #endif
 
         var app = builder.Build();

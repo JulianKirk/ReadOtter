@@ -1,4 +1,4 @@
-@page "/seeder"
+@page "/dev-tools"
 @using Microsoft.Extensions.Options
 @using ReadOtter.Shared.Src.Settings
 @inject IOptions<DevSettings> DevSettings
@@ -6,7 +6,7 @@
 
 @if (DevSettings.Value.IsDevMode)
 {
-    <SeederView />
+    <DevToolsView />
 }
 
 @code {
