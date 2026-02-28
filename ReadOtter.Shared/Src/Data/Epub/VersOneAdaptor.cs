@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.Extensions.Logging;
 using ReadOtter.Shared.Src.Data.Models;
 using VersOne.Epub;
@@ -8,21 +7,26 @@ namespace ReadOtter.Shared.Src.Data.Epub;
 
 public partial class VersOneAdaptor : IVersOneAdaptor
 {
-    private readonly IMapper mapper;
     private readonly ILogger<VersOneAdaptor> logger;
     private readonly Dictionary<string, Dictionary<string, (string MimeType, byte[] Bytes)>> imageLookupCache = new();
     static readonly EpubReaderOptions DefaultReaderOptions = new EpubReaderOptions();
 
-    public VersOneAdaptor(IMapper mapper, ILogger<VersOneAdaptor> logger)
+    public VersOneAdaptor(ILogger<VersOneAdaptor> logger)
     {
-        this.mapper = mapper;
         this.logger = logger;
     }
 
     public BookMetaData GetMetaData(Book book)
     {
         var epubBookRef = GetEpubBookRef(book);
-        return mapper.Map<BookMetaData>(epubBookRef.Schema.Package.Metadata);
+        var meta = epubBookRef.Schema.Package.Metadata;
+        return new BookMetaData
+        {
+            Descriptions = meta.Descriptions?.Select(d => d.Description),
+            Creators = meta.Creators?.Select(c => c.Creator),
+            Publishers = meta.Publishers?.Select(p => p.Publisher),
+            Contributors = meta.Contributors?.Select(c => c.Contributor),
+        };
     }
 
     public ContentChapter GetChapterContent(Book book, string title)

@@ -59,6 +59,22 @@ public class BookCollectionServiceTest
     }
 
     [Test]
+    public void RemoveBook_ShouldDelegateToBookProvider()
+    {
+        // Arrange
+        var bookId = Guid.NewGuid();
+        var mockBookProvider = new Mock<IBookProvider>();
+
+        var service = new BookCollectionService(mockBookProvider.Object);
+
+        // Act
+        service.RemoveBook(bookId);
+
+        // Assert
+        mockBookProvider.Verify(b => b.RemoveBook(bookId), Times.Once);
+    }
+
+    [Test]
     public void Constructor_WhenNullBookProvider_ThrowsArgumentNullException()
     {
         // Act, Assert

@@ -24,6 +24,8 @@ public interface IBookProvider
 
     public Book AddBook(byte[] epubData, string fileName);
 
+    public void RemoveBook(Guid bookId);
+
     public void SaveBookProgress(Guid bookId);
 
     public int? ResolveChapterIndex(Guid bookId, string href);

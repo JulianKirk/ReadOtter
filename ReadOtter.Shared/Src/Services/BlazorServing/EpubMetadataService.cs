@@ -18,6 +18,12 @@ public class EpubMetadataService
         return bookProvider.GetMetadata(id);
     }
 
+    public string GetBookTitle(Guid id)
+    {
+        var book = bookProvider.GetEmptyOrIncompleteBook(id);
+        return book.Title;
+    }
+
     public string GetCoverImage(Guid id)
     {
         var book = bookProvider.GetEmptyOrIncompleteBook(id);
