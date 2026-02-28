@@ -1,10 +1,10 @@
 @page "/seeder"
 @using Microsoft.Extensions.Options
 @using ReadOtter.Shared.Src.Settings
-@inject IOptions<DevSettings> DevSettings
+@inject IOptions<AppSettings> AppSettings
 @inject NavigationManager Navigation
 
-@if (DevSettings.Value.IsDevMode)
+@if (AppSettings.Value.IsDevMode)
 {
     <SeederView />
 }
@@ -12,7 +12,7 @@
 @code {
     protected override void OnInitialized()
     {
-        if (!DevSettings.Value.IsDevMode)
+        if (!AppSettings.Value.IsDevMode)
         {
             Navigation.NavigateTo("/");
         }

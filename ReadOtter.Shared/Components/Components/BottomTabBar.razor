@@ -1,9 +1,6 @@
-@using Microsoft.Extensions.Options
-@using ReadOtter.Shared.Src.Settings
 @inject NavigationManager Navigation
 @inject BookCollectionService BookCollectionService
 @inject IJSRuntime JS
-@inject IOptions<DevSettings> DevSettings
 
 <div class="fixed bottom-0 left-0 right-0 bg-surface-card border-t border-border z-40">
     <div class="max-w-md mx-auto px-6 py-3 flex justify-around items-center">
@@ -19,13 +16,10 @@
             <Icon Name="IconName.Plus" />
             <span class="text-xs">Add</span>
         </button>
-        @if (DevSettings.Value.IsDevMode)
-        {
-            <NavLink href="dev-tools" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
-                <Icon Name="IconName.Cog" />
-                <span class="text-xs">Dev</span>
-            </NavLink>
-        }
+        <NavLink href="settings" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
+            <Icon Name="IconName.Cog" />
+            <span class="text-xs">Settings</span>
+        </NavLink>
     </div>
 </div>
 

@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-surface-base text-text-primary p-6">
     <button @onclick="GoBack" class="text-text-secondary hover:text-text-primary transition-colors text-sm mb-6 flex items-center gap-1">
         <Icon Name="IconName.Back" CssClass="w-4 h-4" />
-        <span>Dev Tools</span>
+        <span>Settings</span>
     </button>
 
     <h1 class="text-2xl font-semibold mb-8">Controls Reference</h1>
@@ -115,7 +115,7 @@
 
     void GoBack()
     {
-        Navigation.NavigateTo("dev-tools");
+        Navigation.NavigateTo("settings");
     }
 
     public void Dispose()

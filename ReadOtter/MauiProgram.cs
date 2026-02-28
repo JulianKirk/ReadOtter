@@ -53,9 +53,9 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
-        builder.Services.Configure<DevSettings>(o => o.IsDevMode = true);
+        builder.Services.Configure<AppSettings>(o => o.IsDevMode = true);
 #else
-        builder.Services.Configure<DevSettings>(_ => { });
+        builder.Services.Configure<AppSettings>(_ => { });
 #endif
 
         var app = builder.Build();

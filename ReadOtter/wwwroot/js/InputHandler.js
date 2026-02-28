@@ -28,6 +28,16 @@ window.clickElement = (element) => {
     element.click();
 };
 
+window.ThemeHandler = {
+    setTheme: function (theme) {
+        if (theme === 'Dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }
+};
+
 window.LinkHandler = {
     _dotNetRef: null,
     _listener: null,
