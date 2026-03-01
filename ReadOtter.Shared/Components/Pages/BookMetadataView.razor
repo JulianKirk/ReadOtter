@@ -30,12 +30,12 @@
 
 			@if (metadata.Creators?.Any() == true)
 			{
-				<p class="text-text-secondary">by @GetCreatorsList()</p>
+				<p class="text-text-secondary">by @EpubMetadataService.GetCreatorsDisplayString(BookId)</p>
 			}
 
 			@if (metadata.Publishers?.Any() == true)
 			{
-				<p class="text-sm text-text-tertiary">Publisher: @GetPublishersList()</p>
+				<p class="text-sm text-text-tertiary">Publisher: @EpubMetadataService.GetPublishersDisplayString(BookId)</p>
 			}
 
 			<div class="flex gap-3 pt-2">
@@ -60,7 +60,7 @@
 	{
 		<section class="pt-4 border-t border-border">
 			<h2 class="text-lg font-semibold mb-2">Contributors</h2>
-			<p class="text-text-secondary">@GetContributorsList()</p>
+			<p class="text-text-secondary">@EpubMetadataService.GetContributorsDisplayString(BookId)</p>
 		</section>
 	}
 
@@ -123,10 +123,6 @@
 		BookCollectionService.RemoveBook(BookId);
 		Navigation.NavigateTo("library-catalog");
 	}
-
-	string GetCreatorsList() => string.Join(", ", metadata.Creators ?? []);
-	string GetPublishersList() => string.Join(", ", metadata.Publishers ?? []);
-	string GetContributorsList() => string.Join(", ", metadata.Contributors ?? []);
 
 	public void Dispose()
 	{

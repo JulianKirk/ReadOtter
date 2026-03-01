@@ -96,9 +96,7 @@
 	{
 		content = EpubContentService.GetCurrentChapterTextContent(BookId);
 		currentChapter = EpubContentService.GetCurrentChapter(BookId);
-		progressPercent = totalChapters > 0
-			? Math.Round((double)(currentChapter + 1) / totalChapters * 100)
-			: 0;
+		progressPercent = EpubContentService.GetReadingProgressPercent(BookId);
 		StateHasChanged();
 	}
 

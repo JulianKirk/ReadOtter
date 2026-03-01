@@ -34,6 +34,24 @@ public class EpubMetadataService
         return GetCoverImage(book);
     }
 
+    public string GetCreatorsDisplayString(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Creators?.Any() == true ? string.Join(", ", meta.Creators) : string.Empty;
+    }
+
+    public string GetPublishersDisplayString(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Publishers?.Any() == true ? string.Join(", ", meta.Publishers) : string.Empty;
+    }
+
+    public string GetContributorsDisplayString(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Contributors?.Any() == true ? string.Join(", ", meta.Contributors) : string.Empty;
+    }
+
     string GetCoverImage(Book book)
     {
         return bookProvider.GetCoverImage(book.Id);

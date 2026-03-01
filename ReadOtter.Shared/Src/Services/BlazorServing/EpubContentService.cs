@@ -57,6 +57,15 @@ public class EpubContentService
         return bookProvider.GetChapter(book.Id, book.CurrentChapter).Content;
     }
 
+    public double GetReadingProgressPercent(Guid id)
+    {
+        var currentChapter = GetCurrentChapter(id);
+        var totalChapters = bookProvider.GetChapterCount(id);
+        return totalChapters > 0
+            ? Math.Round((double)(currentChapter + 1) / totalChapters * 100)
+            : 0;
+    }
+
     public bool NavigateToHref(Guid bookId, string href)
     {
         var chapterIndex = bookProvider.ResolveChapterIndex(bookId, href);

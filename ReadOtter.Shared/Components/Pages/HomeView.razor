@@ -1,5 +1,6 @@
 @inject BookCollectionService BookCollectionService
 @inject EpubMetadataService EpubMetadataService
+@inject EpubContentService EpubContentService
 @inject BookNotificationService BookNotification
 @inject NavigationManager Navigation
 @implements IDisposable
@@ -31,7 +32,7 @@
 					@if (continueTotalChapters > 0)
 					{
 						<div class="w-full bg-surface-raised rounded-full h-1.5 mt-2">
-							<div class="bg-accent h-1.5 rounded-full" style="width: @(Math.Round((double)(continueBook.CurrentChapter + 1) / continueTotalChapters * 100))%"></div>
+							<div class="bg-accent h-1.5 rounded-full" style="width: @continueProgressPercent%"></div>
 						</div>
 					}
 					<button class="mt-3 self-start btn-primary text-sm" @onclick="ContinueReading">Continue</button>
@@ -71,6 +72,7 @@
 	string continueCover = string.Empty;
 	string continueAuthor = string.Empty;
 	int continueTotalChapters;
+	double continueProgressPercent;
 
 	protected override void OnInitialized()
 	{
@@ -94,22 +96,17 @@
 
 	void LoadData()
 	{
-		var allBooks = BookCollectionService.GetAllBooks().ToList();
-		bookIds = allBooks.Select(b => b.Id).ToList();
+		bookIds = BookCollectionService.GetAllBookIds().ToList();
 
-		continueBook = allBooks
-			.Where(b => b.CurrentChapter > 0)
-			.OrderByDescending(b => b.LastOpenedAt)
-			.FirstOrDefault();
+		continueBook = BookCollectionService.GetLastReadBook();
 
 		if (continueBook is not null)
 		{
 			continueCover = EpubMetadataService.GetCoverImage(continueBook.Id);
-			var meta = EpubMetadataService.GetMetaData(continueBook.Id);
-			continueAuthor = meta.Creators?.Any() == true
-				? "by " + string.Join(", ", meta.Creators)
-				: string.Empty;
+			var creators = EpubMetadataService.GetCreatorsDisplayString(continueBook.Id);
+			continueAuthor = !string.IsNullOrEmpty(creators) ? "by " + creators : string.Empty;
 			continueTotalChapters = EpubMetadataService.GetChapterCount(continueBook.Id);
+			continueProgressPercent = EpubContentService.GetReadingProgressPercent(continueBook.Id);
 		}
 	}
 

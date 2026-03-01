@@ -21,7 +21,7 @@
 
 	<div class="p-3">
 		<p class="text-sm font-medium text-text-primary truncate">@bookTitle</p>
-		<p class="text-xs text-text-secondary truncate">@GetCreatorsList()</p>
+		<p class="text-xs text-text-secondary truncate">@EpubMetadataService.GetCreatorsDisplayString(BookId)</p>
 	</div>
 </div>
 
@@ -29,7 +29,6 @@
 	[Parameter]
 	public required Guid BookId { get; set; }
 
-	BookMetaData metadata = new();
 	string coverImage = string.Empty;
 	string bookTitle = string.Empty;
 	bool loadError;
@@ -39,7 +38,6 @@
 		try
 		{
 			bookTitle = EpubMetadataService.GetBookTitle(BookId);
-			metadata = EpubMetadataService.GetMetaData(BookId);
 			coverImage = EpubMetadataService.GetCoverImage(BookId);
 			loadError = false;
 		}
@@ -48,8 +46,6 @@
 			loadError = true;
 		}
 	}
-
-	string GetCreatorsList() => string.Join(", ", metadata.Creators ?? []);
 
 	void ViewBook()
 	{
