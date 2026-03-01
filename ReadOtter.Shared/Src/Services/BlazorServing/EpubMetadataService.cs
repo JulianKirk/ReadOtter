@@ -13,21 +13,49 @@ public class EpubMetadataService
             bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
     }
 
+    public string GetBookTitle(Guid id)
+    {
+        return bookProvider.GetEmptyOrIncompleteBook(id).Title;
+    }
+
+    public int GetChapterCount(Guid id)
+    {
+        return bookProvider.GetChapterCount(id);
+    }
+
     public BookMetaData GetMetaData(Guid id)
     {
         return bookProvider.GetMetadata(id);
-    }
-
-    public string GetBookTitle(Guid id)
-    {
-        var book = bookProvider.GetEmptyOrIncompleteBook(id);
-        return book.Title;
     }
 
     public string GetCoverImage(Guid id)
     {
         var book = bookProvider.GetEmptyOrIncompleteBook(id);
         return GetCoverImage(book);
+    }
+
+    public string GetCreatorsDisplayString(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Creators?.Any() == true ? string.Join(", ", meta.Creators) : string.Empty;
+    }
+
+    public string GetPublishersDisplayString(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Publishers?.Any() == true ? string.Join(", ", meta.Publishers) : string.Empty;
+    }
+
+    public string GetContributorsDisplayString(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Contributors?.Any() == true ? string.Join(", ", meta.Contributors) : string.Empty;
+    }
+
+    public IReadOnlyList<string> GetDescriptions(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Descriptions?.ToList() ?? [];
     }
 
     string GetCoverImage(Book book)

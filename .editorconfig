@@ -1,3 +1,6 @@
+[*.razor]
+indent_style = tab
+
 [*.cs]
 
 # CS8625: Cannot convert null literal to non-nullable reference type.

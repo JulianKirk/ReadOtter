@@ -1,53 +1,47 @@
-﻿@inject BookCollectionService BookCollectionService
-@inject IJSRuntime JS
+@inject BookCollectionService BookCollectionService
+@inject BookNotificationService BookNotification
+@implements IDisposable
 
-<div class="BookCatalogView">
-	<div class="BookCatalogView-Topbar">
-		<h3>Catalog</h3>
-	</div>
+<div class="py-8 space-y-6">
+	<h1 class="text-2xl font-semibold">Library</h1>
 
-	<div class="BookCatalogView-Grid">
-		@foreach (var bookId in bookIds)
-		{
-			<BookGridItemComponent BookId="@bookId"></BookGridItemComponent>
-		}
-	</div>
+	<input type="text" placeholder="Search books..." class="w-full px-4 py-2 bg-surface-card border border-border rounded-lg text-text-primary placeholder-text-tertiary focus:outline-hidden focus:border-accent transition-colors" />
 
-	<button class="btn btn-primary add-book-button" @onclick="OpenFilePicker">Add Book</button>
-	<InputFile @ref="addBookFileInput" style="display:none" OnChange="OnFileSelected" accept=".epub"/>
+	@if (bookIds.Any())
+	{
+		<div class="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-4">
+			@foreach (var bookId in bookIds)
+			{
+				<BookGridItemComponent BookId="@bookId" />
+			}
+		</div>
+	}
+	else
+	{
+		<div class="flex flex-col items-center justify-center py-20 text-center">
+			<p class="text-text-secondary mb-2">No books yet</p>
+			<p class="text-text-tertiary text-sm">Tap the + button below to add your first book</p>
+		</div>
+	}
 </div>
 
 @code {
-	IEnumerable<Guid> bookIds = new List<Guid>();
-
-	InputFile? addBookFileInput;
+	IEnumerable<Guid> bookIds = [];
 
 	protected override void OnInitialized()
 	{
+		BookNotification.OnBooksChanged += HandleBooksChanged;
 		bookIds = BookCollectionService.GetAllBookIds();
 	}
 
-	async Task OpenFilePicker()
+	void HandleBooksChanged()
 	{
-		if (addBookFileInput?.Element is not null)
-		{
-			await JS.InvokeVoidAsync("clickElement", addBookFileInput.Element);
-		}
+		bookIds = BookCollectionService.GetAllBookIds();
+		InvokeAsync(StateHasChanged);
 	}
 
-	async Task OnFileSelected(InputFileChangeEventArgs e)
+	public void Dispose()
 	{
-		var file = e.File;
-		if (file is not null)
-		{
-			var buffer = new byte[file.Size];
-			using var stream = file.OpenReadStream(maxAllowedSize: 100 * 1024 * 1024);
-			await stream.ReadAsync(buffer, 0, (int)file.Size);
-
-			BookCollectionService.AddBook(buffer, file.Name);
-
-			bookIds = BookCollectionService.GetAllBookIds();
-			StateHasChanged();
-		}
+		BookNotification.OnBooksChanged -= HandleBooksChanged;
 	}
 }

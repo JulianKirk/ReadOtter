@@ -35,5 +35,10 @@ jobs:
         dotnet-version: 9.0.x
     - name: Install MAUI workload
       run: dotnet workload install maui
+    - name: Download Tailwind CSS
+      run: |
+        mkdir -p tools
+        curl -sLo tools/tailwindcss.exe https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-windows-x64.exe
+      shell: bash
     - name: Build MAUI
       run: dotnet build ReadOtter/ReadOtter.csproj -f net9.0-windows10.0.19041.0

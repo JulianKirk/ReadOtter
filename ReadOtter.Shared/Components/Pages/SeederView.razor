@@ -3,14 +3,23 @@
 @using ReadOtter.Shared.Src.Services
 @inject SeederService SeederService
 @inject ReadOtterLibraryDbContext Context
+@inject NavigationManager Navigation
+@inject InputService InputService
+@implements IDisposable
 
-<h1>Seeder</h1>
+<div class="min-h-screen bg-surface-base text-text-primary p-6">
+	<button @onclick="GoBack" class="text-text-secondary hover:text-text-primary transition-colors text-sm mb-6 flex items-center gap-1">
+		<Icon Name="IconName.Back" CssClass="w-4 h-4" />
+		<span>Settings</span>
+	</button>
 
-<button class="btn btn-primary" @onclick=@SeedData>Seed Data</button>
+<h1 class="text-2xl font-semibold mb-6">Seeder</h1>
 
-<button class="btn btn-primary" @onclick=@ClearSeededData>Clear Seeded Data</button>
+<button class="btn-primary" @onclick=@SeedData>Seed Data</button>
 
-<button class="btn btn-primary" @onclick=@ClearAllData>Clear All Data</button>
+<button class="btn-primary" @onclick=@ClearSeededData>Clear Seeded Data</button>
+
+<button class="btn-primary" @onclick=@ClearAllData>Clear All Data</button>
 
 <br />
 
@@ -19,22 +28,48 @@
 	<li>@book.Id: @book.Title</li>
 }
 
+</div>
+
 @code {
-	void SeedData() 
-	{ 
+	protected override async Task OnInitializedAsync()
+	{
+		InputService.OnKeyDown += HandleKeyDown;
+		await InputService.Initialize();
+	}
+
+	void HandleKeyDown(string key)
+	{
+		if (key == "Escape")
+		{
+			GoBack();
+		}
+	}
+
+	void GoBack()
+	{
+		Navigation.NavigateTo("settings");
+	}
+
+	void SeedData()
+	{
 		SeederService.SeedData();
 		StateHasChanged();
 	}
 
-	void ClearSeededData() 
+	void ClearSeededData()
 	{
 		SeederService.ClearSeededData();
 		StateHasChanged();
 	}
 
-	void ClearAllData() 
-	{ 
+	void ClearAllData()
+	{
 		SeederService.ClearAllData();
 		StateHasChanged();
+	}
+
+	public void Dispose()
+	{
+		InputService.OnKeyDown -= HandleKeyDown;
 	}
 }

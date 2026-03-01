@@ -28,6 +28,14 @@ public class BookCollectionService
         return bookProvider.AddBook(epubData, fileName);
     }
 
+    public Book? GetLastReadBook()
+    {
+        return GetAllBooks()
+            .Where(b => b.CurrentChapter > 0)
+            .OrderByDescending(b => b.LastOpenedAt)
+            .FirstOrDefault();
+    }
+
     public void RemoveBook(Guid bookId)
     {
         bookProvider.RemoveBook(bookId);

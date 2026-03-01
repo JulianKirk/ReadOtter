@@ -12,6 +12,18 @@ public class EpubContentService
         this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
     }
 
+    public int GetCurrentChapter(Guid id)
+    {
+        return bookProvider.GetEmptyOrIncompleteBook(id).CurrentChapter;
+    }
+
+    public void MarkAsOpened(Guid id)
+    {
+        var book = bookProvider.GetEmptyOrIncompleteBook(id);
+        book.LastOpenedAt = DateTimeOffset.Now;
+        bookProvider.SaveBookProgress(id);
+    }
+
     public bool OffsetBookCurrentChapter(Guid id, int offset)
     {
         var book = bookProvider.GetEmptyOrIncompleteBook(id);
@@ -43,6 +55,15 @@ public class EpubContentService
     public string GetCurrentChapterTextContent(Book book)
     {
         return bookProvider.GetChapter(book.Id, book.CurrentChapter).Content;
+    }
+
+    public double GetReadingProgressPercent(Guid id)
+    {
+        var currentChapter = GetCurrentChapter(id);
+        var totalChapters = bookProvider.GetChapterCount(id);
+        return totalChapters > 0
+            ? Math.Round((double)(currentChapter + 1) / totalChapters * 100)
+            : 0;
     }
 
     public bool NavigateToHref(Guid bookId, string href)

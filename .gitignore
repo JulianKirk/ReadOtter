@@ -371,5 +371,11 @@ build_output.txt
 # Windows null device artifact
 nul
 
-# Build output logs
-build_output.txt
+# Design exploration mockups
+design-exploration/
+
+# Tailwind CLI binary
+tools/
+
+# Tailwind compiled output (generated at build time)
+ReadOtter/wwwroot/css/tailwind.css

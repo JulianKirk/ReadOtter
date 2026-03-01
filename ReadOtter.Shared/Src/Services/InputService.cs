@@ -14,10 +14,14 @@ public class InputService : IAsyncDisposable
 
     public event Action<string>? OnKeyDown;
 
-    public async Task Initialize()
+    public async Task Initialize(string[]? shiftRepeatKeys = null)
     {
+        dotNetRef?.Dispose();
         dotNetRef = DotNetObjectReference.Create(this);
-        await jsRuntime.InvokeVoidAsync("InputHandler.register", dotNetRef);
+        await jsRuntime.InvokeVoidAsync(
+            "InputHandler.register",
+            dotNetRef,
+            shiftRepeatKeys ?? Array.Empty<string>());
     }
 
     [JSInvokable]

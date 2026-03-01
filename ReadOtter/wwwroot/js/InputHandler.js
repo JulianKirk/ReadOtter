@@ -2,9 +2,14 @@
     _dotNetRef: null,
     _listener: null,
 
-    register: function (dotNetRef) {
+    register: function (dotNetRef, shiftRepeatKeys) {
+        this.unregister();
         this._dotNetRef = dotNetRef;
+        var allowedRepeat = new Set(shiftRepeatKeys || []);
         this._listener = (event) => {
+            if (event.repeat) {
+                if (!event.shiftKey || !allowedRepeat.has(event.key)) return;
+            }
             dotNetRef.invokeMethodAsync('HandleKeyDown', event.key);
         };
         window.addEventListener('keydown', this._listener);
@@ -23,11 +28,22 @@ window.clickElement = (element) => {
     element.click();
 };
 
+window.ThemeHandler = {
+    setTheme: function (theme) {
+        if (theme === 'Dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }
+};
+
 window.LinkHandler = {
     _dotNetRef: null,
     _listener: null,
 
     register: function (dotNetRef, containerSelector) {
+        this.unregister(containerSelector);
         this._dotNetRef = dotNetRef;
         this._listener = (event) => {
             var anchor = event.target.closest('a[href]');

@@ -4,6 +4,7 @@ using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Services;
+using ReadOtter.Shared.Src.Settings;
 using Serilog;
 
 namespace ReadOtter;
@@ -38,6 +39,7 @@ public static class MauiProgram
 
         builder.Services.AddScoped<InputService>();
         builder.Services.AddScoped<LinkService>();
+        builder.Services.AddScoped<BookNotificationService>();
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -52,6 +54,9 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.Configure<AppSettings>(o => o.IsDevMode = true);
+#else
+        builder.Services.Configure<AppSettings>(_ => { });
 #endif
 
         var app = builder.Build();
@@ -60,16 +65,6 @@ public static class MauiProgram
         {
             var db = scope.ServiceProvider.GetRequiredService<ReadOtterLibraryDbContext>();
             db.Database.Migrate();
-
-            var hasStaleBooks = db
-                .Books.AsEnumerable()
-                .Any(b => b.FilePath != null && !File.Exists(b.FilePath));
-            if (!db.Books.Any() || hasStaleBooks)
-            {
-                var seeder = scope.ServiceProvider.GetRequiredService<SeederService>();
-                seeder.ClearAllData();
-                seeder.SeedData();
-            }
         }
 
         return app;

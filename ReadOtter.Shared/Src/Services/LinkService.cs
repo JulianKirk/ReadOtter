@@ -16,6 +16,7 @@ public class LinkService : IAsyncDisposable
 
     public async Task Initialize(string containerSelector)
     {
+        dotNetRef?.Dispose();
         dotNetRef = DotNetObjectReference.Create(this);
         await jsRuntime.InvokeVoidAsync("LinkHandler.register", dotNetRef, containerSelector);
     }

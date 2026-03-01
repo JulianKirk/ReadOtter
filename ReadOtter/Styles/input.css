@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+    --color-surface-base: #FBF7F2;
+    --color-surface-card: #EDE4D8;
+    --color-surface-raised: #E0D4C4;
+    --color-border: #C4B5A0;
+    --color-text-primary: #2C1E10;
+    --color-text-secondary: #5C4A38;
+    --color-text-tertiary: #8A7560;
+    --color-accent: #7A4E2D;
+    --color-accent-hover: #5E3A1F;
+    --color-accent-muted: rgba(122, 78, 45, 0.1);
+    --color-danger: #B83220;
+    --color-danger-hover: #952818;
+    --color-accent-text: #FFFFFF;
+    --color-link: #2563EB;
+    --color-link-hover: #1D4ED8;
+}
+
+.dark {
+    --color-surface-base: #1A1614;
+    --color-surface-card: #26201C;
+    --color-surface-raised: #332B25;
+    --color-border: #443A32;
+    --color-text-primary: #E8E0D8;
+    --color-text-secondary: #A89888;
+    --color-text-tertiary: #786858;
+    --color-accent: #C8924A;
+    --color-accent-hover: #D8A460;
+    --color-accent-muted: rgba(200, 146, 74, 0.1);
+    --color-danger: #D04030;
+    --color-danger-hover: #B83828;
+    --color-accent-text: #1A1614;
+    --color-link: #60A5FA;
+    --color-link-hover: #93C5FD;
+}
+
+@theme inline {
+    --color-surface-base: var(--color-surface-base);
+    --color-surface-card: var(--color-surface-card);
+    --color-surface-raised: var(--color-surface-raised);
+    --color-border: var(--color-border);
+    --color-text-primary: var(--color-text-primary);
+    --color-text-secondary: var(--color-text-secondary);
+    --color-text-tertiary: var(--color-text-tertiary);
+    --color-accent: var(--color-accent);
+    --color-accent-hover: var(--color-accent-hover);
+    --color-accent-muted: var(--color-accent-muted);
+    --color-danger: var(--color-danger);
+    --color-danger-hover: var(--color-danger-hover);
+    --color-accent-text: var(--color-accent-text);
+    --color-link: var(--color-link);
+    --color-link-hover: var(--color-link-hover);
+
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-reading: "Literata", Georgia, serif;
+}
+
+@layer base {
+    body {
+        @apply bg-surface-base text-text-primary font-sans;
+    }
+
+    * {
+        scrollbar-width: none;
+    }
+
+    *::-webkit-scrollbar {
+        display: none;
+    }
+
+    *:focus {
+        outline: none;
+    }
+
+    *:focus-visible {
+        @apply outline-2 outline-accent outline-offset-2;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply px-4 py-2 bg-accent font-semibold rounded-md hover:bg-accent-hover transition-colors;
+        color: var(--color-accent-text);
+    }
+
+    .btn-secondary {
+        @apply px-4 py-2 border border-border text-text-primary rounded-md hover:border-accent hover:text-accent transition-colors;
+    }
+
+    .btn-ghost {
+        @apply px-4 py-2 text-text-secondary hover:text-text-primary transition-colors;
+    }
+
+    .btn-danger-ghost {
+        @apply px-4 py-2 text-danger hover:text-danger-hover transition-colors font-semibold;
+    }
+
+    .ReadView-Content a[href] {
+        color: var(--color-link);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.15s;
+    }
+
+    .ReadView-Content a[href]:hover {
+        color: var(--color-link-hover);
+    }
+}
