@@ -17,26 +17,26 @@ namespace ReadOtter.Shared.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
-            modelBuilder.Entity("ReadOtter.Shared.Src.Data.Models.AppSetting", b =>
+            modelBuilder.Entity("ReadOtter.Shared.Src.Data.Models.AppSetting", a =>
                 {
-                    b.Property<Guid>("Id")
+                    a.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SettingName")
+                    a.Property<string>("SettingName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SettingValue")
+                    a.Property<string>("SettingValue")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    a.HasKey("Id");
 
-                    b.HasIndex("SettingName")
+                    a.HasIndex("SettingName")
                         .IsUnique();
 
-                    b.ToTable("AppSettings");
+                    a.ToTable("AppSettings");
                 });
 
             modelBuilder.Entity("ReadOtter.Shared.Src.Data.Models.Book", b =>
