@@ -1,5 +1,8 @@
+using LazyCache;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ReadOtter.Shared.Src.Data.Models;
+using ReadOtter.Shared.Src.Settings;
 using VersOne.Epub;
 using VersOne.Epub.Options;
 
@@ -8,12 +11,19 @@ namespace ReadOtter.Shared.Src.Data.Epub;
 public partial class VersOneAdaptor : IVersOneAdaptor
 {
     private readonly ILogger<VersOneAdaptor> logger;
-    private readonly Dictionary<string, Dictionary<string, (string MimeType, byte[] Bytes)>> imageLookupCache = new();
-    static readonly EpubReaderOptions DefaultReaderOptions = new EpubReaderOptions();
+    private readonly IAppCache cache;
+    private readonly IOptionsMonitor<AppSettings> appSettings;
 
-    public VersOneAdaptor(ILogger<VersOneAdaptor> logger)
+    private static readonly EpubReaderOptions DefaultReaderOptions = new EpubReaderOptions();
+
+    public VersOneAdaptor(
+        ILogger<VersOneAdaptor> logger,
+        IAppCache cache,
+        IOptionsMonitor<AppSettings> appSettings)
     {
         this.logger = logger;
+        this.cache = cache;
+        this.appSettings = appSettings;
     }
 
     public BookMetaData GetMetaData(Book book)
@@ -145,39 +155,41 @@ public partial class VersOneAdaptor : IVersOneAdaptor
         EpubBookRef epubBookRef,
         string filePath)
     {
-        if (imageLookupCache.TryGetValue(filePath, out var cached))
-        {
-            return cached;
-        }
+        return cache.GetOrAdd(
+            $"imagelookup_{filePath}",
+            () =>
+            {
+                var lookup = new Dictionary<string, (string, byte[])>(
+                    StringComparer.OrdinalIgnoreCase);
+                foreach (var image in epubBookRef.Content.Images.Local)
+                {
+                    var normalizedPath = NormalizePath(image.FilePath);
+                    lookup[normalizedPath] = (image.ContentMimeType, image.ReadContent());
+                }
 
-        var lookup = new Dictionary<string, (string, byte[])>(StringComparer.OrdinalIgnoreCase);
-        foreach (var image in epubBookRef.Content.Images.Local)
-        {
-            var normalizedPath = NormalizePath(image.FilePath);
-            lookup[normalizedPath] = (image.ContentMimeType, image.ReadContent());
-        }
-
-        imageLookupCache[filePath] = lookup;
-        return lookup;
+                return lookup;
+            },
+            appSettings.CurrentValue.CacheExpiry);
     }
 
     Dictionary<string, (string MimeType, byte[] Bytes)> BuildImageLookup(
         EpubBook epubBook,
         string filePath)
     {
-        if (imageLookupCache.TryGetValue(filePath, out var cached))
-        {
-            return cached;
-        }
+        return cache.GetOrAdd(
+            $"imagelookup_{filePath}",
+            () =>
+            {
+                var lookup = new Dictionary<string, (string, byte[])>(
+                    StringComparer.OrdinalIgnoreCase);
+                foreach (var image in epubBook.Content.Images.Local)
+                {
+                    var normalizedPath = NormalizePath(image.FilePath);
+                    lookup[normalizedPath] = (image.ContentMimeType, image.Content);
+                }
 
-        var lookup = new Dictionary<string, (string, byte[])>(StringComparer.OrdinalIgnoreCase);
-        foreach (var image in epubBook.Content.Images.Local)
-        {
-            var normalizedPath = NormalizePath(image.FilePath);
-            lookup[normalizedPath] = (image.ContentMimeType, image.Content);
-        }
-
-        imageLookupCache[filePath] = lookup;
-        return lookup;
+                return lookup;
+            },
+            appSettings.CurrentValue.CacheExpiry);
     }
 }

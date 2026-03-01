@@ -11,4 +11,6 @@ public class AppSettings
     public Theme Theme { get; set; } = Theme.Dark;
 
     public bool IsDevMode { get; set; }
+
+    public TimeSpan CacheExpiry { get; set; } = TimeSpan.FromMinutes(30);
 }
