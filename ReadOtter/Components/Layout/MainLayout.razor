@@ -1,7 +1,7 @@
 @inherits LayoutComponentBase
 @using Microsoft.Extensions.Options
 @using ReadOtter.Shared.Src.Settings
-@inject IOptions<AppSettings> AppSettings
+@inject IOptionsMonitor<AppSettings> AppSettings
 @inject IJSRuntime JS
 
 <div class="min-h-screen pb-20">
@@ -17,7 +17,7 @@
 	{
 		if (firstRender)
 		{
-			await JS.InvokeVoidAsync("ThemeHandler.setTheme", AppSettings.Value.Theme.ToString());
+			await JS.InvokeVoidAsync("ThemeHandler.setTheme", AppSettings.CurrentValue.Theme.ToString());
 		}
 	}
 }

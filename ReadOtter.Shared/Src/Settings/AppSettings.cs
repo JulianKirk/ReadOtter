@@ -8,7 +8,7 @@ public enum Theme
 
 public class AppSettings
 {
-    public Theme Theme { get; set; } = Theme.Light;
+    public Theme Theme { get; set; } = Theme.Dark;
 
     public bool IsDevMode { get; set; }
 }

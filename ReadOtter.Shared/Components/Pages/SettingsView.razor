@@ -1,8 +1,7 @@
-@using Microsoft.Extensions.Options
 @using ReadOtter.Shared.Src.Settings
 @inject NavigationManager Navigation
 @inject InputService InputService
-@inject IOptions<AppSettings> AppSettings
+@inject AppSettingsService AppSettingsService
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -20,11 +19,19 @@
 			<div class="bg-surface-card rounded-lg border border-border p-4 space-y-4">
 				<div class="flex items-center justify-between">
 					<span>Theme</span>
-					<select value="@AppSettings.Value.Theme" @onchange="OnThemeChanged"
+					<select value="@AppSettingsService.Settings.Theme" @onchange="OnThemeChanged"
 							class="bg-surface-raised border border-border rounded px-3 py-1.5 text-sm text-text-primary">
 						<option value="@Theme.Light">Light</option>
 						<option value="@Theme.Dark">Dark</option>
 					</select>
+				</div>
+				<div class="flex items-center justify-between">
+					<span>Developer Mode</span>
+					<label class="relative inline-flex items-center cursor-pointer">
+						<input type="checkbox" checked="@AppSettingsService.Settings.IsDevMode" @onchange="OnDevModeChanged"
+							   class="sr-only peer" />
+						<div class="w-9 h-5 bg-surface-raised peer-focus:outline-none rounded-full peer peer-checked:bg-accent transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+					</label>
 				</div>
 			</div>
 		</section>
@@ -40,7 +47,7 @@
 			</div>
 		</section>
 
-		@if (AppSettings.Value.IsDevMode)
+		@if (AppSettingsService.Settings.IsDevMode)
 		{
 			<section>
 				<h2 class="text-lg font-semibold text-accent mb-3">Developer</h2>
@@ -67,8 +74,16 @@
 	{
 		if (Enum.TryParse<Theme>(e.Value?.ToString(), out var theme))
 		{
-			AppSettings.Value.Theme = theme;
+			AppSettingsService.SaveSetting(nameof(AppSettings.Theme), theme.ToString());
 			await JS.InvokeVoidAsync("ThemeHandler.setTheme", theme.ToString());
+		}
+	}
+
+	void OnDevModeChanged(ChangeEventArgs e)
+	{
+		if (bool.TryParse(e.Value?.ToString(), out var enabled))
+		{
+			AppSettingsService.SaveSetting(nameof(AppSettings.IsDevMode), enabled.ToString());
 		}
 	}
 

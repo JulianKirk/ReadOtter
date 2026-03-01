@@ -6,6 +6,8 @@ public interface IUnitOfWork
 {
     public IBookRepository BookRepository { get; }
 
+    public IAppSettingRepository AppSettingRepository { get; }
+
     void Commit();
 
     void Rollback();
