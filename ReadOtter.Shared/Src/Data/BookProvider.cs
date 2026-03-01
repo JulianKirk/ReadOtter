@@ -29,7 +29,7 @@ public class BookProvider : IBookProvider
             appSettings ?? throw new ArgumentNullException(nameof(appSettings));
     }
 
-    private TimeSpan Expiry => appSettings.CurrentValue.CacheExpiry;
+    private TimeSpan Expiry => appSettings.CurrentValue.BookCacheExpiry;
 
     public IEnumerable<Book> GetAllBooks()
     {

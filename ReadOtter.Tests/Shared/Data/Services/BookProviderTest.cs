@@ -28,7 +28,7 @@ public class BookProviderTest
 
         mockUnitOfWork.Setup(u => u.BookRepository).Returns(mockBookRepository.Object);
 
-        var appSettings = new AppSettings { CacheExpiry = TimeSpan.FromMinutes(30) };
+        var appSettings = new AppSettings { BookCacheExpiry = TimeSpan.FromMinutes(30) };
         mockAppSettingsMonitor = new Mock<IOptionsMonitor<AppSettings>>();
         mockAppSettingsMonitor.Setup(m => m.CurrentValue).Returns(appSettings);
 

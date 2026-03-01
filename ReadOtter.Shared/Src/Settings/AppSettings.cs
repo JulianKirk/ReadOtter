@@ -12,7 +12,7 @@ public class AppSettings
 
     public bool IsDevMode { get; set; }
 
-    public TimeSpan CacheExpiry { get; set; } = TimeSpan.FromMinutes(5);
+    public TimeSpan BookCacheExpiry { get; set; } = TimeSpan.FromMinutes(5);
 
     public TimeSpan EpubParsingCacheExpiry { get; set; } = TimeSpan.FromMinutes(60);
 }
