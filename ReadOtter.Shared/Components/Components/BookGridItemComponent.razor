@@ -38,9 +38,9 @@
 	{
 		try
 		{
+			bookTitle = EpubMetadataService.GetBookTitle(BookId);
 			metadata = EpubMetadataService.GetMetaData(BookId);
 			coverImage = EpubMetadataService.GetCoverImage(BookId);
-			bookTitle = EpubMetadataService.GetBookTitle(BookId);
 			loadError = false;
 		}
 		catch (Exception)

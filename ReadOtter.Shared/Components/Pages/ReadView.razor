@@ -3,8 +3,6 @@
 @inject InputService InputService
 @inject LinkService LinkService
 @inject NavigationManager Navigation
-@using ReadOtter.Shared.Src.Data
-@inject IBookProvider BookProvider
 @implements IDisposable
 
 <!-- Progress bar -->
@@ -46,11 +44,8 @@
 	protected override async Task OnInitializedAsync()
 	{
 		bookTitle = EpubMetadataService.GetBookTitle(BookId);
-		totalChapters = BookProvider.GetChapterCount(BookId);
-
-		var book = BookProvider.GetEmptyOrIncompleteBook(BookId);
-		book.LastOpenedAt = DateTimeOffset.Now;
-		BookProvider.SaveBookProgress(BookId);
+		totalChapters = EpubMetadataService.GetChapterCount(BookId);
+		EpubContentService.MarkAsOpened(BookId);
 
 		UpdateContent();
 
@@ -91,8 +86,7 @@
 	void UpdateContent()
 	{
 		content = EpubContentService.GetCurrentChapterTextContent(BookId);
-		var book = BookProvider.GetEmptyOrIncompleteBook(BookId);
-		currentChapter = book.CurrentChapter;
+		currentChapter = EpubContentService.GetCurrentChapter(BookId);
 		progressPercent = totalChapters > 0
 			? Math.Round((double)(currentChapter + 1) / totalChapters * 100)
 			: 0;

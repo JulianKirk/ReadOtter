@@ -12,6 +12,18 @@ public class EpubContentService
         this.bookProvider = bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
     }
 
+    public int GetCurrentChapter(Guid id)
+    {
+        return bookProvider.GetEmptyOrIncompleteBook(id).CurrentChapter;
+    }
+
+    public void MarkAsOpened(Guid id)
+    {
+        var book = bookProvider.GetEmptyOrIncompleteBook(id);
+        book.LastOpenedAt = DateTimeOffset.Now;
+        bookProvider.SaveBookProgress(id);
+    }
+
     public bool OffsetBookCurrentChapter(Guid id, int offset)
     {
         var book = bookProvider.GetEmptyOrIncompleteBook(id);

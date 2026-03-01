@@ -13,15 +13,19 @@ public class EpubMetadataService
             bookProvider ?? throw new ArgumentNullException(nameof(bookProvider));
     }
 
+    public string GetBookTitle(Guid id)
+    {
+        return bookProvider.GetEmptyOrIncompleteBook(id).Title;
+    }
+
+    public int GetChapterCount(Guid id)
+    {
+        return bookProvider.GetChapterCount(id);
+    }
+
     public BookMetaData GetMetaData(Guid id)
     {
         return bookProvider.GetMetadata(id);
-    }
-
-    public string GetBookTitle(Guid id)
-    {
-        var book = bookProvider.GetEmptyOrIncompleteBook(id);
-        return book.Title;
     }
 
     public string GetCoverImage(Guid id)

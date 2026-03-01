@@ -2,8 +2,6 @@
 @inject EpubMetadataService EpubMetadataService
 @inject BookNotificationService BookNotification
 @inject NavigationManager Navigation
-@using ReadOtter.Shared.Src.Data
-@inject IBookProvider BookProvider
 @implements IDisposable
 
 <div class="py-8 space-y-8">
@@ -111,7 +109,7 @@
 			continueAuthor = meta.Creators?.Any() == true
 				? "by " + string.Join(", ", meta.Creators)
 				: string.Empty;
-			continueTotalChapters = BookProvider.GetChapterCount(continueBook.Id);
+			continueTotalChapters = EpubMetadataService.GetChapterCount(continueBook.Id);
 		}
 	}
 

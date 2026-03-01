@@ -90,9 +90,9 @@
 
 	protected override void OnParametersSet()
 	{
+		bookTitle = EpubMetadataService.GetBookTitle(BookId);
 		metadata = EpubMetadataService.GetMetaData(BookId);
 		coverImage = EpubMetadataService.GetCoverImage(BookId);
-		bookTitle = EpubMetadataService.GetBookTitle(BookId);
 	}
 
 	void HandleKeyDown(string key)
