@@ -14,6 +14,8 @@ public class Book
 
     public int CurrentChapterPage { get; set; } = 0; //Not yet used
 
+    public DateTimeOffset? LastOpenedAt { get; set; }
+
     public required string FilePath { get; set; }
 
     [NotMapped]

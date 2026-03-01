@@ -1,55 +1,53 @@
 @inject NavigationManager Navigation
 @inject BookCollectionService BookCollectionService
+@inject BookNotificationService BookNotification
 @inject IJSRuntime JS
 
 <div class="fixed bottom-0 left-0 right-0 bg-surface-card border-t border-border z-40">
-    <div class="max-w-md mx-auto px-6 py-3 flex justify-around items-center">
-        <NavLink href="" Match="NavLinkMatch.All" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
-            <Icon Name="IconName.Home" />
-            <span class="text-xs">Home</span>
-        </NavLink>
-        <NavLink href="library-catalog" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
-            <Icon Name="IconName.Library" />
-            <span class="text-xs">Library</span>
-        </NavLink>
-        <button @onclick="OpenFilePicker" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors">
-            <Icon Name="IconName.Plus" />
-            <span class="text-xs">Add</span>
-        </button>
-        <NavLink href="settings" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
-            <Icon Name="IconName.Cog" />
-            <span class="text-xs">Settings</span>
-        </NavLink>
-    </div>
+	<div class="max-w-md mx-auto px-6 py-3 flex justify-around items-center">
+		<NavLink href="" Match="NavLinkMatch.All" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
+			<Icon Name="IconName.Home" />
+			<span class="text-xs">Home</span>
+		</NavLink>
+		<NavLink href="library-catalog" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
+			<Icon Name="IconName.Library" />
+			<span class="text-xs">Library</span>
+		</NavLink>
+		<button @onclick="OpenFilePicker" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors">
+			<Icon Name="IconName.Plus" />
+			<span class="text-xs">Add</span>
+		</button>
+		<NavLink href="settings" class="flex flex-col items-center gap-1 text-text-secondary hover:text-text-primary transition-colors [&.active]:text-accent">
+			<Icon Name="IconName.Cog" />
+			<span class="text-xs">Settings</span>
+		</NavLink>
+	</div>
 </div>
 
 <InputFile @ref="addBookFileInput" style="display:none" OnChange="OnFileSelected" accept=".epub"/>
 
 @code {
-    [Parameter]
-    public EventCallback OnBookAdded { get; set; }
+	InputFile? addBookFileInput;
 
-    InputFile? addBookFileInput;
+	async Task OpenFilePicker()
+	{
+		if (addBookFileInput?.Element is not null)
+		{
+			await JS.InvokeVoidAsync("clickElement", addBookFileInput.Element);
+		}
+	}
 
-    async Task OpenFilePicker()
-    {
-        if (addBookFileInput?.Element is not null)
-        {
-            await JS.InvokeVoidAsync("clickElement", addBookFileInput.Element);
-        }
-    }
+	async Task OnFileSelected(InputFileChangeEventArgs e)
+	{
+		var file = e.File;
+		if (file is not null)
+		{
+			using var ms = new MemoryStream();
+			using var stream = file.OpenReadStream(maxAllowedSize: 100 * 1024 * 1024);
+			await stream.CopyToAsync(ms);
 
-    async Task OnFileSelected(InputFileChangeEventArgs e)
-    {
-        var file = e.File;
-        if (file is not null)
-        {
-            var buffer = new byte[file.Size];
-            using var stream = file.OpenReadStream(maxAllowedSize: 100 * 1024 * 1024);
-            await stream.ReadAsync(buffer, 0, (int)file.Size);
-
-            BookCollectionService.AddBook(buffer, file.Name);
-            await OnBookAdded.InvokeAsync();
-        }
-    }
+			BookCollectionService.AddBook(ms.ToArray(), file.Name);
+			BookNotification.NotifyBooksChanged();
+		}
+	}
 }

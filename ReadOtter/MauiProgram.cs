@@ -39,6 +39,7 @@ public static class MauiProgram
 
         builder.Services.AddScoped<InputService>();
         builder.Services.AddScoped<LinkService>();
+        builder.Services.AddScoped<BookNotificationService>();
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -59,6 +60,12 @@ public static class MauiProgram
 #endif
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ReadOtterLibraryDbContext>();
+            db.Database.Migrate();
+        }
 
         return app;
     }

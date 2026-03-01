@@ -7,84 +7,83 @@
 @implements IDisposable
 
 <div class="min-h-screen bg-surface-base text-text-primary p-6">
-    <button @onclick="GoBack" class="text-text-secondary hover:text-text-primary transition-colors text-sm mb-6 flex items-center gap-1">
-        <Icon Name="IconName.Back" CssClass="w-4 h-4" />
-        <span>Home</span>
-    </button>
+	<button @onclick="GoBack" class="text-text-secondary hover:text-text-primary transition-colors text-sm mb-6 flex items-center gap-1">
+		<Icon Name="IconName.Back" CssClass="w-4 h-4" />
+		<span>Home</span>
+	</button>
 
-    <h1 class="text-2xl font-semibold mb-6">Settings</h1>
+	<h1 class="text-2xl font-semibold mb-6">Settings</h1>
 
-    <div class="space-y-6">
-        <section>
-            <h2 class="text-lg font-semibold text-accent mb-3">General</h2>
-            <div class="bg-surface-card rounded-lg border border-border p-4 space-y-4">
-                <div class="flex items-center justify-between">
-                    <span>Theme</span>
-                    <select value="@AppSettings.Value.Theme" @onchange="OnThemeChanged"
-                            class="bg-surface-raised border border-border rounded px-3 py-1.5 text-sm text-text-primary">
-                        <option value="@Theme.Light">Light</option>
-                        <option value="@Theme.Dark">Dark</option>
-                    </select>
-                </div>
-            </div>
-        </section>
+	<div class="space-y-6">
+		<section>
+			<h2 class="text-lg font-semibold text-accent mb-3">General</h2>
+			<div class="bg-surface-card rounded-lg border border-border p-4 space-y-4">
+				<div class="flex items-center justify-between">
+					<span>Theme</span>
+					<select value="@AppSettings.Value.Theme" @onchange="OnThemeChanged"
+							class="bg-surface-raised border border-border rounded px-3 py-1.5 text-sm text-text-primary">
+						<option value="@Theme.Light">Light</option>
+						<option value="@Theme.Dark">Dark</option>
+					</select>
+				</div>
+			</div>
+		</section>
 
-        <section>
-            <h2 class="text-lg font-semibold text-accent mb-3">Reference</h2>
-            <div class="space-y-3">
-                <button @onclick='() => Navigation.NavigateTo("controls")'
-                        class="w-full flex items-center gap-3 p-4 bg-surface-card rounded-lg border border-border hover:border-accent transition-colors text-left">
-                    <Icon Name="IconName.Keyboard" CssClass="w-5 h-5 text-accent" />
-                    <span>Controls Reference</span>
-                </button>
-            </div>
-        </section>
+		<section>
+			<h2 class="text-lg font-semibold text-accent mb-3">Reference</h2>
+			<div class="space-y-3">
+				<button @onclick='() => Navigation.NavigateTo("controls")'
+						class="w-full flex items-center gap-3 p-4 bg-surface-card rounded-lg border border-border hover:border-accent transition-colors text-left">
+					<Icon Name="IconName.Keyboard" CssClass="w-5 h-5 text-accent" />
+					<span>Controls Reference</span>
+				</button>
+			</div>
+		</section>
 
-        @if (AppSettings.Value.IsDevMode)
-        {
-            <section>
-                <h2 class="text-lg font-semibold text-accent mb-3">Developer</h2>
-                <div class="space-y-3">
-                    <button @onclick='() => Navigation.NavigateTo("seeder")'
-                            class="w-full flex items-center gap-3 p-4 bg-surface-card rounded-lg border border-border hover:border-accent transition-colors text-left">
-                        <Icon Name="IconName.Seeder" CssClass="w-5 h-5 text-accent" />
-                        <span>Seeder</span>
-                    </button>
-                </div>
-            </section>
-        }
-    </div>
+		@if (AppSettings.Value.IsDevMode)
+		{
+			<section>
+				<h2 class="text-lg font-semibold text-accent mb-3">Developer</h2>
+				<div class="space-y-3">
+					<button @onclick='() => Navigation.NavigateTo("seeder")'
+							class="w-full flex items-center gap-3 p-4 bg-surface-card rounded-lg border border-border hover:border-accent transition-colors text-left">
+						<Icon Name="IconName.Seeder" CssClass="w-5 h-5 text-accent" />
+						<span>Seeder</span>
+					</button>
+				</div>
+			</section>
+		}
+	</div>
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        InputService.OnKeyDown += HandleKeyDown;
-        await InputService.Initialize();
-        await JS.InvokeVoidAsync("ThemeHandler.setTheme", AppSettings.Value.Theme.ToString());
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		InputService.OnKeyDown += HandleKeyDown;
+		await InputService.Initialize();
+	}
 
-    async Task OnThemeChanged(ChangeEventArgs e)
-    {
-        if (Enum.TryParse<Theme>(e.Value?.ToString(), out var theme))
-        {
-            AppSettings.Value.Theme = theme;
-            await JS.InvokeVoidAsync("ThemeHandler.setTheme", theme.ToString());
-        }
-    }
+	async Task OnThemeChanged(ChangeEventArgs e)
+	{
+		if (Enum.TryParse<Theme>(e.Value?.ToString(), out var theme))
+		{
+			AppSettings.Value.Theme = theme;
+			await JS.InvokeVoidAsync("ThemeHandler.setTheme", theme.ToString());
+		}
+	}
 
-    void HandleKeyDown(string key)
-    {
-        if (key == "Escape") GoBack();
-    }
+	void HandleKeyDown(string key)
+	{
+		if (key == "Escape") GoBack();
+	}
 
-    void GoBack()
-    {
-        Navigation.NavigateTo("");
-    }
+	void GoBack()
+	{
+		Navigation.NavigateTo("");
+	}
 
-    public void Dispose()
-    {
-        InputService.OnKeyDown -= HandleKeyDown;
-    }
+	public void Dispose()
+	{
+		InputService.OnKeyDown -= HandleKeyDown;
+	}
 }

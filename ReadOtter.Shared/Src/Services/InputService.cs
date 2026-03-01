@@ -16,6 +16,7 @@ public class InputService : IAsyncDisposable
 
     public async Task Initialize(string[]? shiftRepeatKeys = null)
     {
+        dotNetRef?.Dispose();
         dotNetRef = DotNetObjectReference.Create(this);
         await jsRuntime.InvokeVoidAsync(
             "InputHandler.register",

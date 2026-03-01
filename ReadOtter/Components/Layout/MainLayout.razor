@@ -1,9 +1,23 @@
 @inherits LayoutComponentBase
+@using Microsoft.Extensions.Options
+@using ReadOtter.Shared.Src.Settings
+@inject IOptions<AppSettings> AppSettings
+@inject IJSRuntime JS
 
 <div class="min-h-screen pb-20">
-    <main class="max-w-5xl mx-auto px-4">
-        @Body
-    </main>
+	<main class="max-w-5xl mx-auto px-4">
+		@Body
+	</main>
 </div>
 
 <BottomTabBar />
+
+@code {
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await JS.InvokeVoidAsync("ThemeHandler.setTheme", AppSettings.Value.Theme.ToString());
+		}
+	}
+}

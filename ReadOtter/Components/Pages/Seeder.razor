@@ -6,15 +6,15 @@
 
 @if (AppSettings.Value.IsDevMode)
 {
-    <SeederView />
+	<SeederView />
 }
 
 @code {
-    protected override void OnInitialized()
-    {
-        if (!AppSettings.Value.IsDevMode)
-        {
-            Navigation.NavigateTo("/");
-        }
-    }
+	protected override void OnInitialized()
+	{
+		if (!AppSettings.Value.IsDevMode)
+		{
+			Navigation.NavigateTo("/");
+		}
+	}
 }

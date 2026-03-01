@@ -9,99 +9,104 @@
 
 <!-- Progress bar -->
 <div class="fixed top-0 left-0 right-0 h-0.5 bg-surface-raised z-50">
-    <div class="h-full bg-accent transition-all duration-300" style="width: @progressPercent%"></div>
+	<div class="h-full bg-accent transition-all duration-300" style="width: @progressPercent%"></div>
 </div>
 
 <!-- Reader toolbar -->
 <div class="sticky top-0 bg-surface-card border-b border-border px-4 py-3 flex items-center justify-between z-40">
-    <button class="text-text-secondary hover:text-text-primary transition-colors" @onclick="GoBack">
-        <Icon Name="IconName.Back" />
-    </button>
-    <span class="text-sm text-text-secondary truncate mx-4">@bookTitle</span>
-    <span class="text-xs text-text-tertiary whitespace-nowrap">Ch @(currentChapter + 1) / @totalChapters</span>
+	<button class="text-text-secondary hover:text-text-primary transition-colors" @onclick="GoBack">
+		<Icon Name="IconName.Back" />
+	</button>
+	<span class="text-sm text-text-secondary truncate mx-4">@bookTitle</span>
+	<span class="text-xs text-text-tertiary whitespace-nowrap">Ch @(currentChapter + 1) / @totalChapters</span>
 </div>
 
 <!-- Reading content -->
 <div class="max-w-prose mx-auto px-4 py-8">
-    <div class="ReadView-Content font-reading text-lg leading-relaxed text-text-primary">
-        @((MarkupString)content)
-    </div>
+	<div class="ReadView-Content font-reading text-lg leading-relaxed text-text-primary">
+		@((MarkupString)content)
+	</div>
 
-    <div class="flex justify-between items-center pt-8 mt-8 border-t border-border font-sans">
-        <button class="text-text-secondary hover:text-text-primary transition-colors text-sm" @onclick="GotoPreviousChapter">&larr; Previous</button>
-        <button class="text-text-secondary hover:text-text-primary transition-colors text-sm" @onclick="GotoNextChapter">Next Chapter &rarr;</button>
-    </div>
+	<div class="flex justify-between items-center pt-8 mt-8 border-t border-border font-sans">
+		<button class="text-text-secondary hover:text-text-primary transition-colors text-sm" @onclick="GotoPreviousChapter">&larr; Previous</button>
+		<button class="text-text-secondary hover:text-text-primary transition-colors text-sm" @onclick="GotoNextChapter">Next Chapter &rarr;</button>
+	</div>
 </div>
 
 @code {
-    [Parameter]
-    public Guid BookId { get; set; }
+	[Parameter]
+	public Guid BookId { get; set; }
 
-    string content = string.Empty;
-    string bookTitle = string.Empty;
-    int currentChapter;
-    int totalChapters;
-    double progressPercent;
+	string content = string.Empty;
+	string bookTitle = string.Empty;
+	int currentChapter;
+	int totalChapters;
+	double progressPercent;
 
-    protected override async Task OnInitializedAsync()
-    {
-        bookTitle = EpubMetadataService.GetBookTitle(BookId);
-        totalChapters = BookProvider.GetChapterCount(BookId);
-        UpdateContent();
+	protected override async Task OnInitializedAsync()
+	{
+		bookTitle = EpubMetadataService.GetBookTitle(BookId);
+		totalChapters = BookProvider.GetChapterCount(BookId);
 
-        InputService.OnKeyDown += HandleKeyDown;
-        await InputService.Initialize(["ArrowRight", "ArrowLeft"]);
+		var book = BookProvider.GetEmptyOrIncompleteBook(BookId);
+		book.LastOpenedAt = DateTimeOffset.Now;
+		BookProvider.SaveBookProgress(BookId);
 
-        LinkService.OnLinkClick += HandleLinkClick;
-        await LinkService.Initialize(".ReadView-Content");
-    }
+		UpdateContent();
 
-    void HandleLinkClick(string href)
-    {
-        if (EpubContentService.NavigateToHref(BookId, href))
-        {
-            UpdateContent();
-        }
-    }
+		InputService.OnKeyDown += HandleKeyDown;
+		await InputService.Initialize(["ArrowRight", "ArrowLeft"]);
 
-    void HandleKeyDown(string key)
-    {
-        if (key == "ArrowRight") GotoNextChapter();
-        if (key == "ArrowLeft") GotoPreviousChapter();
-        if (key == "Escape") GoBack();
-    }
+		LinkService.OnLinkClick += HandleLinkClick;
+		await LinkService.Initialize(".ReadView-Content");
+	}
 
-    void GotoPreviousChapter()
-    {
-        EpubContentService.OffsetBookCurrentChapter(BookId, -1);
-        UpdateContent();
-    }
+	void HandleLinkClick(string href)
+	{
+		if (EpubContentService.NavigateToHref(BookId, href))
+		{
+			UpdateContent();
+		}
+	}
 
-    void GotoNextChapter()
-    {
-        EpubContentService.OffsetBookCurrentChapter(BookId, 1);
-        UpdateContent();
-    }
+	void HandleKeyDown(string key)
+	{
+		if (key == "ArrowRight") GotoNextChapter();
+		if (key == "ArrowLeft") GotoPreviousChapter();
+		if (key == "Escape") GoBack();
+	}
 
-    void UpdateContent()
-    {
-        content = EpubContentService.GetCurrentChapterTextContent(BookId);
-        var book = BookProvider.GetEmptyOrIncompleteBook(BookId);
-        currentChapter = book.CurrentChapter;
-        progressPercent = totalChapters > 0
-            ? Math.Round((double)(currentChapter + 1) / totalChapters * 100)
-            : 0;
-        InvokeAsync(StateHasChanged);
-    }
+	void GotoPreviousChapter()
+	{
+		EpubContentService.OffsetBookCurrentChapter(BookId, -1);
+		UpdateContent();
+	}
 
-    void GoBack()
-    {
-        Navigation.NavigateTo($"book/{BookId}");
-    }
+	void GotoNextChapter()
+	{
+		EpubContentService.OffsetBookCurrentChapter(BookId, 1);
+		UpdateContent();
+	}
 
-    public void Dispose()
-    {
-        InputService.OnKeyDown -= HandleKeyDown;
-        LinkService.OnLinkClick -= HandleLinkClick;
-    }
+	void UpdateContent()
+	{
+		content = EpubContentService.GetCurrentChapterTextContent(BookId);
+		var book = BookProvider.GetEmptyOrIncompleteBook(BookId);
+		currentChapter = book.CurrentChapter;
+		progressPercent = totalChapters > 0
+			? Math.Round((double)(currentChapter + 1) / totalChapters * 100)
+			: 0;
+		StateHasChanged();
+	}
+
+	void GoBack()
+	{
+		Navigation.NavigateTo($"book/{BookId}");
+	}
+
+	public void Dispose()
+	{
+		InputService.OnKeyDown -= HandleKeyDown;
+		LinkService.OnLinkClick -= HandleLinkClick;
+	}
 }

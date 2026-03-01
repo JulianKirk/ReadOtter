@@ -11,6 +11,9 @@
     --color-accent-muted: rgba(122, 78, 45, 0.1);
     --color-danger: #B83220;
     --color-danger-hover: #952818;
+    --color-accent-text: #FFFFFF;
+    --color-link: #2563EB;
+    --color-link-hover: #1D4ED8;
 }
 
 .dark {
@@ -26,6 +29,9 @@
     --color-accent-muted: rgba(200, 146, 74, 0.1);
     --color-danger: #D04030;
     --color-danger-hover: #B83828;
+    --color-accent-text: #1A1614;
+    --color-link: #60A5FA;
+    --color-link-hover: #93C5FD;
 }
 
 @tailwind base;
@@ -56,7 +62,8 @@
 
 @layer components {
     .btn-primary {
-        @apply px-4 py-2 bg-accent text-white font-semibold rounded-md hover:bg-accent-hover transition-colors;
+        @apply px-4 py-2 bg-accent font-semibold rounded-md hover:bg-accent-hover transition-colors;
+        color: var(--color-accent-text);
     }
 
     .btn-secondary {
@@ -72,13 +79,13 @@
     }
 
     .ReadView-Content a[href] {
-        color: #2563EB;
+        color: var(--color-link);
         text-decoration: underline;
         text-underline-offset: 2px;
         transition: color 0.15s;
     }
 
     .ReadView-Content a[href]:hover {
-        color: #1D4ED8;
+        color: var(--color-link-hover);
     }
 }

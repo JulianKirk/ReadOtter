@@ -3,3 +3,6 @@ dotnet_diagnostic.CS8618.severity = none
 
 [*.razor.g.cs]
 generated_code = true
+
+[Migrations/*.cs]
+generated_code = true

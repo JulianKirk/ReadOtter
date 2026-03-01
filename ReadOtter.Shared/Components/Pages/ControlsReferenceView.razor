@@ -1,125 +1,125 @@
-<div class="min-h-screen bg-surface-base text-text-primary p-6">
-    <button @onclick="GoBack" class="text-text-secondary hover:text-text-primary transition-colors text-sm mb-6 flex items-center gap-1">
-        <Icon Name="IconName.Back" CssClass="w-4 h-4" />
-        <span>Settings</span>
-    </button>
-
-    <h1 class="text-2xl font-semibold mb-8">Controls Reference</h1>
-
-    <div class="space-y-8">
-        <section>
-            <h2 class="text-lg font-semibold text-accent mb-4">Read View</h2>
-            <div class="bg-surface-card rounded-lg border border-border overflow-hidden">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-border text-text-secondary text-left">
-                            <th class="px-4 py-3 font-medium">Input</th>
-                            <th class="px-4 py-3 font-medium">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-border">
-                        <tr>
-                            <td class="px-4 py-3"><kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">→</kbd></td>
-                            <td class="px-4 py-3 text-text-secondary">Next chapter</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3"><kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">←</kbd></td>
-                            <td class="px-4 py-3 text-text-secondary">Previous chapter</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3">
-                                <kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">Shift</kbd>
-                                +
-                                <kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">→</kbd>
-                            </td>
-                            <td class="px-4 py-3 text-text-secondary">Rapid-fire next chapter (hold)</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3">
-                                <kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">Shift</kbd>
-                                +
-                                <kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">←</kbd>
-                            </td>
-                            <td class="px-4 py-3 text-text-secondary">Rapid-fire previous chapter (hold)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section>
-            <h2 class="text-lg font-semibold text-accent mb-4">Global</h2>
-            <div class="bg-surface-card rounded-lg border border-border overflow-hidden">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-border text-text-secondary text-left">
-                            <th class="px-4 py-3 font-medium">Input</th>
-                            <th class="px-4 py-3 font-medium">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-border">
-                        <tr>
-                            <td class="px-4 py-3"><kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">Esc</kbd></td>
-                            <td class="px-4 py-3 text-text-secondary">Go back (on any page with back navigation)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section>
-            <h2 class="text-lg font-semibold text-accent mb-4">Navigation</h2>
-            <div class="bg-surface-card rounded-lg border border-border overflow-hidden">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-border text-text-secondary text-left">
-                            <th class="px-4 py-3 font-medium">Element</th>
-                            <th class="px-4 py-3 font-medium">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-border">
-                        <tr>
-                            <td class="px-4 py-3 text-text-primary">Previous / Next buttons</td>
-                            <td class="px-4 py-3 text-text-secondary">Navigate chapters (bottom of read view)</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-text-primary">Back arrow (toolbar)</td>
-                            <td class="px-4 py-3 text-text-secondary">Return to book detail page</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 text-text-primary">Internal epub links</td>
-                            <td class="px-4 py-3 text-text-secondary">Navigate to linked chapter within the book</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </div>
-</div>
-
 @inject NavigationManager Navigation
 @inject InputService InputService
 @implements IDisposable
 
+<div class="min-h-screen bg-surface-base text-text-primary p-6">
+	<button @onclick="GoBack" class="text-text-secondary hover:text-text-primary transition-colors text-sm mb-6 flex items-center gap-1">
+		<Icon Name="IconName.Back" CssClass="w-4 h-4" />
+		<span>Settings</span>
+	</button>
+
+	<h1 class="text-2xl font-semibold mb-8">Controls Reference</h1>
+
+	<div class="space-y-8">
+		<section>
+			<h2 class="text-lg font-semibold text-accent mb-4">Read View</h2>
+			<div class="bg-surface-card rounded-lg border border-border overflow-hidden">
+				<table class="w-full text-sm">
+					<thead>
+						<tr class="border-b border-border text-text-secondary text-left">
+							<th class="px-4 py-3 font-medium">Input</th>
+							<th class="px-4 py-3 font-medium">Action</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-border">
+						<tr>
+							<td class="px-4 py-3"><kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">→</kbd></td>
+							<td class="px-4 py-3 text-text-secondary">Next chapter</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3"><kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">←</kbd></td>
+							<td class="px-4 py-3 text-text-secondary">Previous chapter</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3">
+								<kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">Shift</kbd>
+								+
+								<kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">→</kbd>
+							</td>
+							<td class="px-4 py-3 text-text-secondary">Rapid-fire next chapter (hold)</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3">
+								<kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">Shift</kbd>
+								+
+								<kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">←</kbd>
+							</td>
+							<td class="px-4 py-3 text-text-secondary">Rapid-fire previous chapter (hold)</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-lg font-semibold text-accent mb-4">Global</h2>
+			<div class="bg-surface-card rounded-lg border border-border overflow-hidden">
+				<table class="w-full text-sm">
+					<thead>
+						<tr class="border-b border-border text-text-secondary text-left">
+							<th class="px-4 py-3 font-medium">Input</th>
+							<th class="px-4 py-3 font-medium">Action</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-border">
+						<tr>
+							<td class="px-4 py-3"><kbd class="px-2 py-0.5 bg-surface-raised rounded text-xs border border-border">Esc</kbd></td>
+							<td class="px-4 py-3 text-text-secondary">Go back (on any page with back navigation)</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="text-lg font-semibold text-accent mb-4">Navigation</h2>
+			<div class="bg-surface-card rounded-lg border border-border overflow-hidden">
+				<table class="w-full text-sm">
+					<thead>
+						<tr class="border-b border-border text-text-secondary text-left">
+							<th class="px-4 py-3 font-medium">Element</th>
+							<th class="px-4 py-3 font-medium">Action</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-border">
+						<tr>
+							<td class="px-4 py-3 text-text-primary">Previous / Next buttons</td>
+							<td class="px-4 py-3 text-text-secondary">Navigate chapters (bottom of read view)</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3 text-text-primary">Back arrow (toolbar)</td>
+							<td class="px-4 py-3 text-text-secondary">Return to book detail page</td>
+						</tr>
+						<tr>
+							<td class="px-4 py-3 text-text-primary">Internal epub links</td>
+							<td class="px-4 py-3 text-text-secondary">Navigate to linked chapter within the book</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</div>
+
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        InputService.OnKeyDown += HandleKeyDown;
-        await InputService.Initialize();
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		InputService.OnKeyDown += HandleKeyDown;
+		await InputService.Initialize();
+	}
 
-    void HandleKeyDown(string key)
-    {
-        if (key == "Escape") GoBack();
-    }
+	void HandleKeyDown(string key)
+	{
+		if (key == "Escape") GoBack();
+	}
 
-    void GoBack()
-    {
-        Navigation.NavigateTo("settings");
-    }
+	void GoBack()
+	{
+		Navigation.NavigateTo("settings");
+	}
 
-    public void Dispose()
-    {
-        InputService.OnKeyDown -= HandleKeyDown;
-    }
+	public void Dispose()
+	{
+		InputService.OnKeyDown -= HandleKeyDown;
+	}
 }

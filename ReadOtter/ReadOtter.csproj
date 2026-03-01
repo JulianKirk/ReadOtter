@@ -98,8 +98,8 @@
   </ItemGroup>
   <Target Name="TailwindBuild" BeforeTargets="Build">
     <Exec
-      Command="$(MSBuildProjectDirectory)\..\tools\tailwindcss.exe -i $(MSBuildProjectDirectory)\Styles\input.css -o $(MSBuildProjectDirectory)\wwwroot\css\tailwind.css --minify"
-      WorkingDirectory="$(MSBuildProjectDirectory)\.."
+      Command="$(MSBuildProjectDirectory)/../tools/tailwindcss.exe -i $(MSBuildProjectDirectory)/Styles/input.css -o $(MSBuildProjectDirectory)/wwwroot/css/tailwind.css --minify"
+      WorkingDirectory="$(MSBuildProjectDirectory)/.."
     />
   </Target>
 </Project>
