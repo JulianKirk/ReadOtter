@@ -66,9 +66,18 @@
 
 	void HandleKeyDown(string key)
 	{
-		if (key == "ArrowRight") GotoNextChapter();
-		if (key == "ArrowLeft") GotoPreviousChapter();
-		if (key == "Escape") GoBack();
+		if (key == "ArrowRight")
+		{
+			GotoNextChapter();
+		}
+		if (key == "ArrowLeft")
+		{
+			GotoPreviousChapter();
+		}
+		if (key == "Escape")
+		{
+			GoBack();
+		}
 	}
 
 	void GotoPreviousChapter()
