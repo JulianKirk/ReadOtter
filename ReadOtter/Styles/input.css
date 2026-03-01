@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
     --color-surface-base: #FBF7F2;
     --color-surface-card: #EDE4D8;
@@ -34,9 +36,26 @@
     --color-link-hover: #93C5FD;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme inline {
+    --color-surface-base: var(--color-surface-base);
+    --color-surface-card: var(--color-surface-card);
+    --color-surface-raised: var(--color-surface-raised);
+    --color-border: var(--color-border);
+    --color-text-primary: var(--color-text-primary);
+    --color-text-secondary: var(--color-text-secondary);
+    --color-text-tertiary: var(--color-text-tertiary);
+    --color-accent: var(--color-accent);
+    --color-accent-hover: var(--color-accent-hover);
+    --color-accent-muted: var(--color-accent-muted);
+    --color-danger: var(--color-danger);
+    --color-danger-hover: var(--color-danger-hover);
+    --color-accent-text: var(--color-accent-text);
+    --color-link: var(--color-link);
+    --color-link-hover: var(--color-link-hover);
+
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-reading: "Literata", Georgia, serif;
+}
 
 @layer base {
     body {
