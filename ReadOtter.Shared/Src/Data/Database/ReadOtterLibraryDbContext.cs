@@ -11,4 +11,15 @@ public class ReadOtterLibraryDbContext : DbContext
     }
 
     public virtual DbSet<Book> Books { get; set; }
+
+    public virtual DbSet<AppSetting> AppSettings { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<AppSetting>()
+            .HasIndex(s => s.SettingName)
+            .IsUnique();
+    }
 }

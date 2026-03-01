@@ -8,12 +8,16 @@ public class UnitOfWork : IUnitOfWork
 
     private BookRepository? bookRepository;
 
+    private AppSettingRepository? appSettingRepository;
+
     public UnitOfWork(ReadOtterLibraryDbContext context)
     {
         this.context = context;
     }
 
     public IBookRepository BookRepository => bookRepository ??= new BookRepository(context);
+
+    public IAppSettingRepository AppSettingRepository => appSettingRepository ??= new AppSettingRepository(context);
 
     public void Commit()
     {

@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ReadOtter.Shared.Src.Configuration;
 using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Epub;
@@ -24,8 +25,13 @@ public static class MauiProgram
         builder.Services.AddMauiBlazorWebView();
 
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "ReadOtterLibrary.db");
+        var connectionString = $"Data Source={dbPath}";
+
         builder.Services.AddDbContext<ReadOtterLibraryDbContext>(options =>
-            options.UseSqlite($"Data Source={dbPath}"));
+            options.UseSqlite(connectionString));
+
+        builder.Configuration.AddSqliteSettings(connectionString);
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
         builder.Services.AddScoped<SeederService>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -40,6 +46,7 @@ public static class MauiProgram
         builder.Services.AddScoped<InputService>();
         builder.Services.AddScoped<LinkService>();
         builder.Services.AddScoped<BookNotificationService>();
+        builder.Services.AddScoped<AppSettingsService>();
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -54,9 +61,6 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
-        builder.Services.Configure<AppSettings>(o => o.IsDevMode = true);
-#else
-        builder.Services.Configure<AppSettings>(_ => { });
 #endif
 
         var app = builder.Build();
