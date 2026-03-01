@@ -28,14 +28,14 @@
 		<div class="flex-1 space-y-4">
 			<h1 class="text-2xl font-semibold">@bookTitle</h1>
 
-			@if (metadata.Creators?.Any() == true)
+			@if (!string.IsNullOrEmpty(creators))
 			{
-				<p class="text-text-secondary">by @EpubMetadataService.GetCreatorsDisplayString(BookId)</p>
+				<p class="text-text-secondary">by @creators</p>
 			}
 
-			@if (metadata.Publishers?.Any() == true)
+			@if (!string.IsNullOrEmpty(publishers))
 			{
-				<p class="text-sm text-text-tertiary">Publisher: @EpubMetadataService.GetPublishersDisplayString(BookId)</p>
+				<p class="text-sm text-text-tertiary">Publisher: @publishers</p>
 			}
 
 			<div class="flex gap-3 pt-2">
@@ -45,22 +45,22 @@
 		</div>
 	</div>
 
-	@if (metadata.Descriptions?.Any() == true)
+	@if (descriptions.Any())
 	{
 		<section class="space-y-3 pt-4 border-t border-border">
 			<h2 class="text-lg font-semibold">Description</h2>
-			@foreach (var description in metadata.Descriptions)
+			@foreach (var description in descriptions)
 			{
 				<div class="text-text-secondary leading-relaxed">@((MarkupString)description)</div>
 			}
 		</section>
 	}
 
-	@if (metadata.Contributors?.Any() == true)
+	@if (!string.IsNullOrEmpty(contributors))
 	{
 		<section class="pt-4 border-t border-border">
 			<h2 class="text-lg font-semibold mb-2">Contributors</h2>
-			<p class="text-text-secondary">@EpubMetadataService.GetContributorsDisplayString(BookId)</p>
+			<p class="text-text-secondary">@contributors</p>
 		</section>
 	}
 
@@ -77,9 +77,12 @@
 	[Parameter]
 	public required Guid BookId { get; set; }
 
-	BookMetaData metadata = new();
 	string coverImage = string.Empty;
 	string bookTitle = string.Empty;
+	string creators = string.Empty;
+	string publishers = string.Empty;
+	string contributors = string.Empty;
+	IReadOnlyList<string> descriptions = [];
 	bool showConfirmation;
 
 	protected override async Task OnInitializedAsync()
@@ -91,8 +94,11 @@
 	protected override void OnParametersSet()
 	{
 		bookTitle = EpubMetadataService.GetBookTitle(BookId);
-		metadata = EpubMetadataService.GetMetaData(BookId);
 		coverImage = EpubMetadataService.GetCoverImage(BookId);
+		creators = EpubMetadataService.GetCreatorsDisplayString(BookId);
+		publishers = EpubMetadataService.GetPublishersDisplayString(BookId);
+		contributors = EpubMetadataService.GetContributorsDisplayString(BookId);
+		descriptions = EpubMetadataService.GetDescriptions(BookId);
 	}
 
 	void HandleKeyDown(string key)

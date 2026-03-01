@@ -52,6 +52,12 @@ public class EpubMetadataService
         return meta.Contributors?.Any() == true ? string.Join(", ", meta.Contributors) : string.Empty;
     }
 
+    public IReadOnlyList<string> GetDescriptions(Guid id)
+    {
+        var meta = GetMetaData(id);
+        return meta.Descriptions?.ToList() ?? [];
+    }
+
     string GetCoverImage(Book book)
     {
         return bookProvider.GetCoverImage(book.Id);
