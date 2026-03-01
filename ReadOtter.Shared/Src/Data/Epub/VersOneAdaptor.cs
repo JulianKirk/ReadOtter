@@ -169,7 +169,7 @@ public partial class VersOneAdaptor : IVersOneAdaptor
 
                 return lookup;
             },
-            appSettings.CurrentValue.CacheExpiry);
+            appSettings.CurrentValue.EpubParsingCacheExpiry);
     }
 
     Dictionary<string, (string MimeType, byte[] Bytes)> BuildImageLookup(
@@ -190,6 +190,6 @@ public partial class VersOneAdaptor : IVersOneAdaptor
 
                 return lookup;
             },
-            appSettings.CurrentValue.CacheExpiry);
+            appSettings.CurrentValue.EpubParsingCacheExpiry);
     }
 }
