@@ -1,18 +1,23 @@
-﻿using Moq;
+using LazyCache;
+using Microsoft.Extensions.Options;
+using Moq;
 using ReadOtter.Shared.Src.Data;
 using ReadOtter.Shared.Src.Data.Database;
 using ReadOtter.Shared.Src.Data.Database.Repositories;
 using ReadOtter.Shared.Src.Data.Epub;
 using ReadOtter.Shared.Src.Data.Models;
+using ReadOtter.Shared.Src.Settings;
 
 namespace ReadOtter.Tests.Shared.Data.Services;
 
-public class CachedBookProviderTest
+public class BookProviderTest
 {
     private Mock<IUnitOfWork> mockUnitOfWork;
     private Mock<IBookRepository> mockBookRepository;
     private Mock<IVersOneAdaptor> mockVersOneAdaptor;
-    private CachedBookProvider testCachedBookProvider;
+    private Mock<IOptionsMonitor<AppSettings>> mockAppSettingsMonitor;
+    private IAppCache appCache;
+    private BookProvider testBookProvider;
 
     [SetUp]
     public void SetUp()
@@ -23,21 +28,41 @@ public class CachedBookProviderTest
 
         mockUnitOfWork.Setup(u => u.BookRepository).Returns(mockBookRepository.Object);
 
-        testCachedBookProvider = new CachedBookProvider(
+        var appSettings = new AppSettings { BookCacheExpiry = TimeSpan.FromMinutes(30) };
+        mockAppSettingsMonitor = new Mock<IOptionsMonitor<AppSettings>>();
+        mockAppSettingsMonitor.Setup(m => m.CurrentValue).Returns(appSettings);
+
+        appCache = new CachingService();
+
+        testBookProvider = new BookProvider(
             mockUnitOfWork.Object,
-            mockVersOneAdaptor.Object);
+            mockVersOneAdaptor.Object,
+            appCache,
+            mockAppSettingsMonitor.Object);
     }
 
     [Test]
     public void NullUnitOfWork_ShouldThrowArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new CachedBookProvider(null!, mockVersOneAdaptor.Object));
+        Assert.Throws<ArgumentNullException>(
+            () =>
+                new BookProvider(
+                    null!,
+                    mockVersOneAdaptor.Object,
+                    appCache,
+                    mockAppSettingsMonitor.Object));
     }
 
     [Test]
     public void NullVersOneAdaptor_ShouldThrowArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new CachedBookProvider(null!, mockVersOneAdaptor.Object));
+        Assert.Throws<ArgumentNullException>(
+            () =>
+                new BookProvider(
+                    mockUnitOfWork.Object,
+                    null!,
+                    appCache,
+                    mockAppSettingsMonitor.Object));
     }
 
     [Test]
@@ -63,12 +88,12 @@ public class CachedBookProviderTest
         mockBookRepository.Setup(repo => repo.GetAllBooks()).Returns(testBooks);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetAllBooks().ToList();
+        var firstResult = testBookProvider.GetAllBooks().ToList();
 
         Assert.That(firstResult, Is.EqualTo(testBooks));
         mockBookRepository.Verify(repo => repo.GetAllBooks(), Times.Once);
 
-        var secondResult = testCachedBookProvider.GetAllBooks().ToList();
+        var secondResult = testBookProvider.GetAllBooks().ToList();
 
         Assert.That(secondResult, Is.EqualTo(testBooks));
         mockBookRepository.Verify(repo => repo.GetAllBooks(), Times.Exactly(2));
@@ -88,12 +113,12 @@ public class CachedBookProviderTest
         mockBookRepository.Setup(repo => repo.GetBookById(testBook.Id)).Returns(testBook);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
+        var firstResult = testBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
 
         Assert.That(firstResult, Is.EqualTo(testBook));
         mockBookRepository.Verify(repo => repo.GetBookById(testBook.Id), Times.Once);
 
-        var secondResult = testCachedBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
+        var secondResult = testBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
 
         Assert.That(secondResult, Is.EqualTo(testBook));
         mockBookRepository.Verify(repo => repo.GetBookById(testBook.Id), Times.Once);
@@ -113,8 +138,8 @@ public class CachedBookProviderTest
         mockBookRepository.Setup(repo => repo.GetBookById(testBook.Id)).Returns(testBook);
 
         // Act
-        testCachedBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
-        var result = testCachedBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
+        testBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
+        var result = testBookProvider.GetEmptyOrIncompleteBook(testBook.Id);
 
         // Assert
         Assert.That(result, Is.EqualTo(testBook));
@@ -130,7 +155,7 @@ public class CachedBookProviderTest
 
         // Act & Assert
         Assert.That(
-            () => testCachedBookProvider.GetEmptyOrIncompleteBook(nonExistentId),
+            () => testBookProvider.GetEmptyOrIncompleteBook(nonExistentId),
             Throws.InvalidOperationException.With.Message.Contain(
                 $"Book with ID {nonExistentId} not found"));
     }
@@ -164,7 +189,7 @@ public class CachedBookProviderTest
             .Returns(testContent);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetFullBook(testBook.Id);
+        var firstResult = testBookProvider.GetFullBook(testBook.Id);
 
         Assert.That(firstResult.Id, Is.EqualTo(testBook.Id));
         Assert.That(firstResult.MetaData, Is.SameAs(testMetaData));
@@ -175,7 +200,7 @@ public class CachedBookProviderTest
             adaptor => adaptor.GetMetaData(It.IsAny<Book>()),
             Times.Once);
 
-        var secondResult = testCachedBookProvider.GetFullBook(testBook.Id);
+        var secondResult = testBookProvider.GetFullBook(testBook.Id);
 
         Assert.That(firstResult.Id, Is.EqualTo(testBook.Id));
         Assert.That(firstResult.MetaData, Is.SameAs(testMetaData));
@@ -211,13 +236,13 @@ public class CachedBookProviderTest
             .Returns(testMetaData);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetMetadata(testBook.Id);
+        var firstResult = testBookProvider.GetMetadata(testBook.Id);
         Assert.That(firstResult, Is.EqualTo(testMetaData));
         mockVersOneAdaptor.Verify(
             adaptor => adaptor.GetMetaData(It.IsAny<Book>()),
             Times.Once);
 
-        var secondResult = testCachedBookProvider.GetMetadata(testBook.Id);
+        var secondResult = testBookProvider.GetMetadata(testBook.Id);
         Assert.That(secondResult, Is.EqualTo(testMetaData));
         mockVersOneAdaptor.Verify(
             adaptor => adaptor.GetMetaData(It.IsAny<Book>()),
@@ -246,12 +271,12 @@ public class CachedBookProviderTest
             .Returns(testContent);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetContent(testBook.Id);
+        var firstResult = testBookProvider.GetContent(testBook.Id);
 
         Assert.That(firstResult, Is.SameAs(testContent));
         mockVersOneAdaptor.Verify(adaptor => adaptor.GetContent(It.IsAny<Book>()), Times.Once);
 
-        var secondResult = testCachedBookProvider.GetContent(testBook.Id);
+        var secondResult = testBookProvider.GetContent(testBook.Id);
 
         Assert.That(secondResult, Is.SameAs(testContent));
         mockVersOneAdaptor.Verify(adaptor => adaptor.GetContent(It.IsAny<Book>()), Times.Once);
@@ -276,14 +301,14 @@ public class CachedBookProviderTest
             .Returns(testChapter);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetChapter(testBook.Id, chapterTitle);
+        var firstResult = testBookProvider.GetChapter(testBook.Id, chapterTitle);
         Assert.That(firstResult, Is.SameAs(testChapter));
         Assert.That(firstResult.Title, Is.EqualTo(chapterTitle));
         mockVersOneAdaptor.Verify(
             adaptor => adaptor.GetChapterContent(It.IsAny<Book>(), chapterTitle),
             Times.Once);
 
-        var secondResult = testCachedBookProvider.GetChapter(testBook.Id, chapterTitle);
+        var secondResult = testBookProvider.GetChapter(testBook.Id, chapterTitle);
 
         Assert.That(secondResult, Is.SameAs(testChapter));
         Assert.That(secondResult.Title, Is.EqualTo(chapterTitle));
@@ -311,14 +336,14 @@ public class CachedBookProviderTest
             .Returns(testChapter);
 
         // Act, Assert
-        var firstResult = testCachedBookProvider.GetChapter(testBook.Id, chapterIndex);
+        var firstResult = testBookProvider.GetChapter(testBook.Id, chapterIndex);
         Assert.That(firstResult, Is.SameAs(testChapter));
         Assert.That(firstResult.Index, Is.EqualTo(chapterIndex));
         mockVersOneAdaptor.Verify(
             adaptor => adaptor.GetChapterContent(It.IsAny<Book>(), chapterIndex),
             Times.Once);
 
-        var secondResult = testCachedBookProvider.GetChapter(testBook.Id, chapterIndex);
+        var secondResult = testBookProvider.GetChapter(testBook.Id, chapterIndex);
         Assert.That(secondResult, Is.SameAs(testChapter));
         Assert.That(secondResult.Index, Is.EqualTo(chapterIndex));
         mockVersOneAdaptor.Verify(
@@ -344,7 +369,7 @@ public class CachedBookProviderTest
             .Returns(expectedCount);
 
         // Act
-        var result = testCachedBookProvider.GetChapterCount(testBook.Id);
+        var result = testBookProvider.GetChapterCount(testBook.Id);
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedCount));
@@ -369,7 +394,7 @@ public class CachedBookProviderTest
             .Returns(imageBytes);
 
         // Act
-        var result = testCachedBookProvider.GetCoverImage(testBook.Id);
+        var result = testBookProvider.GetCoverImage(testBook.Id);
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedDataUrl));
@@ -382,7 +407,7 @@ public class CachedBookProviderTest
         var bookId = Guid.NewGuid();
 
         // Act
-        testCachedBookProvider.RemoveBook(bookId);
+        testBookProvider.RemoveBook(bookId);
 
         // Assert
         mockBookRepository.Verify(repo => repo.RemoveBookById(bookId), Times.Once);
@@ -419,17 +444,17 @@ public class CachedBookProviderTest
             .Setup(adaptor => adaptor.GetChapterContent(It.IsAny<Book>(), 0))
             .Returns(testChapter);
 
-        testCachedBookProvider.GetMetadata(testBook.Id);
-        testCachedBookProvider.GetContent(testBook.Id);
-        testCachedBookProvider.GetChapter(testBook.Id, 0);
+        testBookProvider.GetMetadata(testBook.Id);
+        testBookProvider.GetContent(testBook.Id);
+        testBookProvider.GetChapter(testBook.Id, 0);
 
         // Act
-        testCachedBookProvider.RemoveBook(testBook.Id);
+        testBookProvider.RemoveBook(testBook.Id);
 
         // Assert -- subsequent calls should hit the repository again
-        testCachedBookProvider.GetMetadata(testBook.Id);
-        testCachedBookProvider.GetContent(testBook.Id);
-        testCachedBookProvider.GetChapter(testBook.Id, 0);
+        testBookProvider.GetMetadata(testBook.Id);
+        testBookProvider.GetContent(testBook.Id);
+        testBookProvider.GetChapter(testBook.Id, 0);
 
         mockVersOneAdaptor.Verify(
             adaptor => adaptor.GetMetaData(It.IsAny<Book>()),
@@ -459,7 +484,7 @@ public class CachedBookProviderTest
             .Returns((byte[]?)null);
 
         // Act
-        var result = testCachedBookProvider.GetCoverImage(testBook.Id);
+        var result = testBookProvider.GetCoverImage(testBook.Id);
 
         // Assert
         Assert.That(result, Is.EqualTo(string.Empty));

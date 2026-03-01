@@ -1,3 +1,4 @@
+using LazyCache;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ReadOtter.Shared.Src.Configuration;
@@ -36,8 +37,9 @@ public static class MauiProgram
         builder.Services.AddScoped<SeederService>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        builder.Services.AddLazyCache();
         builder.Services.AddScoped<IVersOneAdaptor, VersOneAdaptor>();
-        builder.Services.AddScoped<IBookProvider, CachedBookProvider>();
+        builder.Services.AddScoped<IBookProvider, BookProvider>();
 
         builder.Services.AddScoped<EpubContentService>();
         builder.Services.AddScoped<EpubMetadataService>();
